@@ -13,10 +13,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import type { IncrementSlab } from "@prisma/client";
+import type { SerializedIncrementSlab } from "@/lib/utils";
 import { getMaxIncrementPct } from "@/lib/workflow";
 interface ManagementDecisionFormProps {
-  slabs: IncrementSlab[];
+  slabs: SerializedIncrementSlab[];
   defaultValues?: Partial<ManagementFormValues>;
   readOnly?: boolean;
   onSaveDraft?: (data: ManagementFormValues) => Promise<void>;
@@ -77,12 +77,18 @@ export function ManagementDecisionForm({
 
   if (readOnly) {
     return (
-      <div className="space-y-6">
-        <CTCSlabDisplay slabs={slabs} />
-        <SalaryBreakdownTable readOnly />
-        <p className="text-sm"><strong>Increment:</strong> {defaultValues?.mgmtIncrementPercentage ?? "—"}%</p>
-        <p className="text-sm"><strong>Final Remarks:</strong> {defaultValues?.mgmtFinalRemarks ?? "—"}</p>
-      </div>
+      <FormProvider {...methods}>
+        <div className="space-y-6">
+          <CTCSlabDisplay slabs={slabs} />
+          <SalaryBreakdownTable readOnly />
+          <p className="text-sm">
+            <strong>Increment:</strong> {defaultValues?.mgmtIncrementPercentage ?? "—"}%
+          </p>
+          <p className="text-sm">
+            <strong>Final Remarks:</strong> {defaultValues?.mgmtFinalRemarks ?? "—"}
+          </p>
+        </div>
+      </FormProvider>
     );
   }
 

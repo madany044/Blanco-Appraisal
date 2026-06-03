@@ -3,6 +3,7 @@ import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { SubmissionDetailClient } from "@/components/hr/SubmissionDetailClient";
+import { serializeIncrementSlabs } from "@/lib/utils";
 
 export default async function HRSubmissionDetailPage({
   params,
@@ -24,7 +25,7 @@ export default async function HRSubmissionDetailPage({
 
   return (
     <DashboardLayout role="hr" userEmail={user.email} title="Submission Detail">
-      <SubmissionDetailClient submission={submission} slabs={slabs} />
+      <SubmissionDetailClient submission={submission} slabs={serializeIncrementSlabs(slabs)} />
     </DashboardLayout>
   );
 }

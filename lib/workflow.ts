@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { decimalToNumber } from "@/lib/utils";
 import type { AppraisalSubmission, Prisma } from "@prisma/client";
 
 const VALID_TRANSITIONS: Record<number, number[]> = {
@@ -44,10 +45,13 @@ export async function transitionStage(
   });
 }
 
-export function getMaxIncrementPct(ctc: number, slabs: { ctcMin: number; ctcMax: number | null; maxPct: { toNumber(): number } }[]): number {
+export function getMaxIncrementPct(
+  ctc: number,
+  slabs: { ctcMin: number; ctcMax: number | null; maxPct: Parameters<typeof decimalToNumber>[0] }[]
+): number {
   const slab = slabs.find((s) => {
     const max = s.ctcMax ?? Infinity;
     return ctc >= s.ctcMin && ctc <= max;
   });
-  return slab ? slab.maxPct.toNumber() : 0;
+  return slab ? decimalToNumber(slab.maxPct) : 0;
 }

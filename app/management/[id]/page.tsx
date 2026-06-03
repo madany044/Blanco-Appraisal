@@ -3,6 +3,7 @@ import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ManagementDetailClient } from "@/components/management/ManagementDetailClient";
+import { serializeIncrementSlabs } from "@/lib/utils";
 
 export default async function ManagementDetailPage({
   params,
@@ -24,7 +25,7 @@ export default async function ManagementDetailPage({
 
   return (
     <DashboardLayout role="management" userEmail={user.email} title="Management Review">
-      <ManagementDetailClient submission={submission} slabs={slabs} />
+      <ManagementDetailClient submission={submission} slabs={serializeIncrementSlabs(slabs)} />
     </DashboardLayout>
   );
 }

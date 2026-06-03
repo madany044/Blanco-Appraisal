@@ -37,8 +37,29 @@ export function categoryLabel(category: string): string {
   return map[category] ?? category;
 }
 
-export function decimalToNumber(value: { toNumber(): number } | number | null | undefined): number {
+export function decimalToNumber(
+  value: { toNumber(): number } | number | string | null | undefined
+): number {
   if (value == null) return 0;
   if (typeof value === "number") return value;
+  if (typeof value === "string") return parseFloat(value) || 0;
   return value.toNumber();
+}
+
+export type SerializedIncrementSlab = {
+  id: number;
+  ctcMin: number;
+  ctcMax: number | null;
+  maxPct: number;
+};
+
+export function serializeIncrementSlabs(
+  slabs: { id: number; ctcMin: number; ctcMax: number | null; maxPct: Parameters<typeof decimalToNumber>[0] }[]
+): SerializedIncrementSlab[] {
+  return slabs.map((s) => ({
+    id: s.id,
+    ctcMin: s.ctcMin,
+    ctcMax: s.ctcMax,
+    maxPct: decimalToNumber(s.maxPct),
+  }));
 }

@@ -8,12 +8,12 @@ import { HRFeedbackForm } from "@/components/forms/HRFeedbackForm";
 import { ManagerRemarksForm } from "@/components/forms/ManagerRemarksForm";
 import { ManagementDecisionForm } from "@/components/forms/ManagementDecisionForm";
 import type { ManagementFormValues } from "@/lib/validations/management-form.schema";
-import type { AppraisalSubmission, Manager, IncrementSlab } from "@prisma/client";
-import { decimalToNumber } from "@/lib/utils";
+import type { AppraisalSubmission, Manager } from "@prisma/client";
+import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
 
 interface ManagementDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
-  slabs: IncrementSlab[];
+  slabs: SerializedIncrementSlab[];
 }
 
 export function ManagementDetailClient({ submission: s, slabs }: ManagementDetailClientProps) {

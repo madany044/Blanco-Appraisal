@@ -1,4 +1,5 @@
-import type { AppraisalSubmission, Manager, IncrementSlab } from "@prisma/client";
+import type { AppraisalSubmission, Manager } from "@prisma/client";
+import type { SerializedIncrementSlab } from "@/lib/utils";
 
 export type SubmissionWithManager = AppraisalSubmission & {
   manager: Manager;
@@ -70,4 +71,4 @@ export const STAGE_LABELS = [
   "Completed",
 ] as const;
 
-export type IncrementSlabRow = IncrementSlab;
+export type IncrementSlabRow = SerializedIncrementSlab;

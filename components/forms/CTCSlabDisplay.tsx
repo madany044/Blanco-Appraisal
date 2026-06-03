@@ -6,11 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { IncrementSlab } from "@prisma/client";
+import type { SerializedIncrementSlab } from "@/lib/utils";
 import { decimalToNumber } from "@/lib/utils";
 
 interface CTCSlabDisplayProps {
-  slabs: IncrementSlab[];
+  slabs: SerializedIncrementSlab[];
   highlightCtc?: number;
   maxAllowed?: number;
 }

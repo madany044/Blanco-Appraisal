@@ -9,14 +9,14 @@ import { ManagerRemarksForm } from "@/components/forms/ManagerRemarksForm";
 import { ManagementDecisionForm } from "@/components/forms/ManagementDecisionForm";
 import { Button } from "@/components/ui/button";
 import type { HRFormValues } from "@/lib/validations/hr-form.schema";
-import type { AppraisalSubmission, Manager, IncrementSlab } from "@prisma/client";
-import { decimalToNumber } from "@/lib/utils";
+import type { AppraisalSubmission, Manager } from "@prisma/client";
+import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
 import { downloadPDF } from "@/components/export/PDFDownload";
 import { exportSubmissionExcel } from "@/components/export/ExcelExport";
 
 interface SubmissionDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
-  slabs: IncrementSlab[];
+  slabs: SerializedIncrementSlab[];
 }
 
 export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetailClientProps) {
