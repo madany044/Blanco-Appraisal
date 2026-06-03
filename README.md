@@ -88,7 +88,8 @@ Open [http://localhost:3000](http://localhost:3000)
 - `/management/[id]` — Salary decision
 
 
-**Blanco Steel Detailing Services Private Limited**  
+### Blanco Steel Detailing Services Private Limited 
+
 No 3051 SPYR Arcade 2nd Floor Ring Road,  
 Near Mahamane Circle Dattagalli 3rd Stage,  
 Mysore-570023, Karnataka.
