@@ -23,8 +23,6 @@ npm install
 
 ### 2. Configure environment
 
-Copy `.env.example` to `.env` and fill in:
-
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
@@ -51,18 +49,6 @@ Run RLS policies in Supabase SQL Editor:
 npm run db:seed
 ```
 
-Default password for all accounts: `Blanco@2026`
-
-| Email | Role |
-|-------|------|
-| hr.blanco@gmail.com | HR |
-| management.blanco@gmail.com | Management |
-| sudeep.blanco@gmail.com | Manager |
-| yogesh.blanco@gmail.com | Manager |
-| naveen.blanco@gmail.com | Manager |
-| pradeep.blanco@gmail.com | Manager |
-| shashi.blanco@gmail.com | Manager |
-| kumaraswamy.blanco@gmail.com | Manager |
 
 ### 5. Run development server
 
@@ -101,16 +87,10 @@ Open [http://localhost:3000](http://localhost:3000)
 - `/management` — Management dashboard
 - `/management/[id]` — Salary decision
 
-## Deploy to Vercel
-
-1. Push repository to GitHub
-2. Import project in Vercel
-3. Add all environment variables from `.env.example`
-4. Deploy
-
-## Company
 
 **Blanco Steel Detailing Services Private Limited**  
 No 3051 SPYR Arcade 2nd Floor Ring Road,  
 Near Mahamane Circle Dattagalli 3rd Stage,  
 Mysore-570023, Karnataka.
+
+**Designed & Developed By Madan Y** 
