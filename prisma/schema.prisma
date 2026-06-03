@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum AppraisalCategory {
+  GROUP_A
+  GROUP_B
+  GROUP_C
+  QC
+}
+
+enum InitiativeFrequency {
+  Consistently
+  Occasionally
+  Rarely
+  Never
+}
+
+enum LearningCommitment {
+  A
+  B
+  C
+  D
+  E
+}
+
+enum ManagerRecommendation {
+  STRONGLY_RECOMMEND
+  CONDITIONALLY_RECOMMEND
+  NOT_RECOMMENDED
+}
+
+model Manager {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  submissions AppraisalSubmission[]
+
+  @@map("managers")
+}
+
+model IncrementSlab {
+  id     Int      @id @default(autoincrement())
+  ctcMin Int      @map("ctc_min")
+  ctcMax Int?     @map("ctc_max")
+  maxPct Decimal  @map("max_pct") @db.Decimal(5, 2)
+
+  @@map("increment_slabs")
+}
+
+model AppraisalSubmission {
+  id                   String            @id @default(uuid()) @db.Uuid
+  financialYear        String            @default("2026-27") @map("financial_year")
+  category             AppraisalCategory
+  stage                Int               @default(0)
+  submittedAt          DateTime?         @default(now()) @map("submitted_at") @db.Timestamptz(6)
+  hrFilledAt           DateTime?         @map("hr_filled_at") @db.Timestamptz(6)
+  managerFilledAt      DateTime?         @map("manager_filled_at") @db.Timestamptz(6)
+  managementFilledAt   DateTime?         @map("management_filled_at") @db.Timestamptz(6)
+  completedAt          DateTime?         @map("completed_at") @db.Timestamptz(6)
+
+  employeeName         String            @map("employee_name")
+  employeeCode         String            @map("employee_code")
+  managerId            String            @map("manager_id") @db.Uuid
+  teamDesignation      String?           @map("team_designation")
+  dateOfSubmission     DateTime          @default(now()) @map("date_of_submission") @db.Date
+
+  prevExperienceYears    String? @map("prev_experience_years")
+  companyExperienceYears String? @map("company_experience_years")
+
+  basisOfAppraisal       String? @map("basis_of_appraisal")
+  supportToCompany       String? @map("support_to_company")
+
+  expectationsYesNo      String? @map("expectations_yes_no")
+  expectationsReason     String? @map("expectations_reason")
+  strengthsWeaknesses    String? @map("strengths_weaknesses")
+  teamworkExamples       String? @map("teamwork_examples")
+
+  goalChallenges         String? @map("goal_challenges")
+  upcomingGoal           String? @map("upcoming_goal")
+  threeImprovements      String? @map("three_improvements")
+  initiativeFrequency    InitiativeFrequency? @map("initiative_frequency")
+  abroadCapability       String? @map("abroad_capability")
+  abroadCapabilityNa     Boolean @default(false) @map("abroad_capability_na")
+
+  initiativeInnovation    String? @map("initiative_innovation")
+  learningCommitment      LearningCommitment? @map("learning_commitment")
+  professionalismAttitude String? @map("professionalism_attitude")
+
+  rateTeamwork              Int? @map("rate_teamwork")
+  rateCompanyRelationship   Int? @map("rate_company_relationship")
+  ratePmRelationship        Int? @map("rate_pm_relationship")
+  rateCoworkerComms         Int? @map("rate_coworker_comms")
+  rateEngineering           Int? @map("rate_engineering")
+  rateTeamCommunication     Int? @map("rate_team_communication")
+  rateVerbalWritten         Int? @map("rate_verbal_written")
+  rateEnglish               Int? @map("rate_english")
+  rateSelfLearning          Int? @map("rate_self_learning")
+  rateQualityOfWork         Int? @map("rate_quality_of_work")
+  rateDeadlines             Int? @map("rate_deadlines")
+  rateClientComms           Int? @map("rate_client_comms")
+  rateCustomerEmails        Int? @map("rate_customer_emails")
+  rateRfiCreation           Int? @map("rate_rfi_creation")
+  rateEmailWriting          Int? @map("rate_email_writing")
+  rateIssueResolution       Int? @map("rate_issue_resolution")
+  rateKnowledgeSharing      Int? @map("rate_knowledge_sharing")
+  rateLeadership            Int? @map("rate_leadership")
+  rateTeamPerformance       Int? @map("rate_team_performance")
+  rateTeamBuilding          Int? @map("rate_team_building")
+
+  prodSimpleBeam         String? @map("prod_simple_beam")
+  prodMediumBeam         String? @map("prod_medium_beam")
+  prodComplexBeam        String? @map("prod_complex_beam")
+  prodStair              String? @map("prod_stair")
+  prodStairRail          String? @map("prod_stair_rail")
+  prodRoofFrame          String? @map("prod_roof_frame")
+  prodSimpleLadder       String? @map("prod_simple_ladder")
+  prodCagedLadder        String? @map("prod_caged_ladder")
+  prodLoosePieces        String? @map("prod_loose_pieces")
+  prodSinglePart         String? @map("prod_single_part")
+  prodCheckAbHours       String? @map("prod_check_ab_hours")
+  prodCheckEplanHours    String? @map("prod_check_eplan_hours")
+
+  prodDraftAbHours       String? @map("prod_draft_ab_hours")
+  prodDraftEplanHours    String? @map("prod_draft_eplan_hours")
+  prodDraftCagedLadder   String? @map("prod_draft_caged_ladder")
+  prodDraftStairs        String? @map("prod_draft_stairs")
+
+  modelerSectionNa              Boolean @default(false) @map("modeler_section_na")
+  prodModSimpleConnection       String? @map("prod_mod_simple_connection")
+  prodModDirectWeld             String? @map("prod_mod_direct_weld")
+  prodModMomentPlate            String? @map("prod_mod_moment_plate")
+  prodModWeldedTube             String? @map("prod_mod_welded_tube")
+  prodModBoltedBrace            String? @map("prod_mod_bolted_brace")
+  prodModStairsHours            String? @map("prod_mod_stairs_hours")
+  prodModRfiTime                String? @map("prod_mod_rfi_time")
+  prodModMemberPlacingHours     String? @map("prod_mod_member_placing_hours")
+
+  currentYearPerformance   String? @map("current_year_performance")
+  productivityImprovement  String? @map("productivity_improvement")
+  overallRating            String? @map("overall_rating")
+  employeeSignatureDate    DateTime? @map("employee_signature_date") @db.Date
+  employeeSignatureName    String? @map("employee_signature_name")
+
+  hrCodeOfConduct          Int? @map("hr_code_of_conduct")
+  hrDressCode              Int? @map("hr_dress_code")
+  hrProfessionalism        Int? @map("hr_professionalism")
+  hrLeaveManagement        Int? @map("hr_leave_management")
+  hrTimingManagement       Int? @map("hr_timing_management")
+  hrBacklogNotes           String? @map("hr_backlog_notes")
+  hrAdminSignatureDate     DateTime? @map("hr_admin_signature_date") @db.Date
+  hrAdminSignatureName     String? @map("hr_admin_signature_name")
+
+  mgrRecommendation          ManagerRecommendation? @map("mgr_recommendation")
+  mgrStrongReasons           String[] @default([]) @map("mgr_strong_reasons")
+  mgrConditionalReasons      String[] @default([]) @map("mgr_conditional_reasons")
+  mgrNotRecommendedReasons   String[] @default([]) @map("mgr_not_recommended_reasons")
+  mgrRemarks                 String? @map("mgr_remarks")
+  mgrSignatureDate           DateTime? @map("mgr_signature_date") @db.Date
+  mgrSignatureName           String? @map("mgr_signature_name")
+
+  salaryBasicPresent            Decimal? @map("salary_basic_present") @db.Decimal(10, 2)
+  salaryDaPresent               Decimal? @map("salary_da_present") @db.Decimal(10, 2)
+  salaryHraPresent              Decimal? @map("salary_hra_present") @db.Decimal(10, 2)
+  salaryCityAllowancePresent    Decimal? @map("salary_city_allowance_present") @db.Decimal(10, 2)
+  salaryConveyancePresent       Decimal? @map("salary_conveyance_present") @db.Decimal(10, 2)
+  salaryMedicalPresent          Decimal? @map("salary_medical_present") @db.Decimal(10, 2)
+  salaryEducationPresent        Decimal? @map("salary_education_present") @db.Decimal(10, 2)
+  salaryLtaPresent              Decimal? @map("salary_lta_present") @db.Decimal(10, 2)
+  salarySpecialPresent          Decimal? @map("salary_special_present") @db.Decimal(10, 2)
+  salaryGrossPresent            Decimal? @map("salary_gross_present") @db.Decimal(10, 2)
+  salaryPfDeduction             Decimal? @map("salary_pf_deduction") @db.Decimal(10, 2)
+  salaryEsicDeduction           Decimal? @map("salary_esic_deduction") @db.Decimal(10, 2)
+  salaryPtDeduction             Decimal? @map("salary_pt_deduction") @db.Decimal(10, 2)
+  salaryNetPresent              Decimal? @map("salary_net_present") @db.Decimal(10, 2)
+  salaryCtcPresent              Decimal? @map("salary_ctc_present") @db.Decimal(10, 2)
+  salaryEmployerPfPresent       Decimal? @map("salary_employer_pf_present") @db.Decimal(10, 2)
+  salaryBonusPresent            Decimal? @map("salary_bonus_present") @db.Decimal(10, 2)
+  salaryEmployerEsicPresent     Decimal? @map("salary_employer_esic_present") @db.Decimal(10, 2)
+  salaryMedicalInsurancePresent Decimal? @map("salary_medical_insurance_present") @db.Decimal(10, 2)
+
+  salaryCityAllowanceProposed  Decimal? @map("salary_city_allowance_proposed") @db.Decimal(10, 2)
+  salarySpecialProposed        Decimal? @map("salary_special_proposed") @db.Decimal(10, 2)
+  salaryGrossProposed          Decimal? @map("salary_gross_proposed") @db.Decimal(10, 2)
+  salaryNetProposed            Decimal? @map("salary_net_proposed") @db.Decimal(10, 2)
+  salaryCtcProposed            Decimal? @map("salary_ctc_proposed") @db.Decimal(10, 2)
+
+  mgmtIncrementPercentage   Decimal? @map("mgmt_increment_percentage") @db.Decimal(5, 2)
+  mgmtEffectiveDate         DateTime? @map("mgmt_effective_date") @db.Date
+  mgmtApproverName          String? @map("mgmt_approver_name")
+  mgmtApprovalDate          DateTime? @map("mgmt_approval_date") @db.Date
+  mgmtFinalRemarks          String? @map("mgmt_final_remarks")
+  mgmtFeedbackToEmployee    String? @map("mgmt_feedback_to_employee")
+  mgmtInternalNotes         String? @map("mgmt_internal_notes")
+
+  manager Manager @relation(fields: [managerId], references: [id])
+
+  @@index([managerId])
+  @@index([stage])
+  @@index([category])
+  @@index([financialYear])
+  @@index([employeeCode])
+  @@map("appraisal_submissions")
+}
