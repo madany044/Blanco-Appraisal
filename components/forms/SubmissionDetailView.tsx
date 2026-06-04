@@ -3,32 +3,67 @@
 import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { RatingPillReadOnly } from "@/components/forms/RatingPillInput";
 import {
+  EMPLOYEE_QUESTIONS,
   SELF_RATING_ITEMS,
   SHOP_DRAFTING_ITEMS,
   E_DRAFTING_ITEMS,
   MODELER_ITEMS,
   HR_RATING_ITEMS,
-  MGR_RECOMMENDATION_LABELS,
+  HR_BACKLOG_QUESTION,
+  MGR_RECOMMENDATION_SECTIONS,
+  PRODUCTIVITY_INTRO,
+  LEARNING_COMMITMENT_OPTIONS,
+  INITIATIVE_FREQUENCY_OPTIONS,
+  OVERALL_RATING_OPTIONS,
+  selfRatingLabel,
+  formatLearningCommitment,
+  formatExpectationsAnswer,
+  normalizeOverallRating,
+} from "@/lib/form-questions";
+import {
   displayValue,
   getSubmissionField,
-  formatOverallRating,
   formatSalary,
 } from "@/lib/submission-display";
-import { categoryLabel, formatDate } from "@/lib/utils";
+import { categoryLabel, formatDate, cn } from "@/lib/utils";
 import {
   STRONG_REASONS,
   CONDITIONAL_REASONS,
   NOT_RECOMMENDED_REASONS,
+  ABROAD_OPTIONS,
 } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 type SubmissionWithManager = AppraisalSubmission & { manager?: Manager };
 
-function DetailField({ label, value }: { label: string; value: string | number | null | undefined }) {
+function QuestionCard({
+  label,
+  question,
+  answer,
+  children,
+}: {
+  label: string;
+  question: string;
+  answer?: string | null;
+  children?: React.ReactNode;
+}) {
   return (
-    <div className="mb-3 rounded-lg border border-slate-200 bg-white p-4">
+    <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</p>
-      <p className="mt-1 text-[15px] text-[#1e2740] whitespace-pre-wrap">{displayValue(value)}</p>
+      <p className="mt-2 text-sm text-gray-600">{question}</p>
+      {children ?? (
+        <p className="mt-3 text-[15px] font-semibold text-[#1e2740] whitespace-pre-wrap">
+          {displayValue(answer)}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="py-2">
+      <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</dt>
+      <dd className="mt-0.5 text-[15px] font-medium text-[#1e2740]">{value}</dd>
     </div>
   );
 }
@@ -45,13 +80,17 @@ function SectionHeader({ title, color }: { title: string; color: string }) {
 }
 
 function SectionBody({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("rounded-b-lg border border-t-0 border-slate-200 bg-slate-50/50 p-4", className)}>{children}</div>;
+  return (
+    <div className={cn("rounded-b-lg border border-t-0 border-slate-200 bg-slate-50/50 p-4", className)}>
+      {children}
+    </div>
+  );
 }
 
 function RatingBadge({ value }: { value: number | null | undefined }) {
   if (value == null) return <span className="text-sm text-gray-400">—</span>;
   return (
-    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#1a4b8c] text-sm font-bold text-white">
+    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1a4b8c] text-sm font-bold text-white">
       {value}
     </span>
   );
@@ -62,109 +101,209 @@ interface EmployeeSectionProps {
 }
 
 export function EmployeeSubmissionView({ submission: s }: EmployeeSectionProps) {
+  const selectedOverall = normalizeOverallRating(s.overallRating);
+
   return (
     <div className="overflow-hidden rounded-lg">
       <SectionHeader title="SECTION 1 — EMPLOYEE SUBMISSION" color="#1a4b8c" />
       <SectionBody>
-        <div className="grid gap-0 md:grid-cols-2 md:gap-x-4">
-          <DetailField label="Employee Name" value={s.employeeName} />
-          <DetailField label="Employee ID" value={s.employeeCode} />
-          <DetailField label="Category" value={categoryLabel(s.category)} />
-          <DetailField label="Manager" value={s.manager?.name} />
-          <DetailField label="Team & Designation" value={s.teamDesignation} />
-          <DetailField label="Date" value={formatDate(s.dateOfSubmission)} />
-          <DetailField label="Previous Field Experience" value={s.prevExperienceYears} />
-          <DetailField label="Company Experience" value={s.companyExperienceYears} />
-          <DetailField label="Current Monthly Salary (₹)" value={s.currentSalary != null ? formatSalary(s.currentSalary) : null} />
+        <div className="mb-6 rounded-lg border border-slate-200 bg-white p-4">
+          <h3 className="mb-3 text-sm font-bold text-[#1a4b8c]">Employee Info</h3>
+          <dl className="grid gap-x-6 md:grid-cols-2">
+            <InfoRow label="Employee Name" value={displayValue(s.employeeName)} />
+            <InfoRow label="Employee ID" value={displayValue(s.employeeCode)} />
+            <InfoRow label="Category" value={categoryLabel(s.category)} />
+            <InfoRow label="Manager" value={displayValue(s.manager?.name)} />
+            <InfoRow label="Team/Designation" value={displayValue(s.teamDesignation)} />
+            <InfoRow label="Date" value={formatDate(s.dateOfSubmission) || "—"} />
+            <InfoRow label="Previous field experience" value={displayValue(s.prevExperienceYears)} />
+            <InfoRow label="Company experience" value={displayValue(s.companyExperienceYears)} />
+            <InfoRow
+              label="Current Monthly Salary"
+              value={s.currentSalary != null ? formatSalary(s.currentSalary) : "—"}
+            />
+          </dl>
         </div>
 
-        <DetailField label="Question 1: Basis of Appraisal Request" value={s.basisOfAppraisal} />
-        <DetailField label="Question 2: Support to the Company" value={s.supportToCompany} />
-        <DetailField
-          label="Question 3: Expectations"
-          value={
-            s.expectationsYesNo
-              ? `${s.expectationsYesNo}${s.expectationsReason ? ` — ${s.expectationsReason}` : ""}`
-              : null
-          }
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q1.label}
+          question={EMPLOYEE_QUESTIONS.q1.text}
+          answer={s.basisOfAppraisal}
         />
-        <DetailField label="Question 4: Strengths & Weaknesses" value={s.strengthsWeaknesses} />
-        <DetailField label="Question 5: Teamwork Examples" value={s.teamworkExamples} />
-        <DetailField label="Question 6a: Goal Challenges" value={s.goalChallenges} />
-        <DetailField label="Question 6b: Upcoming Year Goal" value={s.upcomingGoal} />
-        <DetailField label="Question 6c: Three Things to Improve" value={s.threeImprovements} />
-        <DetailField label="Question 6d: Initiative Frequency" value={s.initiativeFrequency} />
-        <DetailField
-          label="Question 6e: Abroad Capability"
-          value={s.abroadCapabilityNa ? "N/A" : s.abroadCapability}
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q2.label}
+          question={EMPLOYEE_QUESTIONS.q2.text}
+          answer={s.supportToCompany}
         />
-        <DetailField label="Question 7: Initiative or Innovation Examples" value={s.initiativeInnovation} />
-        <DetailField label="Question 8: Learning Commitment" value={s.learningCommitment} />
-        <DetailField label="Question 9: Professionalism and Attitude" value={s.professionalismAttitude} />
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q3.label}
+          question={EMPLOYEE_QUESTIONS.q3.text}
+          answer={formatExpectationsAnswer(s) || null}
+        />
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q4.label}
+          question={EMPLOYEE_QUESTIONS.q4.text}
+          answer={s.strengthsWeaknesses}
+        />
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q5.label}
+          question={EMPLOYEE_QUESTIONS.q5.text}
+          answer={s.teamworkExamples}
+        />
 
-        <p className="mb-2 mt-4 text-sm font-bold text-[#1a4b8c]">Self Performance Ratings (/10)</p>
-        <div className="mb-4 grid gap-2 md:grid-cols-2">
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">QUESTION 6</p>
+          <p className="mt-2 text-sm font-semibold text-gray-700">{EMPLOYEE_QUESTIONS.q6heading}</p>
+        </div>
+
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q6a.label}
+          question={EMPLOYEE_QUESTIONS.q6a.text}
+          answer={s.goalChallenges}
+        />
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q6b.label}
+          question={EMPLOYEE_QUESTIONS.q6b.text}
+          answer={s.upcomingGoal}
+        />
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q6c.label}
+          question={EMPLOYEE_QUESTIONS.q6c.text}
+          answer={s.threeImprovements}
+        />
+        <QuestionCard label={EMPLOYEE_QUESTIONS.q6d.label} question={EMPLOYEE_QUESTIONS.q6d.text}>
+          <p className="mt-2 text-xs text-gray-500">
+            Options: {INITIATIVE_FREQUENCY_OPTIONS.join(" · ")}
+          </p>
+          <p className="mt-2 text-[15px] font-semibold text-[#1e2740]">
+            Selected: {displayValue(s.initiativeFrequency)}
+          </p>
+        </QuestionCard>
+        <QuestionCard label={EMPLOYEE_QUESTIONS.q6e.label} question={EMPLOYEE_QUESTIONS.q6e.text}>
+          {s.abroadCapabilityNa ? (
+            <p className="mt-3 text-[15px] font-semibold text-[#1e2740]">N/A — Not applicable for this category</p>
+          ) : (
+            <>
+              <p className="mt-2 text-xs text-gray-500">Options: {ABROAD_OPTIONS.join(" · ")}</p>
+              <p className="mt-2 text-[15px] font-semibold text-[#1e2740]">
+                Selected: {displayValue(s.abroadCapability)}
+              </p>
+            </>
+          )}
+        </QuestionCard>
+
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q7.label}
+          question={EMPLOYEE_QUESTIONS.q7.text}
+          answer={s.initiativeInnovation}
+        />
+        <QuestionCard label={EMPLOYEE_QUESTIONS.q8.label} question={EMPLOYEE_QUESTIONS.q8.text}>
+          <p className="mt-2 text-xs text-gray-500">
+            Options: {LEARNING_COMMITMENT_OPTIONS.map((o) => o.label).join(" · ")}
+          </p>
+          <p className="mt-2 text-[15px] font-semibold text-[#1e2740]">
+            Selected: {displayValue(formatLearningCommitment(s.learningCommitment) || s.learningCommitment)}
+          </p>
+        </QuestionCard>
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q9.label}
+          question={EMPLOYEE_QUESTIONS.q9.text}
+          answer={s.professionalismAttitude}
+        />
+
+        <h4 className="mb-3 mt-2 text-sm font-bold text-[#1a4b8c]">Self Performance Ratings</h4>
+        <div className="mb-6 space-y-2">
           {SELF_RATING_ITEMS.map((item) => (
             <div
               key={item.key}
-              className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2"
+              className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white px-4 py-3"
             >
-              <span className="pr-2 text-sm text-[#1e2740]">{item.label}</span>
-              <RatingBadge value={s[item.key as keyof AppraisalSubmission] as number | null} />
-            </div>
-          ))}
-        </div>
-
-        <p className="mb-2 text-sm font-bold text-[#1a4b8c]">Productivity — Shop Drafting</p>
-        <div className="mb-4 grid gap-2 md:grid-cols-2">
-          {SHOP_DRAFTING_ITEMS.map((item) => (
-            <div
-              key={item.key}
-              className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2"
-            >
-              <span className="text-sm">{item.label}</span>
-              <span className="text-sm font-medium">{displayValue(getSubmissionField(s, item.key))}</span>
-            </div>
-          ))}
-        </div>
-
-        <p className="mb-2 text-sm font-bold text-[#1a4b8c]">Productivity — E-Drafting</p>
-        <div className="mb-4 grid gap-2 md:grid-cols-2">
-          {E_DRAFTING_ITEMS.map((item) => (
-            <div
-              key={item.key}
-              className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2"
-            >
-              <span className="text-sm">{item.label}</span>
-              <span className="text-sm font-medium">{displayValue(getSubmissionField(s, item.key))}</span>
-            </div>
-          ))}
-        </div>
-
-        <p className="mb-2 text-sm font-bold text-[#1a4b8c]">Productivity — Modeler</p>
-        {s.modelerSectionNa ? (
-          <p className="mb-4 text-sm text-muted-foreground">N/A for this category</p>
-        ) : (
-          <div className="mb-4 grid gap-2 md:grid-cols-2">
-            {MODELER_ITEMS.map((item) => (
-              <div
-                key={item.key}
-                className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2"
-              >
-                <span className="text-sm">{item.label}</span>
-                <span className="text-sm font-medium">{displayValue(getSubmissionField(s, item.key))}</span>
+              <span className="flex-1 text-sm text-[#1e2740]">{selfRatingLabel(item)}</span>
+              <div className="flex shrink-0 items-center gap-1 text-sm font-medium text-gray-600">
+                <RatingBadge value={s[item.key as keyof AppraisalSubmission] as number | null} />
+                <span>/ 10</span>
               </div>
+            </div>
+          ))}
+        </div>
+
+        <h4 className="mb-1 text-sm font-bold text-[#1a4b8c]">10. Productivity and Time Management</h4>
+        <p className="mb-4 text-sm text-gray-600">{PRODUCTIVITY_INTRO}</p>
+
+        <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">Shop Drafting and Checker</h5>
+        <ul className="mb-6 list-disc space-y-2 pl-5">
+          {SHOP_DRAFTING_ITEMS.map((item) => (
+            <li key={item.key} className="text-sm text-[#1e2740]">
+              <span>{item.label}: </span>
+              <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
+            </li>
+          ))}
+        </ul>
+
+        <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">E-Drafting</h5>
+        <ul className="mb-6 list-disc space-y-2 pl-5">
+          {E_DRAFTING_ITEMS.map((item) => (
+            <li key={item.key} className="text-sm text-[#1e2740]">
+              <span>{item.label}: </span>
+              <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
+            </li>
+          ))}
+        </ul>
+
+        <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">Modeler</h5>
+        {s.modelerSectionNa ? (
+          <p className="mb-6 text-sm font-medium text-muted-foreground">
+            Modeler — Not Applicable for this category
+          </p>
+        ) : (
+          <ul className="mb-6 list-disc space-y-2 pl-5">
+            {MODELER_ITEMS.map((item) => (
+              <li key={item.key} className="text-sm text-[#1e2740]">
+                <span>{item.label}: </span>
+                <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
-        <DetailField label="Question 10: Work Performance" value={s.currentYearPerformance} />
-        <DetailField label="Question 11: Productivity Improvement" value={s.productivityImprovement} />
-        <DetailField label="Overall Rating" value={formatOverallRating(s.overallRating)} />
-        <div className="grid md:grid-cols-2 md:gap-x-4">
-          <DetailField label="Employee Signature" value={s.employeeSignatureName} />
-          <DetailField label="Employee Signature Date" value={formatDate(s.employeeSignatureDate)} />
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q11.label}
+          question={EMPLOYEE_QUESTIONS.q11.text}
+          answer={s.currentYearPerformance}
+        />
+        <QuestionCard
+          label={EMPLOYEE_QUESTIONS.q12.label}
+          question={EMPLOYEE_QUESTIONS.q12.text}
+          answer={s.productivityImprovement}
+        />
+
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Overall Rating</p>
+          <p className="mt-2 text-sm text-gray-600">Rate Yourself of Your Overall Performance:</p>
+          <ul className="mt-3 space-y-2">
+            {OVERALL_RATING_OPTIONS.map((opt) => {
+              const selected = selectedOverall === opt;
+              return (
+                <li
+                  key={opt}
+                  className={cn(
+                    "flex items-start gap-2 rounded-md px-2 py-1.5 text-sm",
+                    selected && "bg-blue-50 font-semibold text-[#1a4b8c]"
+                  )}
+                >
+                  <span className="mt-0.5 shrink-0">{selected ? "☑" : "☐"}</span>
+                  <span>{opt}</span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
+
+        <dl className="grid gap-x-6 md:grid-cols-3">
+          <InfoRow label="Employee Signature" value={displayValue(s.employeeSignatureName)} />
+          <InfoRow label="Employee Code" value={displayValue(s.employeeCode)} />
+          <InfoRow label="Date" value={formatDate(s.employeeSignatureDate) || formatDate(s.dateOfSubmission) || "—"} />
+        </dl>
       </SectionBody>
     </div>
   );
@@ -176,65 +315,84 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
       <SectionHeader title="SECTION 2 — HR AND ADMIN FEEDBACK" color="#1a8c5a" />
       <SectionBody>
         {HR_RATING_ITEMS.map((item) => (
-          <div key={item.key} className="mb-4">
-            <p className="mb-2 text-sm font-medium">{item.label}</p>
-            <RatingPillReadOnly value={s[item.key as keyof AppraisalSubmission] as number | null} />
+          <div key={item.key} className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+            <p className="text-sm text-[#1e2740]">{item.label}</p>
+            <div className="mt-2 flex items-center gap-2">
+              <RatingPillReadOnly value={s[item.key as keyof AppraisalSubmission] as number | null} />
+              <span className="text-sm text-gray-600">
+                {s[item.key as keyof AppraisalSubmission] != null
+                  ? `${s[item.key as keyof AppraisalSubmission]}/10`
+                  : "—"}
+              </span>
+            </div>
           </div>
         ))}
-        <DetailField label="Backlog Notes" value={s.hrBacklogNotes} />
-        <div className="grid md:grid-cols-2 md:gap-x-4">
-          <DetailField label="Admin Signature" value={s.hrAdminSignatureName} />
-          <DetailField label="Admin Signature Date" value={formatDate(s.hrAdminSignatureDate)} />
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-sm text-gray-600">{HR_BACKLOG_QUESTION}</p>
+          <p className="mt-2 whitespace-pre-wrap text-[15px] font-semibold text-[#1e2740]">
+            {displayValue(s.hrBacklogNotes)}
+          </p>
         </div>
+        <dl className="grid gap-x-6 md:grid-cols-2">
+          <InfoRow label="Signature Of Admin Head" value={displayValue(s.hrAdminSignatureName)} />
+          <InfoRow label="Date" value={formatDate(s.hrAdminSignatureDate) || "—"} />
+        </dl>
       </SectionBody>
     </div>
   );
 }
 
 export function ManagerSubmissionView({ submission: s }: { submission: AppraisalSubmission }) {
-  const levels = s.mgrRecommendation ?? [];
-  const groups = [
-    { level: "STRONGLY_RECOMMEND", reasons: s.mgrStrongReasons, options: STRONG_REASONS },
-    { level: "CONDITIONALLY_RECOMMEND", reasons: s.mgrConditionalReasons, options: CONDITIONAL_REASONS },
-    { level: "NOT_RECOMMENDED", reasons: s.mgrNotRecommendedReasons, options: NOT_RECOMMENDED_REASONS },
-  ];
+  const reasonOptions: Record<string, readonly string[]> = {
+    mgrStrongReasons: STRONG_REASONS,
+    mgrConditionalReasons: CONDITIONAL_REASONS,
+    mgrNotRecommendedReasons: NOT_RECOMMENDED_REASONS,
+  };
 
   return (
     <div className="overflow-hidden rounded-lg">
       <SectionHeader title="SECTION 3 — TEAM HEAD FEEDBACK" color="#c97c10" />
       <SectionBody>
-        <div className="mb-3 grid gap-3 md:grid-cols-2">
-          <DetailField label="Employee Name" value={s.employeeName} />
-          <DetailField label="Employee Code" value={s.employeeCode} />
-        </div>
-        <DetailField
-          label="Recommendation Level(s)"
-          value={levels.length ? levels.map((l) => MGR_RECOMMENDATION_LABELS[l] ?? l).join("; ") : null}
-        />
-        {groups.map((g) =>
-          levels.includes(g.level) ? (
-            <div key={g.level} className="mb-4">
-              <p className="mb-2 text-sm font-semibold">{MGR_RECOMMENDATION_LABELS[g.level]}</p>
-              <ul className="list-disc space-y-1 pl-5 text-sm">
-                {g.options
-                  .filter((r) => g.reasons.includes(r))
-                  .map((r) => (
+        <dl className="mb-4 grid gap-x-6 md:grid-cols-2">
+          <InfoRow label="Employee Name" value={displayValue(s.employeeName)} />
+          <InfoRow label="Employee Code" value={displayValue(s.employeeCode)} />
+        </dl>
+
+        {MGR_RECOMMENDATION_SECTIONS.map((section) => {
+          const reasons = s[section.field] ?? [];
+          const options = reasonOptions[section.field];
+          const checked = [
+            ...options.filter((r) => reasons.includes(r)),
+            ...reasons.filter((r) => !options.includes(r)),
+          ];
+
+          return (
+            <div key={section.level} className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+              <p className="text-sm font-semibold text-[#1e2740]">• {section.header}</p>
+              {checked.length > 0 ? (
+                <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-[#1e2740]">
+                  {checked.map((r) => (
                     <li key={r}>{r}</li>
                   ))}
-                {g.reasons
-                  .filter((r) => !(g.options as readonly string[]).includes(r))
-                  .map((r) => (
-                    <li key={r}>{r}</li>
-                  ))}
-              </ul>
+                </ul>
+              ) : (
+                <p className="mt-3 text-sm text-gray-400">—</p>
+              )}
             </div>
-          ) : null
-        )}
-        <DetailField label="Manager Remarks" value={s.mgrRemarks} />
-        <div className="grid md:grid-cols-2 md:gap-x-4">
-          <DetailField label="Team Head Signature" value={s.mgrSignatureName} />
-          <DetailField label="Team Head Signature Date" value={formatDate(s.mgrSignatureDate)} />
-        </div>
+          );
+        })}
+
+        {s.mgrRemarks ? (
+          <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Additional Remarks</p>
+            <p className="mt-2 whitespace-pre-wrap text-[15px] font-semibold text-[#1e2740]">{s.mgrRemarks}</p>
+          </div>
+        ) : null}
+
+        <dl className="grid gap-x-6 md:grid-cols-2">
+          <InfoRow label="Signature Of Team Head" value={displayValue(s.mgrSignatureName)} />
+          <InfoRow label="Date" value={formatDate(s.mgrSignatureDate) || "—"} />
+        </dl>
       </SectionBody>
     </div>
   );
