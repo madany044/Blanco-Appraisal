@@ -54,7 +54,7 @@ export default function LoginPage() {
         <CardHeader className="text-center">
           <CardTitle className="text-blanco-primary">Staff Login</CardTitle>
           <CardDescription>
-            Blanco Steel Detailing — Appraisal System FY 2026-27
+            Blanco Steel Detailing — Appraisal System
           </CardDescription>
         </CardHeader>
         <CardContent>
