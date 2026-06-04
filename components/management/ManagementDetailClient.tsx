@@ -10,6 +10,7 @@ import { ManagementDecisionForm } from "@/components/forms/ManagementDecisionFor
 import type { ManagementFormValues } from "@/lib/validations/management-form.schema";
 import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
+import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 interface ManagementDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
@@ -43,6 +44,7 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
 
   return (
     <div className="space-y-6">
+      <FormBrandHeader subtitle={`${s.employeeName} · ${s.employeeCode}`} compact />
       <div>
         <h2 className="text-xl font-semibold">{s.employeeName}</h2>
         <p className="text-muted-foreground">{s.employeeCode} · {s.manager.name}</p>

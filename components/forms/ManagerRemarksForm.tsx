@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import type { AppraisalSubmission } from "@prisma/client";
+import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 interface ManagerRemarksFormProps {
   defaultValues?: Partial<ManagerFormValues>;
@@ -54,6 +55,7 @@ export function ManagerRemarksForm({
   return (
     <FormProvider {...methods}>
       <form className="space-y-6">
+        <FormBrandHeader subtitle="Team Head Feedback" compact />
         <div>
           <Label>Recommendation levels *</Label>
           <p className="text-sm text-muted-foreground mb-3">

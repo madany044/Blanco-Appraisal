@@ -2,22 +2,31 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Shield, Building2 } from "lucide-react";
+import { CompanyLogo } from "@/components/shared/CompanyLogo";
+import { COMPANY_NAME, COMPANY_ADDRESS } from "@/lib/brand";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blanco-primary to-slate-800">
       <div className="container mx-auto px-4 py-16">
-        <div className="text-center text-white mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            BLANCO STEEL DETAILING SERVICES PRIVATE LIMITED
+        <div className="text-center text-white mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 leading-tight max-w-3xl mx-auto">
+            {COMPANY_NAME}
           </h1>
-          <p className="text-xs text-slate-300 mt-4 max-w-xl mx-auto">
-            No 3051 SPYR Arcade 2nd Floor Ring Road, Near Mahamane Circle Dattagalli 3rd Stage,
-            Mysore-570023, Karnataka.
+          <p className="text-xs text-slate-300 mt-3 max-w-xl mx-auto leading-relaxed">
+            {COMPANY_ADDRESS}
           </p>
         </div>
 
-        <p className="text-center text-white/80 mb-8 text-lg">Select your role to continue</p>
+        <div className="flex justify-center mb-8">
+          <div className="rounded-xl bg-white/95 px-6 py-4 shadow-lg ring-1 ring-white/20">
+            <CompanyLogo size="md" priority />
+          </div>
+        </div>
+
+        <p className="text-center text-white/90 mb-8 text-lg font-medium tracking-wide">
+          Select your role to continue
+        </p>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           <Card className="hover:shadow-xl transition-shadow">

@@ -13,6 +13,7 @@ import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
 import { downloadPDF } from "@/components/export/PDFDownload";
+import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { exportSubmissionExcel } from "@/components/export/ExcelExport";
 
 interface SubmissionDetailClientProps {
@@ -60,6 +61,10 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
 
   return (
     <div className="space-y-6">
+      <FormBrandHeader
+        subtitle={`${s.employeeName} · ${s.employeeCode}`}
+        compact
+      />
       <div>
         <h2 className="text-xl font-semibold">{s.employeeName}</h2>
         <p className="text-muted-foreground">{s.employeeCode} · {s.manager.name}</p>

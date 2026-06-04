@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CompanyLogo } from "@/components/shared/CompanyLogo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -52,6 +53,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
+          <CompanyLogo size="sm" className="mb-3" />
           <CardTitle className="text-blanco-primary">Staff Login</CardTitle>
           <CardDescription>
             Blanco Steel Detailing — Appraisal System

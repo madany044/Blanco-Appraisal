@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { RatingPillInput, RatingPillReadOnly } from "@/components/forms/RatingPillInput";
 import { HRSubmissionView } from "@/components/forms/SubmissionDetailView";
 import type { AppraisalSubmission } from "@prisma/client";
+import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 const HR_RATINGS = [
   { name: "hrCodeOfConduct" as const, label: "Rate this Employee - Adhere to Company Code of Conduct" },
@@ -71,6 +72,7 @@ export function HRFeedbackForm({
   return (
     <FormProvider {...methods}>
       <form className="space-y-6">
+        <FormBrandHeader subtitle="HR and Admin Feedback" compact />
         {HR_RATINGS.map((item) => (
           <div key={item.name} className="rounded-lg border p-4">
             <Controller

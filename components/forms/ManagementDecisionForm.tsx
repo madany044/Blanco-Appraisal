@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import type { SerializedIncrementSlab } from "@/lib/utils";
 import { getMaxIncrementPct } from "@/lib/workflow";
 import { formatSalary } from "@/lib/submission-display";
+import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 const LETTER_INTRO = `Dear Employee of Team,
 
@@ -73,6 +74,7 @@ export function ManagementDecisionForm({
 
   const content = (
     <div className="space-y-8">
+      <FormBrandHeader subtitle="Management Worksheet & Final Conclusion" compact />
       {/* Letter intro */}
       <div style={{
         background: "#f8f9fc",

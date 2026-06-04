@@ -21,6 +21,7 @@ import {
 } from "@/lib/validations/employee-form.schema";
 import { OVERALL_RATINGS, ABROAD_OPTIONS, type AppraisalCategory } from "@/lib/types";
 import type { Manager } from "@prisma/client";
+import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 const RATINGS_PART1 = [
   { name: "rateTeamwork", label: "a. Teamwork and Collaboration" },
@@ -51,9 +52,10 @@ const RATINGS_PART2 = [
 interface UniversalAppraisalFormProps {
   category: AppraisalCategory;
   managers: Manager[];
+  brandSubtitle?: string;
 }
 
-export function UniversalAppraisalForm({ category, managers }: UniversalAppraisalFormProps) {
+export function UniversalAppraisalForm({ category, managers, brandSubtitle }: UniversalAppraisalFormProps) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
@@ -127,7 +129,8 @@ export function UniversalAppraisalForm({ category, managers }: UniversalAppraisa
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-6">
-        <div className="sticky top-0 z-10 bg-white py-4 border-b">
+        <FormBrandHeader compact subtitle={brandSubtitle} />
+        <div className="sticky top-0 z-10 bg-white py-4 border-b shadow-sm">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-blanco-primary">Step {step} of 10</span>
             <Badge>{category.replace("_", " ")}</Badge>

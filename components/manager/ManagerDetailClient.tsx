@@ -8,6 +8,7 @@ import { HRFeedbackForm } from "@/components/forms/HRFeedbackForm";
 import { ManagerRemarksForm } from "@/components/forms/ManagerRemarksForm";
 import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { AppraisalSubmission, Manager } from "@prisma/client";
+import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 interface ManagerDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
@@ -38,6 +39,7 @@ export function ManagerDetailClient({ submission: s }: ManagerDetailClientProps)
 
   return (
     <div className="space-y-6">
+      <FormBrandHeader subtitle={`${s.employeeName} · ${s.employeeCode}`} compact />
       <div>
         <h2 className="text-xl font-semibold">{s.employeeName}</h2>
         <p className="text-muted-foreground">{s.employeeCode}</p>

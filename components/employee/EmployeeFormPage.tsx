@@ -32,12 +32,11 @@ export function EmployeeFormPage({ category, title }: EmployeeFormPageProps) {
         <Link href="/employee" className="inline-flex items-center text-sm text-blanco-primary hover:underline">
           <ArrowLeft className="h-4 w-4 mr-1" /> Change category
         </Link>
-        <h1 className="text-2xl font-bold text-blanco-primary mt-4">{title}</h1>
       </div>
       {loading ? (
         <p className="text-center text-muted-foreground">Loading form...</p>
       ) : (
-        <UniversalAppraisalForm category={category} managers={managers} />
+        <UniversalAppraisalForm category={category} managers={managers} brandSubtitle={title} />
       )}
     </div>
   );
