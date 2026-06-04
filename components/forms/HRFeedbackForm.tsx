@@ -12,11 +12,11 @@ import { HRSubmissionView } from "@/components/forms/SubmissionDetailView";
 import type { AppraisalSubmission } from "@prisma/client";
 
 const HR_RATINGS = [
-  { name: "hrCodeOfConduct" as const, label: "Adhere to Company Code of Conduct" },
-  { name: "hrDressCode" as const, label: "Dress Code Management" },
-  { name: "hrProfessionalism" as const, label: "Professionalism Attitude" },
-  { name: "hrLeaveManagement" as const, label: "Leave Management" },
-  { name: "hrTimingManagement" as const, label: "Timing Management" },
+  { name: "hrCodeOfConduct" as const, label: "Rate this Employee - Adhere to Company Code of Conduct" },
+  { name: "hrDressCode" as const, label: "Rate this Employee - Dress Code Management" },
+  { name: "hrProfessionalism" as const, label: "Rate this Employee - Professionalism Attitude" },
+  { name: "hrLeaveManagement" as const, label: "Rate this Employee -Leave Management" },
+  { name: "hrTimingManagement" as const, label: "Rate this Employee -Timing Management" },
 ];
 
 interface HRFeedbackFormProps {
@@ -87,12 +87,13 @@ export function HRFeedbackForm({
           </div>
         ))}
         <div>
-          <Label>Notes: backlog, arrogancy, disciplinary issues</Label>
+          <Label>Please Specify If any backlog, Arrogancy, Damaging the company Property, Involving in any illegal activities 
+          during the office premises, misleading other employees, etc. </Label>
           <Textarea className="mt-1" {...register("hrBacklogNotes")} />
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Admin Head Signature (typed name) *</Label>
+            <Label>Approved By *</Label>
             <Input {...register("hrAdminSignatureName")} />
           </div>
           <div>
