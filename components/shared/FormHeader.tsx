@@ -71,11 +71,11 @@ export function FormHeader({ managers }: FormHeaderProps) {
           <Input value={today} readOnly disabled className="bg-muted" />
         </div>
         <div>
-          <Label htmlFor="prevExperienceYears">Previous Field Experience (years)</Label>
+          <Label htmlFor="prevExperienceYears">Previous no of years experience in this field (if applicable)</Label>
           <Input id="prevExperienceYears" {...register("prevExperienceYears")} />
         </div>
         <div>
-          <Label htmlFor="companyExperienceYears">Company Experience (years)</Label>
+          <Label htmlFor="companyExperienceYears">No of years experience in this company</Label>
           <Input id="companyExperienceYears" {...register("companyExperienceYears")} />
         </div>
         <div>

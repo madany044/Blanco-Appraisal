@@ -37,6 +37,11 @@ export function ProductivitySection() {
   return (
     <div className="space-y-8">
       <div>
+         <p className="text-sm text-gray-500 mb-2">
+    What’s your capability to produce the maximum number of the following
+    kinds of drawings/connections (Checking, Shop Drafting, GA Drafting &
+    Modelling)?
+  </p>
         <h3 className="text-lg font-semibold text-blanco-primary mb-4">Shop Drafting and Checker</h3>
         <div className="grid gap-4 md:grid-cols-2">
           {SHOP_FIELDS.map((f) => (

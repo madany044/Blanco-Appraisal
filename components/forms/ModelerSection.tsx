@@ -44,13 +44,30 @@ export function ModelerSection({ category }: ModelerSectionProps) {
   }
 
   return (
+  <>
+    <div className="mb-6 text-center border-b pb-3">
+      <h3 className="text-2xl font-bold text-blanco-primary">
+        Modeler
+      </h3>
+    </div>
+
     <div className="grid gap-4 md:grid-cols-2">
       {MODELER_FIELDS.map((f) => (
-        <div key={f.name}>
-          <Label htmlFor={f.name}>{f.label}</Label>
-          <Input id={f.name} {...register(f.name)} />
-        </div>
-      ))}
+  <div key={f.name}>
+    <Label htmlFor={f.name}>{f.label}</Label>
+
+    {f.name === "prodModMemberPlacingHours" && (
+      <img
+        src="/images/member-placing-sketch.png"
+        alt="Member Placing Sketch"
+        className="mt-2 mb-3 max-w-full rounded border"
+      />
+    )}
+
+    <Input id={f.name} {...register(f.name)} />
+  </div>
+))}
     </div>
+  </>
   );
 }
