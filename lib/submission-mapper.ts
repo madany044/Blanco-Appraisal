@@ -17,6 +17,7 @@ export function mapEmployeeToPrisma(
     teamDesignation: data.teamDesignation,
     prevExperienceYears: data.prevExperienceYears,
     companyExperienceYears: data.companyExperienceYears,
+    currentSalary: data.currentSalary,
     basisOfAppraisal: data.basisOfAppraisal,
     supportToCompany: data.supportToCompany,
     expectationsYesNo: data.expectationsYesNo,
@@ -111,77 +112,20 @@ export function mapManagerToPrisma(data: ManagerFormValues): Prisma.AppraisalSub
   };
 }
 
-export function mapManagementToPrisma(data: ManagementFormValues): Prisma.AppraisalSubmissionUpdateInput {
-  const grossPresent =
-    data.salaryBasicPresent +
-    data.salaryDaPresent +
-    data.salaryHraPresent +
-    data.salaryCityAllowancePresent +
-    data.salaryConveyancePresent +
-    data.salaryMedicalPresent +
-    data.salaryEducationPresent +
-    data.salaryLtaPresent +
-    data.salarySpecialPresent;
-
-  const grossProposed =
-    data.salaryBasicPresent +
-    data.salaryDaPresent +
-    data.salaryHraPresent +
-    data.salaryCityAllowanceProposed +
-    data.salaryConveyancePresent +
-    data.salaryMedicalPresent +
-    data.salaryEducationPresent +
-    data.salaryLtaPresent +
-    data.salarySpecialProposed;
-
-  const netPresent = grossPresent - data.salaryPfDeduction - data.salaryEsicDeduction - data.salaryPtDeduction;
-  const netProposed = grossProposed - data.salaryPfDeduction - data.salaryEsicDeduction - data.salaryPtDeduction;
-
-  const ctcPresent =
-    grossPresent +
-    data.salaryEmployerPfPresent +
-    data.salaryBonusPresent +
-    data.salaryEmployerEsicPresent +
-    data.salaryMedicalInsurancePresent;
-
-  const ctcProposed =
-    grossProposed +
-    data.salaryEmployerPfPresent +
-    data.salaryBonusPresent +
-    data.salaryEmployerEsicPresent +
-    data.salaryMedicalInsurancePresent;
+export function mapManagementToPrisma(
+  data: ManagementFormValues,
+  currentSalary: number
+): Prisma.AppraisalSubmissionUpdateInput {
+  const newSalary = Math.round(currentSalary * (1 + data.mgmtIncrementPercentage / 100));
 
   return {
-    salaryBasicPresent: data.salaryBasicPresent,
-    salaryDaPresent: data.salaryDaPresent,
-    salaryHraPresent: data.salaryHraPresent,
-    salaryCityAllowancePresent: data.salaryCityAllowancePresent,
-    salaryConveyancePresent: data.salaryConveyancePresent,
-    salaryMedicalPresent: data.salaryMedicalPresent,
-    salaryEducationPresent: data.salaryEducationPresent,
-    salaryLtaPresent: data.salaryLtaPresent,
-    salarySpecialPresent: data.salarySpecialPresent,
-    salaryGrossPresent: grossPresent,
-    salaryPfDeduction: data.salaryPfDeduction,
-    salaryEsicDeduction: data.salaryEsicDeduction,
-    salaryPtDeduction: data.salaryPtDeduction,
-    salaryNetPresent: netPresent,
-    salaryCtcPresent: ctcPresent,
-    salaryEmployerPfPresent: data.salaryEmployerPfPresent,
-    salaryBonusPresent: data.salaryBonusPresent,
-    salaryEmployerEsicPresent: data.salaryEmployerEsicPresent,
-    salaryMedicalInsurancePresent: data.salaryMedicalInsurancePresent,
-    salaryCityAllowanceProposed: data.salaryCityAllowanceProposed,
-    salarySpecialProposed: data.salarySpecialProposed,
-    salaryGrossProposed: grossProposed,
-    salaryNetProposed: netProposed,
-    salaryCtcProposed: ctcProposed,
     mgmtIncrementPercentage: data.mgmtIncrementPercentage,
+    mgmtNewSalary: newSalary,
     mgmtEffectiveDate: new Date(data.mgmtEffectiveDate),
     mgmtApproverName: data.mgmtApproverName,
     mgmtApprovalDate: new Date(),
     mgmtFinalRemarks: data.mgmtFinalRemarks,
-    mgmtFeedbackToEmployee: data.mgmtFeedbackToEmployee,
+    mgmtFeedbackToEmployee: data.mgmtFeedbackToEmployee ?? data.mgmtFinalRemarks,
     mgmtInternalNotes: data.mgmtInternalNotes,
   };
 }

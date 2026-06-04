@@ -8,8 +8,8 @@ interface FormChipsProps {
 export function FormChips({ submission }: FormChipsProps) {
   const hasEmployee = submission.stage >= 0 && submission.basisOfAppraisal;
   const hasHR = submission.hrCodeOfConduct != null;
-  const hasManager = submission.mgrRecommendation != null;
-  const hasManagement = submission.salaryCtcPresent != null;
+  const hasManager = (submission.mgrRecommendation?.length ?? 0) > 0;
+  const hasManagement = submission.mgmtIncrementPercentage != null;
 
   return (
     <div className="flex flex-wrap gap-1">

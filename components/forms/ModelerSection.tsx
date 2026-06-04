@@ -13,9 +13,9 @@ const MODELER_FIELDS = [
   { name: "prodModMomentPlate", label: "Moment plate connections per/hour" },
   { name: "prodModWeldedTube", label: "Welded tube brace connections per hour" },
   { name: "prodModBoltedBrace", label: "Bolted brace connections per hour" },
-  { name: "prodModStairsHours", label: "Hours to complete two flight stairs with rails" },
+  { name: "prodModStairsHours", label: "how many hours to complete two flight stairs with landing and applicable rails" },
   { name: "prodModRfiTime", label: "Hours/minutes to create simple RFI" },
-  { name: "prodModMemberPlacingHours", label: "Hours to complete member placing of reference sketch" },
+  { name: "prodModMemberPlacingHours", label: "Specify how many hours to complete only member placing of below sketch" },
 ];
 
 interface ModelerSectionProps {

@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 const CATEGORIES = [
-  { href: "/employee/group-a", title: "Group A", desc: "Modeler section applicable" },
-  { href: "/employee/group-b", title: "Group B", desc: "Abroad capability applicable" },
-  { href: "/employee/group-c", title: "Group C", desc: "Abroad capability applicable" },
-  { href: "/employee/qc", title: "QC", desc: "Modeler section applicable" },
+  { href: "/employee/group-a", title: "Group A", desc: "5 YEARS & ABOVE WITH ALL DPT" },
+  { href: "/employee/group-b", title: "Group B", desc: "BELOW 5 YEARS WITH ONLY MODELING DEPT" },
+  { href: "/employee/group-c", title: "Group C", desc: "BELOW 5 YEARS WITH ERECTION & SHOP& CHECKING" },
+  { href: "/employee/qc", title: "QC", desc: "ALL QC  TEAM" },
 ];
 
 export default function EmployeeCategoryPage() {

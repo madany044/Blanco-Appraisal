@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { transitionStage, getMaxIncrementPct } from "@/lib/workflow";
 import { mapManagementToPrisma } from "@/lib/submission-mapper";
 import { managementFormSchema } from "@/lib/validations/management-form.schema";
+import { serializeIncrementSlabs } from "@/lib/utils";
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -29,24 +31,15 @@ export async function POST(
       return NextResponse.json({ error: "Invalid stage for management submit" }, { status: 400 });
     }
 
-    const slabs = await prisma.incrementSlab.findMany();
-    const grossPresent =
-      parsed.data.salaryBasicPresent +
-      parsed.data.salaryDaPresent +
-      parsed.data.salaryHraPresent +
-      parsed.data.salaryCityAllowancePresent +
-      parsed.data.salaryConveyancePresent +
-      parsed.data.salaryMedicalPresent +
-      parsed.data.salaryEducationPresent +
-      parsed.data.salaryLtaPresent +
-      parsed.data.salarySpecialPresent;
-    const ctcExtras =
-      parsed.data.salaryEmployerPfPresent +
-      parsed.data.salaryBonusPresent +
-      parsed.data.salaryEmployerEsicPresent +
-      parsed.data.salaryMedicalInsurancePresent;
-    const ctcPresentAnnual = grossPresent * 12 + ctcExtras * 12;
-    const maxPct = getMaxIncrementPct(ctcPresentAnnual, slabs);
+    if (!existing.currentSalary) {
+      return NextResponse.json({ error: "Employee current salary is missing" }, { status: 400 });
+    }
+
+    const slabs = serializeIncrementSlabs(
+      await prisma.incrementSlab.findMany({ orderBy: { ctcMin: "asc" } })
+    );
+    const annualCtc = existing.currentSalary * 12;
+    const maxPct = getMaxIncrementPct(annualCtc, slabs);
 
     if (!draft && parsed.data.mgmtIncrementPercentage > maxPct) {
       return NextResponse.json(
@@ -55,7 +48,7 @@ export async function POST(
       );
     }
 
-    const mgmtData = mapManagementToPrisma(parsed.data);
+    const mgmtData = mapManagementToPrisma(parsed.data, existing.currentSalary);
 
     if (draft) {
       const updated = await prisma.appraisalSubmission.update({

@@ -3,9 +3,18 @@
 import { pdf } from "@react-pdf/renderer";
 import { PDFReport } from "@/components/export/PDFReport";
 import type { AppraisalSubmission } from "@prisma/client";
+import type { SerializedIncrementSlab } from "@/lib/utils";
 
 export async function downloadPDF(submission: AppraisalSubmission) {
-  const blob = await pdf(<PDFReport submission={submission} />).toBlob();
+  let slabs: SerializedIncrementSlab[] = [];
+  try {
+    const res = await fetch("/api/slabs");
+    if (res.ok) slabs = await res.json();
+  } catch {
+    /* use empty slabs */
+  }
+
+  const blob = await pdf(<PDFReport submission={submission} slabs={slabs} />).toBlob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

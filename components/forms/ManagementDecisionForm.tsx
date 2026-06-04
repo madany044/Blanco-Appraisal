@@ -1,22 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   managementFormSchema,
+  INCREMENT_OPTIONS,
   type ManagementFormValues,
 } from "@/lib/validations/management-form.schema";
 import { CTCSlabDisplay } from "@/components/forms/CTCSlabDisplay";
-import { SalaryBreakdownTable } from "@/components/forms/SalaryBreakdownTable";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import type { SerializedIncrementSlab } from "@/lib/utils";
 import { getMaxIncrementPct } from "@/lib/workflow";
+import { formatSalary } from "@/lib/submission-display";
+
+const LETTER_INTRO = `Dear Employee of Team,
+
+We are happy to receive your appraisal request and the feedback from your team head. We will be evaluating everything, and your increment letter will be e-mailed to you soon. Kindly note that revised Increment criteria have been already e-mailed to your registered e-mail IDs with the company (also noted below) and the criteria will remain the same, but we will assure you as best as close to the percentage noted below but purely depends on your performance report card.`;
+
 interface ManagementDecisionFormProps {
   slabs: SerializedIncrementSlab[];
+  employeeName: string;
+  currentSalary: number;
   defaultValues?: Partial<ManagementFormValues>;
   readOnly?: boolean;
   onSaveDraft?: (data: ManagementFormValues) => Promise<void>;
@@ -25,130 +33,329 @@ interface ManagementDecisionFormProps {
 
 export function ManagementDecisionForm({
   slabs,
+  employeeName,
+  currentSalary,
   defaultValues,
   readOnly,
   onSaveDraft,
   onSubmit,
 }: ManagementDecisionFormProps) {
-  const [ctcPresent, setCtcPresent] = useState(0);
-  const maxAllowed = getMaxIncrementPct(ctcPresent, slabs);
+  const annualCtc = currentSalary * 12;
+  const maxAllowed = getMaxIncrementPct(annualCtc, slabs);
 
   const methods = useForm<ManagementFormValues>({
     resolver: zodResolver(managementFormSchema),
     defaultValues: {
-      salaryBasicPresent: 0,
-      salaryDaPresent: 0,
-      salaryHraPresent: 0,
-      salaryCityAllowancePresent: 0,
-      salaryConveyancePresent: 0,
-      salaryMedicalPresent: 0,
-      salaryEducationPresent: 0,
-      salaryLtaPresent: 0,
-      salarySpecialPresent: 0,
-      salaryPfDeduction: 0,
-      salaryEsicDeduction: 0,
-      salaryPtDeduction: 0,
-      salaryEmployerPfPresent: 0,
-      salaryBonusPresent: 0,
-      salaryEmployerEsicPresent: 0,
-      salaryMedicalInsurancePresent: 0,
-      salaryCityAllowanceProposed: 0,
-      salarySpecialProposed: 0,
       mgmtIncrementPercentage: 0,
+      mgmtEffectiveDate: new Date().toISOString().split("T")[0],
       ...defaultValues,
     },
   });
 
-  const { register, handleSubmit, watch, setError, clearErrors } = methods;
-  const incrementPct = watch("mgmtIncrementPercentage");
+  const { register, handleSubmit, watch, setValue } = methods;
+  const incrementPct = watch("mgmtIncrementPercentage") ?? 0;
+  const newMonthlySalary = useMemo(
+    () => Math.round(currentSalary * (1 + incrementPct / 100)),
+    [currentSalary, incrementPct]
+  );
 
-  async function validateAndSubmit(handler?: (data: ManagementFormValues) => Promise<void>) {
+  async function validateAndSubmit(
+    handler?: (data: ManagementFormValues) => Promise<void>
+  ) {
     return handleSubmit(async (data) => {
       if (data.mgmtIncrementPercentage > maxAllowed) {
-        setError("mgmtIncrementPercentage", {
-          message: `Increment cannot exceed slab maximum of ${maxAllowed}%`,
-        });
+        alert(`Increment cannot exceed slab maximum of ${maxAllowed}%`);
         return;
       }
-      clearErrors("mgmtIncrementPercentage");
       await handler?.(data);
     })();
   }
 
-  if (readOnly) {
-    return (
-      <FormProvider {...methods}>
-        <div className="space-y-6">
-          <CTCSlabDisplay slabs={slabs} />
-          <SalaryBreakdownTable readOnly />
-          <p className="text-sm">
-            <strong>Increment:</strong> {defaultValues?.mgmtIncrementPercentage ?? "—"}%
+  const content = (
+    <div className="space-y-8">
+      {/* Letter intro */}
+      <div style={{
+        background: "#f8f9fc",
+        border: "1px solid #e2e6ef",
+        borderRadius: 10,
+        padding: "16px 20px",
+        fontSize: 13,
+        lineHeight: 1.7,
+        color: "#1e2740",
+        whiteSpace: "pre-wrap",
+      }}>
+        {LETTER_INTRO}
+      </div>
+
+      {/* CTC Slab — compact */}
+      <CTCSlabDisplay
+        slabs={slabs}
+        highlightCtc={annualCtc}
+        maxAllowed={maxAllowed}
+      />
+
+      {/* Salary section */}
+      <div style={{
+        border: "1px solid #e2e6ef",
+        borderRadius: 10,
+        padding: "16px 20px",
+        background: "#fff",
+      }}>
+        <p style={{
+          fontSize: 13,
+          fontWeight: 700,
+          color: "#1a4b8c",
+          marginBottom: 14,
+          textTransform: "uppercase",
+          letterSpacing: "0.05em",
+        }}>
+          Salary Section
+        </p>
+
+        {/* Current salary display */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 16,
+          marginBottom: 20,
+        }}>
+          <div>
+            <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
+              textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+              Current Monthly Salary
+            </p>
+            <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
+              {formatSalary(currentSalary)}
+            </p>
+          </div>
+          <div>
+            <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
+              textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+              Current Annual CTC
+            </p>
+            <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
+              {formatSalary(annualCtc)}
+            </p>
+          </div>
+        </div>
+
+        {readOnly ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <p style={{ fontSize: 13 }}>
+              <strong>Increment:</strong> {incrementPct}%
+            </p>
+            <p style={{ fontSize: 13 }}>
+              <strong>New Monthly Salary:</strong> {formatSalary(newMonthlySalary)}
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Increment % button grid */}
+            <div style={{ marginBottom: 16 }}>
+              <p style={{
+                fontSize: 13, fontWeight: 600, color: "#333f5c", marginBottom: 10,
+              }}>
+                Select Increment Percentage
+              </p>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(9, 1fr)",
+                gap: 6,
+              }}>
+                {INCREMENT_OPTIONS.map((n) => {
+                  const isSelected = incrementPct === n;
+                  const isDisabled = n > maxAllowed;
+                  return (
+                    <button
+                      key={n}
+                      type="button"
+                      disabled={isDisabled}
+                      onClick={() =>
+                        setValue("mgmtIncrementPercentage", n, {
+                          shouldValidate: true,
+                        })
+                      }
+                      style={{
+                        padding: "7px 0",
+                        fontSize: 13,
+                        fontWeight: isSelected ? 700 : 500,
+                        borderRadius: 7,
+                        border: isSelected
+                          ? "1.5px solid #1a4b8c"
+                          : isDisabled
+                          ? "1.5px solid #e2e6ef"
+                          : "1.5px solid #e2e6ef",
+                        background: isSelected
+                          ? "#1a4b8c"
+                          : isDisabled
+                          ? "#f8f9fc"
+                          : "#fff",
+                        color: isSelected
+                          ? "#fff"
+                          : isDisabled
+                          ? "#c9d0de"
+                          : "#4b5772",
+                        cursor: isDisabled ? "not-allowed" : "pointer",
+                        textDecoration: isDisabled ? "line-through" : "none",
+                        transition: "all 0.15s ease",
+                        width: "100%",
+                        textAlign: "center",
+                      }}
+                    >
+                      {n}%
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Summary pill */}
+              {incrementPct > 0 && incrementPct <= maxAllowed && (
+                <div style={{
+                  marginTop: 10,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  background: "#e6f5ee",
+                  border: "1px solid #1a8c5a",
+                  borderRadius: 20,
+                  padding: "6px 16px",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "#1a8c5a",
+                }}>
+                  ✓ {incrementPct}% selected — New salary: {formatSalary(newMonthlySalary)}
+                </div>
+              )}
+
+              {/* Warning pill */}
+              {incrementPct > maxAllowed && (
+                <div style={{
+                  marginTop: 10,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  background: "#fdecea",
+                  border: "1px solid #c0392b",
+                  borderRadius: 20,
+                  padding: "6px 16px",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "#c0392b",
+                }}>
+                  ⚠ {incrementPct}% exceeds maximum allowed ({maxAllowed}%) for this salary range
+                </div>
+              )}
+            </div>
+
+            {/* New salary display */}
+            {incrementPct >= 0 && (
+              <div>
+                <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
+                  textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+                  New Monthly Salary (auto-calculated)
+                </p>
+                <p style={{ fontSize: 20, fontWeight: 800, color: "#1a8c5a" }}>
+                  {formatSalary(newMonthlySalary)}
+                </p>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Letter conclusion */}
+      <div style={{
+        background: "#e8f0fb",
+        border: "1px solid #c5d9f5",
+        borderRadius: 10,
+        padding: "14px 18px",
+        fontSize: 14,
+        color: "#1e2740",
+        fontStyle: "italic",
+      }}>
+        Dear Employee <strong style={{ fontStyle: "normal" }}>{employeeName}</strong>,
+        You have been obtained{" "}
+        <strong style={{ fontStyle: "normal", color: "#1a4b8c" }}>{incrementPct}%</strong>{" "}
+        of Increment based on your report card,
+      </div>
+
+      {/* Remarks and signature */}
+      {readOnly ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <p style={{ fontSize: 13 }}>
+            <strong>Feedback / Remarks:</strong>{" "}
+            {defaultValues?.mgmtFinalRemarks ?? "—"}
           </p>
-          <p className="text-sm">
-            <strong>Final Remarks:</strong> {defaultValues?.mgmtFinalRemarks ?? "—"}
+          <p style={{ fontSize: 13 }}>
+            <strong>Internal Notes:</strong>{" "}
+            {defaultValues?.mgmtInternalNotes ?? "—"}
+          </p>
+          <p style={{ fontSize: 13 }}>
+            <strong>Approver:</strong>{" "}
+            {defaultValues?.mgmtApproverName ?? "—"}
           </p>
         </div>
-      </FormProvider>
-    );
-  }
-
-  return (
-    <FormProvider {...methods}>
-      <form className="space-y-8">
-        <CTCSlabDisplay slabs={slabs} highlightCtc={ctcPresent} maxAllowed={maxAllowed} />
-        <SalaryBreakdownTable onTotalsChange={(t) => setCtcPresent(t.ctcPresent)} />
-        <div className="grid gap-4 md:grid-cols-2">
+      ) : (
+        <>
           <div>
-            <Label>Increment Percentage %</Label>
-            <Input
-              type="number"
-              step="0.01"
-              {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
+            <Label>Additional Feedback / Remarks to Employee *</Label>
+            <Textarea
+              className="mt-1 min-h-[120px]"
+              placeholder="Write feedback, areas of improvement, or any specific message for the employee..."
+              {...register("mgmtFinalRemarks")}
             />
-            {incrementPct > maxAllowed && (
-              <p className="text-sm text-blanco-danger mt-1">
-                Exceeds maximum allowed ({maxAllowed}%)
-              </p>
+          </div>
+          <div>
+            <Label>Internal Management Notes (not shared)</Label>
+            <Textarea
+              className="mt-1 min-h-[80px]"
+              {...register("mgmtInternalNotes")}
+            />
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label>Approver Signature *</Label>
+              <Input {...register("mgmtApproverName")} />
+            </div>
+            <div>
+              <Label>Effective Date *</Label>
+              <Input type="date" {...register("mgmtEffectiveDate")} />
+            </div>
+            <div>
+              <Label>Approval Date</Label>
+              <Input
+                value={new Date().toISOString().split("T")[0]}
+                readOnly
+                disabled
+                className="bg-muted"
+              />
+            </div>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {onSaveDraft && (
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={() => validateAndSubmit(onSaveDraft)}
+              >
+                Save Draft
+              </Button>
+            )}
+            {onSubmit && (
+              <Button
+                type="button"
+                className="w-full"
+                onClick={() => validateAndSubmit(onSubmit)}
+              >
+                Attach Decision &amp; Send to HR
+              </Button>
             )}
           </div>
-          <div>
-            <Label>Effective Date *</Label>
-            <Input type="date" {...register("mgmtEffectiveDate")} />
-          </div>
-          <div>
-            <Label>Approver Signature (typed name) *</Label>
-            <Input {...register("mgmtApproverName")} />
-          </div>
-          <div>
-            <Label>Approval Date</Label>
-            <Input value={new Date().toISOString().split("T")[0]} readOnly disabled className="bg-muted" />
-          </div>
-        </div>
-        <div>
-          <Label>Final Remarks *</Label>
-          <Textarea className="mt-1" {...register("mgmtFinalRemarks")} />
-        </div>
-        <div>
-          <Label>Feedback to Employee</Label>
-          <Textarea className="mt-1" {...register("mgmtFeedbackToEmployee")} />
-        </div>
-        <div>
-          <Label>Internal Management Notes</Label>
-          <Textarea className="mt-1" {...register("mgmtInternalNotes")} />
-        </div>
-        <div className="flex gap-3">
-          {onSaveDraft && (
-            <Button type="button" variant="secondary" onClick={() => validateAndSubmit(onSaveDraft)}>
-              Save Draft
-            </Button>
-          )}
-          {onSubmit && (
-            <Button type="button" variant="success" onClick={() => validateAndSubmit(onSubmit)}>
-              Attach Decision and Send to HR for Finalization
-            </Button>
-          )}
-        </div>
-      </form>
-    </FormProvider>
+        </>
+      )}
+    </div>
   );
+
+  if (readOnly) return content;
+  return <FormProvider {...methods}>{content}</FormProvider>;
 }

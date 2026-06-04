@@ -30,12 +30,6 @@ enum LearningCommitment {
   E
 }
 
-enum ManagerRecommendation {
-  STRONGLY_RECOMMEND
-  CONDITIONALLY_RECOMMEND
-  NOT_RECOMMENDED
-}
-
 model Manager {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String?  @map("user_id") @db.Uuid
@@ -76,6 +70,7 @@ model AppraisalSubmission {
 
   prevExperienceYears    String? @map("prev_experience_years")
   companyExperienceYears String? @map("company_experience_years")
+  currentSalary          Int?    @map("current_salary")
 
   basisOfAppraisal       String? @map("basis_of_appraisal")
   supportToCompany       String? @map("support_to_company")
@@ -160,7 +155,7 @@ model AppraisalSubmission {
   hrAdminSignatureDate     DateTime? @map("hr_admin_signature_date") @db.Date
   hrAdminSignatureName     String? @map("hr_admin_signature_name")
 
-  mgrRecommendation          ManagerRecommendation? @map("mgr_recommendation")
+  mgrRecommendation          String[] @default([]) @map("mgr_recommendation")
   mgrStrongReasons           String[] @default([]) @map("mgr_strong_reasons")
   mgrConditionalReasons      String[] @default([]) @map("mgr_conditional_reasons")
   mgrNotRecommendedReasons   String[] @default([]) @map("mgr_not_recommended_reasons")
@@ -168,33 +163,8 @@ model AppraisalSubmission {
   mgrSignatureDate           DateTime? @map("mgr_signature_date") @db.Date
   mgrSignatureName           String? @map("mgr_signature_name")
 
-  salaryBasicPresent            Decimal? @map("salary_basic_present") @db.Decimal(10, 2)
-  salaryDaPresent               Decimal? @map("salary_da_present") @db.Decimal(10, 2)
-  salaryHraPresent              Decimal? @map("salary_hra_present") @db.Decimal(10, 2)
-  salaryCityAllowancePresent    Decimal? @map("salary_city_allowance_present") @db.Decimal(10, 2)
-  salaryConveyancePresent       Decimal? @map("salary_conveyance_present") @db.Decimal(10, 2)
-  salaryMedicalPresent          Decimal? @map("salary_medical_present") @db.Decimal(10, 2)
-  salaryEducationPresent        Decimal? @map("salary_education_present") @db.Decimal(10, 2)
-  salaryLtaPresent              Decimal? @map("salary_lta_present") @db.Decimal(10, 2)
-  salarySpecialPresent          Decimal? @map("salary_special_present") @db.Decimal(10, 2)
-  salaryGrossPresent            Decimal? @map("salary_gross_present") @db.Decimal(10, 2)
-  salaryPfDeduction             Decimal? @map("salary_pf_deduction") @db.Decimal(10, 2)
-  salaryEsicDeduction           Decimal? @map("salary_esic_deduction") @db.Decimal(10, 2)
-  salaryPtDeduction             Decimal? @map("salary_pt_deduction") @db.Decimal(10, 2)
-  salaryNetPresent              Decimal? @map("salary_net_present") @db.Decimal(10, 2)
-  salaryCtcPresent              Decimal? @map("salary_ctc_present") @db.Decimal(10, 2)
-  salaryEmployerPfPresent       Decimal? @map("salary_employer_pf_present") @db.Decimal(10, 2)
-  salaryBonusPresent            Decimal? @map("salary_bonus_present") @db.Decimal(10, 2)
-  salaryEmployerEsicPresent     Decimal? @map("salary_employer_esic_present") @db.Decimal(10, 2)
-  salaryMedicalInsurancePresent Decimal? @map("salary_medical_insurance_present") @db.Decimal(10, 2)
-
-  salaryCityAllowanceProposed  Decimal? @map("salary_city_allowance_proposed") @db.Decimal(10, 2)
-  salarySpecialProposed        Decimal? @map("salary_special_proposed") @db.Decimal(10, 2)
-  salaryGrossProposed          Decimal? @map("salary_gross_proposed") @db.Decimal(10, 2)
-  salaryNetProposed            Decimal? @map("salary_net_proposed") @db.Decimal(10, 2)
-  salaryCtcProposed            Decimal? @map("salary_ctc_proposed") @db.Decimal(10, 2)
-
   mgmtIncrementPercentage   Decimal? @map("mgmt_increment_percentage") @db.Decimal(5, 2)
+  mgmtNewSalary             Decimal? @map("mgmt_new_salary") @db.Decimal(10, 2)
   mgmtEffectiveDate         DateTime? @map("mgmt_effective_date") @db.Date
   mgmtApproverName          String? @map("mgmt_approver_name")
   mgmtApprovalDate          DateTime? @map("mgmt_approval_date") @db.Date

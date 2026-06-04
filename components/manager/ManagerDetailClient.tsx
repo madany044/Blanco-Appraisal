@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
 import { ChainSection } from "@/components/shared/ChainSection";
-import { EmployeeFormReadOnly } from "@/components/forms/EmployeeFormReadOnly";
+import { SubmissionDetailView } from "@/components/forms/SubmissionDetailView";
 import { HRFeedbackForm } from "@/components/forms/HRFeedbackForm";
 import { ManagerRemarksForm } from "@/components/forms/ManagerRemarksForm";
 import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
@@ -45,28 +45,17 @@ export function ManagerDetailClient({ submission: s }: ManagerDetailClientProps)
       <WorkflowBar currentStage={s.stage} />
 
       <ChainSection title="Section 1: Employee Form" accent="blue">
-        <EmployeeFormReadOnly submission={s} />
+        <SubmissionDetailView submission={s} sections={["employee"]} />
       </ChainSection>
 
       <ChainSection title="Section 2: HR Form" accent="green">
-        <HRFeedbackForm
-          readOnly
-          defaultValues={{
-            hrCodeOfConduct: s.hrCodeOfConduct ?? undefined,
-            hrDressCode: s.hrDressCode ?? undefined,
-            hrProfessionalism: s.hrProfessionalism ?? undefined,
-            hrLeaveManagement: s.hrLeaveManagement ?? undefined,
-            hrTimingManagement: s.hrTimingManagement ?? undefined,
-            hrBacklogNotes: s.hrBacklogNotes ?? undefined,
-            hrAdminSignatureName: s.hrAdminSignatureName ?? undefined,
-          }}
-        />
+        <HRFeedbackForm readOnly submission={s} />
       </ChainSection>
 
       <ChainSection title="Section 3: Manager Remarks Form" accent="amber">
         <ManagerRemarksForm
           defaultValues={{
-            mgrRecommendation: s.mgrRecommendation ?? undefined,
+            mgrRecommendation: s.mgrRecommendation as ManagerFormValues["mgrRecommendation"],
             mgrStrongReasons: s.mgrStrongReasons,
             mgrConditionalReasons: s.mgrConditionalReasons,
             mgrNotRecommendedReasons: s.mgrNotRecommendedReasons,
@@ -74,6 +63,7 @@ export function ManagerDetailClient({ submission: s }: ManagerDetailClientProps)
             mgrSignatureName: s.mgrSignatureName ?? undefined,
           }}
           readOnly={s.stage !== 1}
+          submission={s.stage !== 1 ? s : undefined}
           onSaveDraft={s.stage === 1 ? (d) => submit(d, true) : undefined}
           onSubmit={s.stage === 1 ? (d) => submit(d, false) : undefined}
           onReturn={s.stage === 1 ? returnToHR : undefined}

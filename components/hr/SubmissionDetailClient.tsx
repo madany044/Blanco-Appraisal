@@ -3,12 +3,13 @@
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
 import { ChainSection } from "@/components/shared/ChainSection";
-import { EmployeeFormReadOnly } from "@/components/forms/EmployeeFormReadOnly";
+import { SubmissionDetailView } from "@/components/forms/SubmissionDetailView";
 import { HRFeedbackForm } from "@/components/forms/HRFeedbackForm";
 import { ManagerRemarksForm } from "@/components/forms/ManagerRemarksForm";
 import { ManagementDecisionForm } from "@/components/forms/ManagementDecisionForm";
 import { Button } from "@/components/ui/button";
 import type { HRFormValues } from "@/lib/validations/hr-form.schema";
+import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
 import { downloadPDF } from "@/components/export/PDFDownload";
@@ -49,24 +50,6 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
   };
 
   const mgmtDefaults = {
-    salaryBasicPresent: decimalToNumber(s.salaryBasicPresent),
-    salaryDaPresent: decimalToNumber(s.salaryDaPresent),
-    salaryHraPresent: decimalToNumber(s.salaryHraPresent),
-    salaryCityAllowancePresent: decimalToNumber(s.salaryCityAllowancePresent),
-    salaryConveyancePresent: decimalToNumber(s.salaryConveyancePresent),
-    salaryMedicalPresent: decimalToNumber(s.salaryMedicalPresent),
-    salaryEducationPresent: decimalToNumber(s.salaryEducationPresent),
-    salaryLtaPresent: decimalToNumber(s.salaryLtaPresent),
-    salarySpecialPresent: decimalToNumber(s.salarySpecialPresent),
-    salaryPfDeduction: decimalToNumber(s.salaryPfDeduction),
-    salaryEsicDeduction: decimalToNumber(s.salaryEsicDeduction),
-    salaryPtDeduction: decimalToNumber(s.salaryPtDeduction),
-    salaryEmployerPfPresent: decimalToNumber(s.salaryEmployerPfPresent),
-    salaryBonusPresent: decimalToNumber(s.salaryBonusPresent),
-    salaryEmployerEsicPresent: decimalToNumber(s.salaryEmployerEsicPresent),
-    salaryMedicalInsurancePresent: decimalToNumber(s.salaryMedicalInsurancePresent),
-    salaryCityAllowanceProposed: decimalToNumber(s.salaryCityAllowanceProposed),
-    salarySpecialProposed: decimalToNumber(s.salarySpecialProposed),
     mgmtIncrementPercentage: decimalToNumber(s.mgmtIncrementPercentage),
     mgmtEffectiveDate: s.mgmtEffectiveDate?.toISOString().split("T")[0] ?? "",
     mgmtApproverName: s.mgmtApproverName ?? "",
@@ -84,34 +67,38 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
       <WorkflowBar currentStage={s.stage} />
 
       <ChainSection title="Section 1: Employee Form" accent="blue">
-        <EmployeeFormReadOnly submission={s} />
+        <SubmissionDetailView submission={s} sections={["employee"]} />
       </ChainSection>
 
       <ChainSection title="Section 2: HR Form" accent="green">
         <HRFeedbackForm
           defaultValues={hrDefaults}
           readOnly={s.stage > 0}
+          submission={s.stage > 0 ? s : undefined}
           onSaveDraft={s.stage === 0 ? (d) => hrSubmit(d, true) : undefined}
           onSubmit={s.stage === 0 ? (d) => hrSubmit(d, false) : undefined}
         />
       </ChainSection>
 
       <ChainSection title="Section 3: Manager Remarks" accent="amber">
-        <ManagerRemarksForm
-          defaultValues={{
-            mgrRecommendation: s.mgrRecommendation ?? undefined,
-            mgrStrongReasons: s.mgrStrongReasons,
-            mgrConditionalReasons: s.mgrConditionalReasons,
-            mgrNotRecommendedReasons: s.mgrNotRecommendedReasons,
-            mgrRemarks: s.mgrRemarks ?? undefined,
-            mgrSignatureName: s.mgrSignatureName ?? undefined,
-          }}
-          readOnly
-        />
+        <ManagerRemarksForm submission={s} readOnly defaultValues={{
+          mgrRecommendation: s.mgrRecommendation as ManagerFormValues["mgrRecommendation"],
+          mgrStrongReasons: s.mgrStrongReasons,
+          mgrConditionalReasons: s.mgrConditionalReasons,
+          mgrNotRecommendedReasons: s.mgrNotRecommendedReasons,
+          mgrRemarks: s.mgrRemarks ?? undefined,
+          mgrSignatureName: s.mgrSignatureName ?? undefined,
+        }} />
       </ChainSection>
 
       <ChainSection title="Section 4: Management Decision" accent="purple">
-        <ManagementDecisionForm slabs={slabs} defaultValues={mgmtDefaults} readOnly />
+        <ManagementDecisionForm
+          slabs={slabs}
+          employeeName={s.employeeName}
+          currentSalary={s.currentSalary ?? 0}
+          defaultValues={mgmtDefaults}
+          readOnly
+        />
       </ChainSection>
 
       {s.stage === 3 && (

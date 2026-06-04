@@ -109,7 +109,7 @@ export function UniversalAppraisalForm({ category, managers }: UniversalAppraisa
 
   async function nextStep() {
     const fieldsByStep: Record<number, (keyof EmployeeFormValues)[]> = {
-      1: ["employeeName", "employeeCode", "managerId", "basisOfAppraisal", "supportToCompany"],
+      1: ["employeeName", "employeeCode", "managerId", "currentSalary", "basisOfAppraisal", "supportToCompany"],
       2: ["expectationsYesNo", "expectationsReason", "strengthsWeaknesses"],
       3: ["upcomingGoal", "initiativeFrequency"],
       4: ["learningCommitment"],

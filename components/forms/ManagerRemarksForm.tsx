@@ -4,15 +4,17 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { managerFormSchema, type ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import { RecommendationChecklist } from "@/components/forms/RecommendationChecklist";
+import { ManagerSubmissionView } from "@/components/forms/SubmissionDetailView";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
+import type { AppraisalSubmission } from "@prisma/client";
 
 interface ManagerRemarksFormProps {
   defaultValues?: Partial<ManagerFormValues>;
   readOnly?: boolean;
+  submission?: AppraisalSubmission;
   onSaveDraft?: (data: ManagerFormValues) => Promise<void>;
   onSubmit?: (data: ManagerFormValues) => Promise<void>;
   onReturn?: (data: ManagerFormValues) => Promise<void>;
@@ -21,6 +23,7 @@ interface ManagerRemarksFormProps {
 export function ManagerRemarksForm({
   defaultValues,
   readOnly,
+  submission,
   onSaveDraft,
   onSubmit,
   onReturn,
@@ -32,58 +35,32 @@ export function ManagerRemarksForm({
       mgrConditionalReasons: [],
       mgrNotRecommendedReasons: [],
       ...defaultValues,
+      mgrRecommendation: Array.isArray(defaultValues?.mgrRecommendation)
+        ? defaultValues.mgrRecommendation
+        : [],
     },
   });
 
-  const { register, handleSubmit, watch, setValue } = methods;
-  const recommendation = watch("mgrRecommendation");
+  const { register, handleSubmit } = methods;
+
+  if (readOnly && submission) {
+    return <ManagerSubmissionView submission={submission} />;
+  }
 
   if (readOnly) {
-    const v = defaultValues ?? {};
-    const label =
-      v.mgrRecommendation === "STRONGLY_RECOMMEND"
-        ? "I Strongly recommend this employee"
-        : v.mgrRecommendation === "CONDITIONALLY_RECOMMEND"
-          ? "I May recommend this employee"
-          : v.mgrRecommendation === "NOT_RECOMMENDED"
-            ? "I May OR May Not recommend this employee"
-            : "—";
-    return (
-      <div className="space-y-4 text-sm">
-        <p><strong>Recommendation:</strong> {label}</p>
-        <p><strong>Remarks:</strong> {v.mgrRemarks ?? "—"}</p>
-        <p><strong>Signature:</strong> {v.mgrSignatureName ?? "—"}</p>
-      </div>
-    );
+    return submission ? <ManagerSubmissionView submission={submission} /> : null;
   }
 
   return (
     <FormProvider {...methods}>
       <form className="space-y-6">
         <div>
-          <Label>Recommendation level *</Label>
-          <RadioGroup
-            value={recommendation}
-            onValueChange={(v) =>
-              setValue("mgrRecommendation", v as ManagerFormValues["mgrRecommendation"])
-            }
-            className="mt-2 space-y-2"
-          >
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="STRONGLY_RECOMMEND" id="strong" />
-              <Label htmlFor="strong">I Strongly recommend this employee</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="CONDITIONALLY_RECOMMEND" id="conditional" />
-              <Label htmlFor="conditional">I May recommend this employee</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="NOT_RECOMMENDED" id="not" />
-              <Label htmlFor="not">I May OR May Not recommend this employee</Label>
-            </div>
-          </RadioGroup>
+          <Label>Recommendation levels *</Label>
+          <p className="text-sm text-muted-foreground mb-3">
+            You may select one or more recommendation groups and check items in each.
+          </p>
+          <RecommendationChecklist />
         </div>
-        {recommendation && <RecommendationChecklist recommendation={recommendation} />}
         <div>
           <Label>Additional Remarks</Label>
           <Textarea className="mt-1" {...register("mgrRemarks")} />

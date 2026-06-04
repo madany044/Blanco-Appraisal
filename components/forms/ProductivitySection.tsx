@@ -18,17 +18,17 @@ const SHOP_FIELDS: FieldDef[] = [
   { name: "prodRoofFrame", label: "Standard roof frame drawings per/hour" },
   { name: "prodSimpleLadder", label: "Simple ladder drawings per/hour" },
   { name: "prodCagedLadder", label: "Caged ladder drawings per/hour" },
-  { name: "prodLoosePieces", label: "Loose pieces assembly drawings per/hour" },
+  { name: "prodLoosePieces", label: "• loose pieces (angle, BPL, plates, etc..) assembly drawings per/hour" },
   { name: "prodSinglePart", label: "Single part drawings per/hour" },
-  { name: "prodCheckAbHours", label: "Hours to check Single sheet AB plan and section views" },
-  { name: "prodCheckEplanHours", label: "Hours to check Single sheet E-plan and section views" },
+  { name: "prodCheckAbHours", label: "How many hours to checking Single sheet AB plan and section views" },
+  { name: "prodCheckEplanHours", label: "How many hours to checking Single sheet E-plan and section views" },
 ];
 
 const DRAFT_FIELDS: FieldDef[] = [
-  { name: "prodDraftAbHours", label: "Hours to complete drafting Single sheet AB plan" },
-  { name: "prodDraftEplanHours", label: "Hours to complete drafting Single sheet E-plan" },
-  { name: "prodDraftCagedLadder", label: "Hours to complete caged ladder E-plan and section views" },
-  { name: "prodDraftStairs", label: "Hours to complete drafting two flight stairs with rails" },
+  { name: "prodDraftAbHours", label: "How many hours to complete drafting of Single sheet AB plan and section views" },
+  { name: "prodDraftEplanHours", label: "How many hours to complete drafting of Single sheet E-plan and section views" },
+  { name: "prodDraftCagedLadder", label: "How many hours to complete caged ladder E-plan and section views" },
+  { name: "prodDraftStairs", label: "How many hours to complete drafting of two flight stairs with landing and applicable rails" },
 ];
 
 export function ProductivitySection() {

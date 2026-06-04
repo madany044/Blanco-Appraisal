@@ -9,6 +9,7 @@ export const employeeFormSchema = z.object({
   teamDesignation: z.string().optional(),
   prevExperienceYears: z.string().optional(),
   companyExperienceYears: z.string().optional(),
+  currentSalary: z.coerce.number().int().min(1, "Current monthly salary is required"),
   basisOfAppraisal: z.string().min(1, "Required"),
   supportToCompany: z.string().min(1, "Required"),
   expectationsYesNo: z.enum(["YES", "NO"]),
@@ -79,6 +80,7 @@ export const employeeDraftSchema = employeeFormSchema.partial().extend({
   employeeName: z.string().optional(),
   employeeCode: z.string().optional(),
   managerId: z.string().uuid().optional(),
+  currentSalary: z.coerce.number().int().min(0).optional(),
 });
 
 export type EmployeeFormValues = z.infer<typeof employeeFormSchema>;
