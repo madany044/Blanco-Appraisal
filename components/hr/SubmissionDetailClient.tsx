@@ -41,6 +41,7 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
   }
 
   const hrDefaults: Partial<HRFormValues> = {
+    currentSalary: s.currentSalary ?? 0,
     hrCodeOfConduct: s.hrCodeOfConduct ?? undefined,
     hrDressCode: s.hrDressCode ?? undefined,
     hrProfessionalism: s.hrProfessionalism ?? undefined,

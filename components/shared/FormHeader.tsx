@@ -78,19 +78,6 @@ export function FormHeader({ managers }: FormHeaderProps) {
           <Label htmlFor="companyExperienceYears">No of years experience in this company</Label>
           <Input id="companyExperienceYears" {...register("companyExperienceYears")} />
         </div>
-        <div>
-          <Label htmlFor="currentSalary">Current Monthly Salary (₹) *</Label>
-          <Input
-            id="currentSalary"
-            type="number"
-            min={0}
-            placeholder="Enter your current monthly salary"
-            {...register("currentSalary", { valueAsNumber: true })}
-          />
-          {errors.currentSalary && (
-            <p className="text-sm text-blanco-danger mt-1">{String(errors.currentSalary.message)}</p>
-          )}
-        </div>
       </div>
     </div>
   );

@@ -17,7 +17,6 @@ export function mapEmployeeToPrisma(
     teamDesignation: data.teamDesignation,
     prevExperienceYears: data.prevExperienceYears,
     companyExperienceYears: data.companyExperienceYears,
-    currentSalary: data.currentSalary,
     basisOfAppraisal: data.basisOfAppraisal,
     supportToCompany: data.supportToCompany,
     expectationsYesNo: data.expectationsYesNo,
@@ -89,6 +88,7 @@ export function mapEmployeeToPrisma(
 
 export function mapHRToPrisma(data: HRFormValues): Prisma.AppraisalSubmissionUpdateInput {
   return {
+    currentSalary: data.currentSalary,
     hrCodeOfConduct: data.hrCodeOfConduct,
     hrDressCode: data.hrDressCode,
     hrProfessionalism: data.hrProfessionalism,

@@ -118,10 +118,6 @@ export function EmployeeSubmissionView({ submission: s }: EmployeeSectionProps) 
             <InfoRow label="Date" value={formatDate(s.dateOfSubmission) || "—"} />
             <InfoRow label="Previous field experience" value={displayValue(s.prevExperienceYears)} />
             <InfoRow label="Company experience" value={displayValue(s.companyExperienceYears)} />
-            <InfoRow
-              label="Current Monthly Salary"
-              value={s.currentSalary != null ? formatSalary(s.currentSalary) : "—"}
-            />
           </dl>
         </div>
 
@@ -314,6 +310,12 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
     <div className="overflow-hidden rounded-lg">
       <SectionHeader title="SECTION 2 — HR AND ADMIN FEEDBACK" color="#1a8c5a" />
       <SectionBody>
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-sm text-gray-600">Employee Current Monthly Salary (₹)</p>
+          <p className="mt-1 text-[15px] font-semibold text-[#1e2740]">
+            {s.currentSalary != null ? formatSalary(s.currentSalary) : "—"}
+          </p>
+        </div>
         {HR_RATING_ITEMS.map((item) => (
           <div key={item.key} className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
             <p className="text-sm text-[#1e2740]">{item.label}</p>

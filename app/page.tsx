@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Shield, Building2 } from "lucide-react";
+import { Users, Shield } from "lucide-react";
 import { CompanyLogo } from "@/components/shared/CompanyLogo";
 import { COMPANY_NAME, COMPANY_ADDRESS } from "@/lib/brand";
 
@@ -18,17 +18,15 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="flex justify-center mb-8">
-          <div className="rounded-xl bg-white/95 px-6 py-4 shadow-lg ring-1 ring-white/20">
-            <CompanyLogo size="md" priority />
-          </div>
+        <div className="flex justify-center mb-10">
+          <CompanyLogo size="xl" priority className="drop-shadow-2xl" />
         </div>
 
         <p className="text-center text-white/90 mb-8 text-lg font-medium tracking-wide">
           Select your role to continue
         </p>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
           <Card className="hover:shadow-xl transition-shadow">
             <CardHeader>
               <Users className="h-10 w-10 text-blanco-primary mb-2" />
@@ -56,17 +54,6 @@ export default function HomePage() {
                   Login
                 </Button>
               </Link>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-xl transition-shadow border-blanco-purple/30">
-            <CardHeader>
-              <Building2 className="h-10 w-10 text-blanco-purple mb-2" />
-              <CardTitle>About</CardTitle>
-              <CardDescription></CardDescription>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              <p></p>
             </CardContent>
           </Card>
         </div>

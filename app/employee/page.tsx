@@ -14,18 +14,22 @@ const CATEGORIES = [
 export default function EmployeeCategoryPage() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-blanco-primary text-white py-6 px-4">
-        <div className="container mx-auto">
-          <Link href="/" className="inline-flex items-center text-sm text-blue-100 hover:text-white mb-4">
-            <ArrowLeft className="h-4 w-4 mr-1" /> Back
+      <header className="relative bg-blanco-primary text-white px-4 pb-10 pt-6">
+        <div className="container relative mx-auto max-w-3xl">
+          <Link
+            href="/"
+            className="absolute left-0 top-0 inline-flex items-center rounded-md px-2 py-1 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            <ArrowLeft className="mr-1 h-4 w-4" /> Back
           </Link>
-          <div className="inline-flex rounded-lg bg-white/95 px-4 py-2 mb-3 shadow-sm">
-            <CompanyLogo size="sm" />
+          <div className="flex flex-col items-center pt-8 text-center">
+            <div className="mb-5 w-fit rounded-xl bg-white px-5 py-3 shadow-md">
+              <CompanyLogo size="lg" priority />
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+              Select Your Category
+            </h1>
           </div>
-          <h1 className="text-2xl font-bold">Select Your Category</h1>
-          <p className="text-blue-100 text-sm mt-1">
-            Employee Progress Report Card — FY 2026-27
-          </p>
         </div>
       </header>
       <main className="container mx-auto px-4 py-12">

@@ -47,7 +47,7 @@ export function HRFeedbackForm({
     },
   });
 
-  const { register, handleSubmit, control } = methods;
+  const { register, handleSubmit, control, formState: { errors } } = methods;
 
   if (readOnly && submission) {
     return <HRSubmissionView submission={submission} />;
@@ -73,6 +73,23 @@ export function HRFeedbackForm({
     <FormProvider {...methods}>
       <form className="space-y-6">
         <FormBrandHeader subtitle="HR and Admin Feedback" compact />
+        <div className="rounded-lg border p-4">
+          <Label htmlFor="currentSalary">Employee Current Monthly Salary (₹) *</Label>
+          <Input
+            id="currentSalary"
+            type="number"
+            min={0}
+            placeholder="Enter employee's current monthly salary"
+            className="mt-1"
+            {...register("currentSalary", { valueAsNumber: true })}
+          />
+          <p className="mt-1 text-sm text-muted-foreground">
+            This value is used to calculate increment amounts in the Management decision form.
+          </p>
+          {errors.currentSalary && (
+            <p className="text-sm text-blanco-danger mt-1">{String(errors.currentSalary.message)}</p>
+          )}
+        </div>
         {HR_RATINGS.map((item) => (
           <div key={item.name} className="rounded-lg border p-4">
             <Controller
