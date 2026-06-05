@@ -63,7 +63,7 @@ export default function HomePage() {
             <CardHeader>
               <Building2 className="h-10 w-10 text-blanco-purple mb-2" />
               <CardTitle>About</CardTitle>
-              <CardDescription>Steel detailing salary appraisal workflow</CardDescription>
+              <CardDescription></CardDescription>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
               <p></p>
