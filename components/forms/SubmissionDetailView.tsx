@@ -223,43 +223,53 @@ export function EmployeeSubmissionView({ submission: s }: EmployeeSectionProps) 
           ))}
         </div>
 
-        <h4 className="mb-1 text-sm font-bold text-[#1a4b8c]">10. Productivity and Time Management</h4>
-        <p className="mb-4 text-sm text-gray-600">{PRODUCTIVITY_INTRO}</p>
-
-        <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">Shop Drafting and Checker</h5>
-        <ul className="mb-6 list-disc space-y-2 pl-5">
-          {SHOP_DRAFTING_ITEMS.map((item) => (
-            <li key={item.key} className="text-sm text-[#1e2740]">
-              <span>{item.label}: </span>
-              <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
-            </li>
-          ))}
-        </ul>
-
-        <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">E-Drafting</h5>
-        <ul className="mb-6 list-disc space-y-2 pl-5">
-          {E_DRAFTING_ITEMS.map((item) => (
-            <li key={item.key} className="text-sm text-[#1e2740]">
-              <span>{item.label}: </span>
-              <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
-            </li>
-          ))}
-        </ul>
-
-        <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">Modeler</h5>
-        {s.modelerSectionNa ? (
-          <p className="mb-6 text-sm font-medium text-muted-foreground">
-            Modeler — Not Applicable for this category
-          </p>
+        {s.category === "QC" ? (
+          <div className="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm italic text-gray-600">
+            <p className="font-medium not-italic text-[#1e2740]">📋 Productivity Section</p>
+            <p className="mt-1">Not applicable for QC category employees.</p>
+            <p>QC employees describe performance in Questions 11 and 12 (text answers below).</p>
+          </div>
         ) : (
-          <ul className="mb-6 list-disc space-y-2 pl-5">
-            {MODELER_ITEMS.map((item) => (
-              <li key={item.key} className="text-sm text-[#1e2740]">
-                <span>{item.label}: </span>
-                <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <h4 className="mb-1 text-sm font-bold text-[#1a4b8c]">10. Productivity and Time Management</h4>
+            <p className="mb-4 text-sm text-gray-600">{PRODUCTIVITY_INTRO}</p>
+
+            <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">Shop Drafting and Checker</h5>
+            <ul className="mb-6 list-disc space-y-2 pl-5">
+              {SHOP_DRAFTING_ITEMS.map((item) => (
+                <li key={item.key} className="text-sm text-[#1e2740]">
+                  <span>{item.label}: </span>
+                  <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
+                </li>
+              ))}
+            </ul>
+
+            <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">E-Drafting</h5>
+            <ul className="mb-6 list-disc space-y-2 pl-5">
+              {E_DRAFTING_ITEMS.map((item) => (
+                <li key={item.key} className="text-sm text-[#1e2740]">
+                  <span>{item.label}: </span>
+                  <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
+                </li>
+              ))}
+            </ul>
+
+            <h5 className="mb-2 text-sm font-semibold text-[#1e2740]">Modeler</h5>
+            {s.modelerSectionNa ? (
+              <p className="mb-6 text-sm font-medium text-muted-foreground">
+                Modeler — Not Applicable for this category
+              </p>
+            ) : (
+              <ul className="mb-6 list-disc space-y-2 pl-5">
+                {MODELER_ITEMS.map((item) => (
+                  <li key={item.key} className="text-sm text-[#1e2740]">
+                    <span>{item.label}: </span>
+                    <span className="font-semibold">{displayValue(getSubmissionField(s, item.key))}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
 
         <QuestionCard

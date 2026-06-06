@@ -36,6 +36,36 @@ const RATINGS_PART1 = [
   { name: "rateQualityOfWork", label: "j. Quality of work and execution" },
 ];
 
+const ALL_STEPS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
+
+const QC_PRODUCTIVITY_NULLS = {
+  prodSimpleBeam: null,
+  prodMediumBeam: null,
+  prodComplexBeam: null,
+  prodStair: null,
+  prodStairRail: null,
+  prodRoofFrame: null,
+  prodSimpleLadder: null,
+  prodCagedLadder: null,
+  prodLoosePieces: null,
+  prodSinglePart: null,
+  prodCheckAbHours: null,
+  prodCheckEplanHours: null,
+  prodDraftAbHours: null,
+  prodDraftEplanHours: null,
+  prodDraftCagedLadder: null,
+  prodDraftStairs: null,
+  prodModSimpleConnection: null,
+  prodModDirectWeld: null,
+  prodModMomentPlate: null,
+  prodModWeldedTube: null,
+  prodModBoltedBrace: null,
+  prodModStairsHours: null,
+  prodModRfiTime: null,
+  prodModMemberPlacingHours: null,
+  modelerSectionNa: true,
+};
+
 const RATINGS_PART2 = [
   { name: "rateDeadlines", label: "k. Meeting deadlines and completing tasks on time" },
   { name: "rateClientComms", label: "l. Communicating with Client" },
@@ -60,12 +90,17 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
   const showAbroad = category === "GROUP_B" || category === "GROUP_C";
+  const isQC = category === "QC";
+  const visibleSteps = isQC ? ALL_STEPS.filter((s) => s !== 7 && s !== 8) : [...ALL_STEPS];
+  const displayStep = visibleSteps.indexOf(step as (typeof ALL_STEPS)[number]) + 1;
+  const totalSteps = visibleSteps.length;
+  const lastStep = visibleSteps[visibleSteps.length - 1];
 
   const methods = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeFormSchema),
     defaultValues: {
       abroadCapabilityNa: !showAbroad,
-      modelerSectionNa: category === "GROUP_B" || category === "GROUP_C",
+      modelerSectionNa: category === "GROUP_B" || category === "GROUP_C" || isQC,
     },
     mode: "onBlur",
   });
@@ -81,10 +116,11 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
+          ...(isQC ? QC_PRODUCTIVITY_NULLS : {}),
           category,
           stage: isDraft ? -1 : 0,
           abroadCapabilityNa: !showAbroad,
-          modelerSectionNa: category === "GROUP_B" || category === "GROUP_C",
+          modelerSectionNa: isQC ? true : category === "GROUP_B" || category === "GROUP_C",
         }),
       });
       if (!res.ok) {
@@ -123,7 +159,17 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
       const valid = await trigger(fields);
       if (!valid) return;
     }
-    setStep((s) => Math.min(s + 1, 10));
+    const currentIdx = visibleSteps.indexOf(step as (typeof ALL_STEPS)[number]);
+    if (currentIdx < visibleSteps.length - 1) {
+      setStep(visibleSteps[currentIdx + 1]);
+    }
+  }
+
+  function prevStep() {
+    const currentIdx = visibleSteps.indexOf(step as (typeof ALL_STEPS)[number]);
+    if (currentIdx > 0) {
+      setStep(visibleSteps[currentIdx - 1]);
+    }
   }
 
   return (
@@ -132,10 +178,10 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
         <FormBrandHeader compact subtitle={brandSubtitle} />
         <div className="sticky top-0 z-10 bg-white py-4 border-b shadow-sm">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-blanco-primary">Step {step} of 10</span>
+            <span className="text-sm font-medium text-blanco-primary">Step {displayStep} of {totalSteps}</span>
             <Badge>{category.replace("_", " ")}</Badge>
           </div>
-          <Progress value={step * 10} />
+          <Progress value={(displayStep / totalSteps) * 100} />
         </div>
 
         {step === 1 && (
@@ -306,14 +352,14 @@ cycle as similar as your salary grow: *</Label>
         )}
 
         <div className="flex justify-between pt-6 border-t">
-          <Button type="button" variant="outline" disabled={step === 1} onClick={() => setStep((s) => s - 1)}>
+          <Button type="button" variant="outline" disabled={step === visibleSteps[0]} onClick={prevStep}>
             Previous
           </Button>
           <div className="flex gap-3">
             <Button type="button" variant="secondary" onClick={onDraft} disabled={submitting}>
               Save Draft
             </Button>
-            {step < 10 ? (
+            {step < lastStep ? (
               <Button type="button" onClick={nextStep}>Next</Button>
             ) : (
               <Button type="submit" variant="success" disabled={submitting}>
