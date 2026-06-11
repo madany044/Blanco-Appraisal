@@ -5,10 +5,10 @@ import { ArrowLeft } from "lucide-react";
 import { CompanyLogo } from "@/components/shared/CompanyLogo";
 
 const CATEGORIES = [
-  { href: "/employee/group-a", title: "Group A", desc: "5 YEARS & ABOVE WITH ALL DPT" },
-  { href: "/employee/group-b", title: "Group B", desc: "BELOW 5 YEARS WITH ONLY MODELING DEPT" },
-  { href: "/employee/group-c", title: "Group C", desc: "BELOW 5 YEARS WITH ERECTION & SHOP& CHECKING" },
-  { href: "/employee/qc", title: "QC", desc: "ALL QC  TEAM" },
+  { href: "/employee/group-a", title: "Group A", desc: "5 Years & Above With All Departments" },
+  { href: "/employee/group-b", title: "Group B", desc: "Below 5 Yyears With Only Modeling Department" },
+  { href: "/employee/group-c", title: "Group C", desc: "Below 5 Years With Erection, Shop & Checking Departments" },
+  { href: "/employee/qc", title: "QC & Engineering", desc: "_" },
 ];
 
 export default function EmployeeCategoryPage() {
@@ -26,9 +26,9 @@ export default function EmployeeCategoryPage() {
             <div className="mb-5 w-fit rounded-xl bg-white px-5 py-3 shadow-md">
               <CompanyLogo size="lg" priority />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-              Select Your Category
-            </h1>
+            <h3 className="text-2xl font-bold tracking-tight md:text-3xl">
+              Select Your Job Category
+            </h3>
           </div>
         </div>
       </header>

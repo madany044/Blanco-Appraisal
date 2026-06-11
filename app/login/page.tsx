@@ -54,9 +54,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CompanyLogo size="sm" className="mb-3" />
-          <CardTitle className="text-blanco-primary">Staff Login</CardTitle>
+          <CardTitle className="text-blanco-primary">Login</CardTitle>
           <CardDescription>
-            Blanco Steel Detailing — Appraisal System
+            Employee Annual Appraisal Portal 
           </CardDescription>
         </CardHeader>
         <CardContent>
