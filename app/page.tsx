@@ -2,11 +2,10 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CompanyLogo } from "@/components/shared/CompanyLogo";
-import { COMPANY_NAME, COMPANY_ADDRESS } from "@/lib/brand";
+import { COMPANY_NAME } from "@/lib/brand";
 
 const ROLE_CARDS = [
   {
-    icon: "👤",
     title: "Employee",
     subtitle: "Submit your appraisal form",
     href: "/employee",
@@ -14,25 +13,20 @@ const ROLE_CARDS = [
     buttonLabel: "Continue as Employee",
   },
   {
-    icon: "🏢",
     title: "HR & Administration",
-    subtitle: "Review and process submissions",
     href: "/login?role=hr",
     variant: "outline" as const,
     buttonLabel: "Login",
   },
   {
-    icon: "👔",
     title: "Reporting Manager",
-    subtitle: "Review team appraisals and add remarks",
     href: "/login?role=manager",
     variant: "outline" as const,
     buttonLabel: "Login",
   },
   {
-    icon: "🏛️",
+    icon: "",
     title: "Management",
-    subtitle: "Final increment decisions",
     href: "/login?role=management",
     variant: "outline" as const,
     buttonLabel: "Login",
@@ -48,7 +42,9 @@ export default function HomePage() {
             {COMPANY_NAME}
           </h1>
           <p className="text-xs text-slate-300 mt-3 max-w-xl mx-auto leading-relaxed">
-            {COMPANY_ADDRESS}
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <marquee> Welcome to the Employee Annual Appraisal Portal </marquee>
           </p>
         </div>
 
@@ -60,7 +56,7 @@ export default function HomePage() {
           Select your role to continue
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-7xl mx-auto">
           {ROLE_CARDS.map((card) => (
             <Card key={card.title} className="hover:shadow-xl transition-shadow">
               <CardHeader>
