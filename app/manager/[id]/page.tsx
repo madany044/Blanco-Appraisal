@@ -24,7 +24,7 @@ export default async function ManagerDetailPage({
 
   return (
     <DashboardLayout role="manager" userEmail={user.email} title="Employee Detail">
-      <ManagerDetailClient submission={submission} />
+      <ManagerDetailClient submission={submission} managerName={manager.name} />
     </DashboardLayout>
   );
 }

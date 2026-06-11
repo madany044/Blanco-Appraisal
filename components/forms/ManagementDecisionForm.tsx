@@ -5,7 +5,6 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   managementFormSchema,
-  INCREMENT_OPTIONS,
   type ManagementFormValues,
 } from "@/lib/validations/management-form.schema";
 import { CTCSlabDisplay } from "@/components/forms/CTCSlabDisplay";
@@ -48,12 +47,11 @@ export function ManagementDecisionForm({
     resolver: zodResolver(managementFormSchema),
     defaultValues: {
       mgmtIncrementPercentage: 0,
-      mgmtEffectiveDate: new Date().toISOString().split("T")[0],
       ...defaultValues,
     },
   });
 
-  const { register, handleSubmit, watch, setValue } = methods;
+  const { register, handleSubmit, watch } = methods;
   const incrementPct = watch("mgmtIncrementPercentage") ?? 0;
   const newMonthlySalary = useMemo(
     () => Math.round(currentSalary * (1 + incrementPct / 100)),
@@ -152,113 +150,53 @@ export function ManagementDecisionForm({
           </div>
         ) : (
           <>
-            {/* Increment % button grid */}
             <div style={{ marginBottom: 16 }}>
-              <p style={{
-                fontSize: 13, fontWeight: 600, color: "#333f5c", marginBottom: 10,
-              }}>
-                Select Increment Percentage
+              <Label htmlFor="mgmtIncrementPercentage">Increment Percentage (%)</Label>
+              <Input
+                id="mgmtIncrementPercentage"
+                type="number"
+                min={0}
+                max={100}
+                step={0.5}
+                placeholder="Enter increment %"
+                {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
+                style={{
+                  width: 200,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  padding: "10px 14px",
+                  border: "2px solid #e2e6ef",
+                  borderRadius: 8,
+                  textAlign: "center",
+                  marginTop: 8,
+                }}
+              />
+              <p style={{ color: "#6b7a99", fontSize: 12, marginTop: 8 }}>
+                Maximum allowed for this salary range: {maxAllowed}%
               </p>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(9, 1fr)",
-                gap: 6,
-              }}>
-                {INCREMENT_OPTIONS.map((n) => {
-                  const isSelected = incrementPct === n;
-                  const isDisabled = n > maxAllowed;
-                  return (
-                    <button
-                      key={n}
-                      type="button"
-                      disabled={isDisabled}
-                      onClick={() =>
-                        setValue("mgmtIncrementPercentage", n, {
-                          shouldValidate: true,
-                        })
-                      }
-                      style={{
-                        padding: "7px 0",
-                        fontSize: 13,
-                        fontWeight: isSelected ? 700 : 500,
-                        borderRadius: 7,
-                        border: isSelected
-                          ? "1.5px solid #1a4b8c"
-                          : isDisabled
-                          ? "1.5px solid #e2e6ef"
-                          : "1.5px solid #e2e6ef",
-                        background: isSelected
-                          ? "#1a4b8c"
-                          : isDisabled
-                          ? "#f8f9fc"
-                          : "#fff",
-                        color: isSelected
-                          ? "#fff"
-                          : isDisabled
-                          ? "#c9d0de"
-                          : "#4b5772",
-                        cursor: isDisabled ? "not-allowed" : "pointer",
-                        textDecoration: isDisabled ? "line-through" : "none",
-                        transition: "all 0.15s ease",
-                        width: "100%",
-                        textAlign: "center",
-                      }}
-                    >
-                      {n}%
-                    </button>
-                  );
-                })}
-              </div>
 
-              {/* Summary pill */}
-              {incrementPct > 0 && incrementPct <= maxAllowed && (
+              {incrementPct > maxAllowed && (
+                <p style={{ color: "#c0392b", fontSize: 12, marginTop: 8 }}>
+                  ⚠ {incrementPct}% exceeds maximum allowed ({maxAllowed}%)
+                </p>
+              )}
+
+              {incrementPct >= 0 && incrementPct <= maxAllowed && incrementPct > 0 && (
                 <div style={{
                   marginTop: 10,
                   display: "inline-flex",
                   alignItems: "center",
                   background: "#e6f5ee",
-                  border: "1px solid #1a8c5a",
                   borderRadius: 20,
-                  padding: "6px 16px",
+                  padding: "6px 14px",
                   fontSize: 13,
                   fontWeight: 600,
                   color: "#1a8c5a",
                 }}>
-                  ✓ {incrementPct}% selected — New salary: {formatSalary(newMonthlySalary)}
-                </div>
-              )}
-
-              {/* Warning pill */}
-              {incrementPct > maxAllowed && (
-                <div style={{
-                  marginTop: 10,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  background: "#fdecea",
-                  border: "1px solid #c0392b",
-                  borderRadius: 20,
-                  padding: "6px 16px",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: "#c0392b",
-                }}>
-                  ⚠ {incrementPct}% exceeds maximum allowed ({maxAllowed}%) for this salary range
+                  ✓ {incrementPct}% — New salary: {formatSalary(newMonthlySalary)}
                 </div>
               )}
             </div>
-
-            {/* New salary display */}
-            {incrementPct >= 0 && (
-              <div>
-                <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
-                  textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-                  New Monthly Salary (auto-calculated)
-                </p>
-                <p style={{ fontSize: 20, fontWeight: 800, color: "#1a8c5a" }}>
-                  {formatSalary(newMonthlySalary)}
-                </p>
-              </div>
-            )}
           </>
         )}
       </div>
@@ -316,10 +254,6 @@ export function ManagementDecisionForm({
             <div>
               <Label>Approver Signature *</Label>
               <Input {...register("mgmtApproverName")} />
-            </div>
-            <div>
-              <Label>Effective Date *</Label>
-              <Input type="date" {...register("mgmtEffectiveDate")} />
             </div>
             <div>
               <Label>Approval Date</Label>

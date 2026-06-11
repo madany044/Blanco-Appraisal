@@ -559,9 +559,21 @@ function InfoPanel({ sub }: { sub: AppraisalSubmission }) {
           <Text style={s.infoValue}>{pdfDisplayValue(sub.employeeCode)}</Text>
         </View>
         <View style={s.infoCellRight}>
-          <Text style={s.infoLabel}>Team &amp; Designation:</Text>
+          <Text style={s.infoLabel}>Team:</Text>
+          <Text style={s.infoValue}>{pdfDisplayValue(sub.team)}</Text>
+        </View>
+      </View>
+      <View style={s.infoRow}>
+        <View style={s.infoCell}>
+          <Text style={s.infoLabel}>Designation:</Text>
+          <Text style={s.infoValue}>{pdfDisplayValue(sub.designation)}</Text>
+        </View>
+        <View style={s.infoCellRight}>
+          <Text style={s.infoLabel}>
+            Number of years' experience in this company:
+          </Text>
           <Text style={s.infoValue}>
-            {pdfDisplayValue(sub.teamDesignation)}
+            {pdfDisplayValue(sub.companyExperienceYears)}
           </Text>
         </View>
       </View>
@@ -574,14 +586,7 @@ function InfoPanel({ sub }: { sub: AppraisalSubmission }) {
             {pdfDisplayValue(sub.prevExperienceYears)}
           </Text>
         </View>
-        <View style={s.infoCellRight}>
-          <Text style={s.infoLabel}>
-            Number of years' experience in this company:
-          </Text>
-          <Text style={s.infoValue}>
-            {pdfDisplayValue(sub.companyExperienceYears)}
-          </Text>
-        </View>
+        <View style={s.infoCellRight} />
       </View>
     </View>
   );
@@ -659,13 +664,22 @@ function CheckRow({
 function HrRatingRow({
   label,
   score,
+  notes,
 }: {
   label: string;
   score: number | null;
+  notes?: string | null;
 }) {
   return (
     <View style={s.hrRow}>
-      <Text style={s.hrLabel}>• {label}</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={s.hrLabel}>• {label}</Text>
+        {notes ? (
+          <Text style={{ fontSize: 8, fontStyle: "italic", color: "#6b7a99", marginTop: 2 }}>
+            {notes}
+          </Text>
+        ) : null}
+      </View>
       <View style={s.hrCircleWrap}>
         <Text style={{ fontSize: 8.5, fontFamily: "Helvetica-Bold" }}>
           {score != null ? `${score}/10` : "—"}
@@ -699,6 +713,10 @@ export function PDFReport({
   const isQC = sub.category === "QC";
   const annualCtc = (sub.currentSalary ?? 0) * 12;
   const incrementPct = decimalToNumber(sub.mgmtIncrementPercentage);
+  const newMonthlySalary =
+    sub.mgmtNewSalary != null
+      ? Math.round(decimalToNumber(sub.mgmtNewSalary))
+      : Math.round((sub.currentSalary ?? 0) * (1 + incrementPct / 100));
   const selectedOverall = normalizeOverallRating(sub.overallRating);
  
   const mgrReasonOptions: Record<string, readonly string[]> = {
@@ -808,8 +826,13 @@ export function PDFReport({
             e. Do you have capability of managing yourself if company gives opportunity to work in abroad:
           </Text>
           {sub.abroadCapabilityNa ? (
-            <View style={[s.answerBoxSmall]}>
-              <Text>N/A — Not applicable for this category</Text>
+            <View style={{ marginLeft: 10 }}>
+              {ABROAD_OPTIONS.map((opt) => (
+                <CheckRow key={opt} checked={false} label={opt} />
+              ))}
+              <Text style={{ marginTop: 6, fontFamily: "Helvetica-Bold", color: "#c0392b" }}>
+                N/A
+              </Text>
             </View>
           ) : (
             <View style={{ marginLeft: 10 }}>
@@ -1155,10 +1178,22 @@ export function PDFReport({
           const val = sub[item.key as keyof AppraisalSubmission] as
             | number
             | null;
+          const notes =
+            item.key === "hrLeaveManagement"
+              ? sub.hrLeaveManagementNotes
+              : item.key === "hrTimingManagement"
+              ? sub.hrTimingManagementNotes
+              : null;
           return (
-            <HrRatingRow key={item.key} label={item.label} score={val} />
+            <HrRatingRow key={item.key} label={item.label} score={val} notes={notes} />
           );
         })}
+
+        <View style={[s.qBlock, { marginTop: 8 }]}>
+          <Text style={s.qBody}>
+            Effective Date: {formatDate(sub.mgmtEffectiveDate) || " "}
+          </Text>
+        </View>
  
         <View style={[s.qBlock, { marginTop: 8 }]}>
           <Text style={s.qBody}>{HR_BACKLOG_QUESTION}</Text>
@@ -1233,7 +1268,18 @@ export function PDFReport({
             </View>
           );
         })}
- 
+
+        {sub.mgrRemarks ? (
+          <View style={{ marginBottom: 10 }}>
+            <Text style={{ fontSize: 8.5, fontFamily: "Helvetica-Bold", marginBottom: 4 }}>
+              Additional Remarks:
+            </Text>
+            <View style={[s.answerBox, { minHeight: 40 }]}>
+              <Text>{pdfDisplayValue(sub.mgrRemarks) || " "}</Text>
+            </View>
+          </View>
+        ) : null}
+
         <View style={s.sigRow}>
           <View style={s.sigBlock}>
             <Text style={s.sigLabel}>Signature Of Team Head:</Text>
@@ -1298,7 +1344,8 @@ export function PDFReport({
           }}
         >
           Dear Employee {sub.employeeName} — You have been obtained{" "}
-          {incrementPct}% of Increment based on your report card,
+          {incrementPct}% of Increment based on your report card. New monthly salary: ₹
+          {newMonthlySalary.toLocaleString("en-IN")}
         </Text>
  
         <View style={[s.answerBox, { minHeight: 60, marginBottom: 16 }]}>
@@ -1319,8 +1366,7 @@ export function PDFReport({
           <View style={s.sigBlock}>
             <Text style={s.sigLabel}>Date:</Text>
             <Text style={s.sigLine}>
-              {formatDate(sub.mgmtApprovalDate ?? sub.mgmtEffectiveDate) ||
-                " "}
+              {formatDate(sub.mgmtApprovalDate) || " "}
             </Text>
           </View>
         </View>

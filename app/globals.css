@@ -44,3 +44,18 @@
 .workflow-pulse {
   animation: pulse-ring 2s ease-in-out infinite;
 }
+
+@keyframes success-toast-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-success-toast {
+  animation: success-toast-slide-up 0.3s ease-out;
+}

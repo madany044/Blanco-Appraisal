@@ -15,10 +15,10 @@ export const OVERALL_RATINGS = [
 ] as const;
 
 export const ABROAD_OPTIONS = [
-  "Excellent skill, accept immediately",
-  "Can accept, need more time",
-  "Will learn, accept next year",
-  "Need to upgrade, not for 3 years",
+  "I have excellent skill to manage myself and I can accept the opportunity immediately.",
+  "I can accept the opportunity, but I need more time to improve myself.",
+  "I put effort to learn myself and I can accept the opportunity for the next year.",
+  "I need to upgrade myself and I cannot accept the opportunity till next 3 years.",
 ] as const;
 
 export const STRONG_REASONS = [

@@ -1,9 +1,43 @@
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Shield } from "lucide-react";
 import { CompanyLogo } from "@/components/shared/CompanyLogo";
 import { COMPANY_NAME, COMPANY_ADDRESS } from "@/lib/brand";
+
+const ROLE_CARDS = [
+  {
+    icon: "👤",
+    title: "Employee",
+    subtitle: "Submit your appraisal form",
+    href: "/employee",
+    variant: "default" as const,
+    buttonLabel: "Continue as Employee",
+  },
+  {
+    icon: "🏢",
+    title: "HR & Administration",
+    subtitle: "Review and process submissions",
+    href: "/login?role=hr",
+    variant: "outline" as const,
+    buttonLabel: "Login",
+  },
+  {
+    icon: "👔",
+    title: "Reporting Manager",
+    subtitle: "Review team appraisals and add remarks",
+    href: "/login?role=manager",
+    variant: "outline" as const,
+    buttonLabel: "Login",
+  },
+  {
+    icon: "🏛️",
+    title: "Management",
+    subtitle: "Final increment decisions",
+    href: "/login?role=management",
+    variant: "outline" as const,
+    buttonLabel: "Login",
+  },
+];
 
 export default function HomePage() {
   return (
@@ -26,36 +60,25 @@ export default function HomePage() {
           Select your role to continue
         </p>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          <Card className="hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <Users className="h-10 w-10 text-blanco-primary mb-2" />
-              <CardTitle>Employee</CardTitle>
-              <CardDescription>
-                Submit your appraisal form — no login required
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/employee">
-                <Button className="w-full" size="lg">Continue as Employee</Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <Shield className="h-10 w-10 text-blanco-success mb-2" />
-              <CardTitle>HR / Manager / Management</CardTitle>
-              <CardDescription>Secure login for authorized User</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/login">
-                <Button variant="outline" className="w-full" size="lg">
-                  Login
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {ROLE_CARDS.map((card) => (
+            <Card key={card.title} className="hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <span className="text-4xl mb-2 block" aria-hidden>
+                  {card.icon}
+                </span>
+                <CardTitle>{card.title}</CardTitle>
+                <CardDescription>{card.subtitle}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Link href={card.href}>
+                  <Button className="w-full" size="lg" variant={card.variant}>
+                    {card.buttonLabel}
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </div>

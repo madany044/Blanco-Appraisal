@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const managementFormSchema = z.object({
-  mgmtIncrementPercentage: z.coerce.number().min(0).max(35),
-  mgmtEffectiveDate: z.string().min(1, "Effective date required"),
+  mgmtIncrementPercentage: z.coerce.number().min(0).max(100),
   mgmtApproverName: z.string().min(1, "Approver signature required"),
   mgmtFinalRemarks: z.string().min(1, "Feedback / remarks required"),
   mgmtFeedbackToEmployee: z.string().optional(),

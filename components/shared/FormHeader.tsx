@@ -63,8 +63,12 @@ export function FormHeader({ managers }: FormHeaderProps) {
           )}
         </div>
         <div>
-          <Label htmlFor="teamDesignation">Team & Designation</Label>
-          <Input id="teamDesignation" {...register("teamDesignation")} />
+          <Label htmlFor="team">Team</Label>
+          <Input id="team" {...register("team")} />
+        </div>
+        <div>
+          <Label htmlFor="designation">Designation</Label>
+          <Input id="designation" {...register("designation")} />
         </div>
         <div>
           <Label>Date</Label>

@@ -13,6 +13,7 @@ import type { AppraisalSubmission } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 interface ManagerRemarksFormProps {
+  managerName?: string;
   defaultValues?: Partial<ManagerFormValues>;
   readOnly?: boolean;
   submission?: AppraisalSubmission;
@@ -22,6 +23,7 @@ interface ManagerRemarksFormProps {
 }
 
 export function ManagerRemarksForm({
+  managerName,
   defaultValues,
   readOnly,
   submission,
@@ -39,6 +41,7 @@ export function ManagerRemarksForm({
       mgrRecommendation: Array.isArray(defaultValues?.mgrRecommendation)
         ? defaultValues.mgrRecommendation
         : [],
+      mgrSignatureName: defaultValues?.mgrSignatureName || managerName || "",
     },
   });
 
@@ -69,7 +72,7 @@ export function ManagerRemarksForm({
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Team Head Signature (typed name) *</Label>
+            <Label>Signature Of Team Head</Label>
             <Input {...register("mgrSignatureName")} />
           </div>
           <div>

@@ -11,14 +11,25 @@ import { RatingPillInput, RatingPillReadOnly } from "@/components/forms/RatingPi
 import { HRSubmissionView } from "@/components/forms/SubmissionDetailView";
 import type { AppraisalSubmission } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { getDefaultEffectiveDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 const HR_RATINGS = [
   { name: "hrCodeOfConduct" as const, label: "Rate this Employee - Adhere to Company Code of Conduct" },
   { name: "hrDressCode" as const, label: "Rate this Employee - Dress Code Management" },
   { name: "hrProfessionalism" as const, label: "Rate this Employee - Professionalism Attitude" },
-  { name: "hrLeaveManagement" as const, label: "Rate this Employee -Leave Management" },
-  { name: "hrTimingManagement" as const, label: "Rate this Employee -Timing Management" },
+  { name: "hrLeaveManagement" as const, label: "Rate this Employee -Leave Management", notesField: "hrLeaveManagementNotes" as const, notesPlaceholder: "Add leave details (optional)..." },
+  { name: "hrTimingManagement" as const, label: "Rate this Employee -Timing Management", notesField: "hrTimingManagementNotes" as const, notesPlaceholder: "Add timing details (optional)..." },
 ];
+
+const notesInputStyle: React.CSSProperties = {
+  fontSize: 13,
+  border: "1px solid #e2e6ef",
+  borderRadius: 6,
+  padding: "6px 10px",
+  marginTop: 6,
+  width: "100%",
+};
 
 interface HRFeedbackFormProps {
   defaultValues?: Partial<HRFormValues>;
@@ -43,6 +54,7 @@ export function HRFeedbackForm({
       hrProfessionalism: 5,
       hrLeaveManagement: 5,
       hrTimingManagement: 5,
+      effective_date: getDefaultEffectiveDate(),
       ...defaultValues,
     },
   });
@@ -90,6 +102,18 @@ export function HRFeedbackForm({
             <p className="text-sm text-blanco-danger mt-1">{String(errors.currentSalary.message)}</p>
           )}
         </div>
+        <div className="rounded-lg border p-4">
+          <Label htmlFor="effective_date">Increment Effective Date</Label>
+          <Input
+            id="effective_date"
+            type="date"
+            className="mt-1"
+            {...register("effective_date")}
+          />
+          <p className="mt-1 text-sm text-muted-foreground">
+            Date from which the increment takes effect
+          </p>
+        </div>
         {HR_RATINGS.map((item) => (
           <div key={item.name} className="rounded-lg border p-4">
             <Controller
@@ -103,6 +127,14 @@ export function HRFeedbackForm({
                 />
               )}
             />
+            {"notesField" in item && item.notesField ? (
+              <Input
+                placeholder={item.notesPlaceholder}
+                maxLength={200}
+                style={notesInputStyle}
+                {...register(item.notesField)}
+              />
+            ) : null}
           </div>
         ))}
         <div>

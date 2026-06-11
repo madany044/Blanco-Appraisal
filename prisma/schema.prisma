@@ -65,7 +65,8 @@ model AppraisalSubmission {
   employeeName         String            @map("employee_name")
   employeeCode         String            @map("employee_code")
   managerId            String            @map("manager_id") @db.Uuid
-  teamDesignation      String?           @map("team_designation")
+  team                 String?
+  designation          String?
   dateOfSubmission     DateTime          @default(now()) @map("date_of_submission") @db.Date
 
   prevExperienceYears    String? @map("prev_experience_years")
@@ -150,7 +151,9 @@ model AppraisalSubmission {
   hrDressCode              Int? @map("hr_dress_code")
   hrProfessionalism        Int? @map("hr_professionalism")
   hrLeaveManagement        Int? @map("hr_leave_management")
+  hrLeaveManagementNotes   String? @map("hr_leave_management_notes")
   hrTimingManagement       Int? @map("hr_timing_management")
+  hrTimingManagementNotes  String? @map("hr_timing_management_notes")
   hrBacklogNotes           String? @map("hr_backlog_notes")
   hrAdminSignatureDate     DateTime? @map("hr_admin_signature_date") @db.Date
   hrAdminSignatureName     String? @map("hr_admin_signature_name")

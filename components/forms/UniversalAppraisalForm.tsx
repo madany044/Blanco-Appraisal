@@ -265,6 +265,61 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
 
 {/* Keep your existing Abroad Capability section exactly as it is */}
 
+<p className="mt-4 text-sm text-gray-500">
+  e. Do you have capability of managing yourself if company gives opportunity to work in abroad:
+</p>
+
+<div
+  className="mt-2 relative"
+  style={
+    !showAbroad
+      ? {
+          filter: "blur(1.5px)",
+          opacity: 0.75,
+          pointerEvents: "none",
+          userSelect: "none",
+          position: "relative",
+        }
+      : undefined
+  }
+>
+  <RadioGroup
+    value={watch("abroadCapability")}
+    onValueChange={(v) => setValue("abroadCapability", v)}
+    className="space-y-2"
+    disabled={!showAbroad}
+  >
+    {ABROAD_OPTIONS.map((opt, i) => (
+      <div key={opt} className="flex items-start gap-2">
+        <RadioGroupItem value={opt} id={`abroad-${i}`} disabled={!showAbroad} />
+        <Label htmlFor={`abroad-${i}`} className="font-normal leading-snug">{opt}</Label>
+      </div>
+    ))}
+  </RadioGroup>
+  {!showAbroad && (
+    <div
+      aria-hidden
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%) rotate(-8deg)",
+        fontSize: 28,
+        fontWeight: 800,
+        color: "#c0392b",
+        opacity: 0.55,
+        border: "2px solid #c0392b",
+        borderRadius: 6,
+        padding: "4px 16px",
+        background: "rgba(255, 255, 255, 0.3)",
+        pointerEvents: "none",
+      }}
+    >
+      N/A
+    </div>
+  )}
+</div>
+
           </div>
           )}  
 

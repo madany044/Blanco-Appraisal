@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
 import { ChainSection } from "@/components/shared/ChainSection";
@@ -14,6 +15,7 @@ import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
 import { downloadPDF } from "@/components/export/PDFDownload";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { SuccessToast } from "@/components/shared/SuccessToast";
 import { exportSubmissionExcel } from "@/components/export/ExcelExport";
 
 interface SubmissionDetailClientProps {
@@ -23,6 +25,7 @@ interface SubmissionDetailClientProps {
 
 export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetailClientProps) {
   const router = useRouter();
+  const [toast, setToast] = useState<string | null>(null);
 
   async function hrSubmit(data: HRFormValues, draft = false) {
     const res = await fetch(`/api/submissions/${s.id}/hr-submit`, {
@@ -30,30 +33,38 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...data, draft }),
     });
-    if (res.ok) router.refresh();
-    else alert("Failed to submit");
+    if (res.ok) {
+      if (!draft) {
+        setToast("✅ HR review submitted successfully. File has been sent to the Reporting Manager.");
+      }
+      router.refresh();
+    } else alert("Failed to submit");
   }
 
   async function handleComplete() {
     const res = await fetch(`/api/submissions/${s.id}/complete`, { method: "POST" });
-    if (res.ok) router.refresh();
-    else alert("Failed to archive");
+    if (res.ok) {
+      setToast("✅ Record marked as completed and archived.");
+      router.refresh();
+    } else alert("Failed to archive");
   }
 
   const hrDefaults: Partial<HRFormValues> = {
     currentSalary: s.currentSalary ?? 0,
+    effective_date: s.mgmtEffectiveDate?.toISOString().split("T")[0] ?? undefined,
     hrCodeOfConduct: s.hrCodeOfConduct ?? undefined,
     hrDressCode: s.hrDressCode ?? undefined,
     hrProfessionalism: s.hrProfessionalism ?? undefined,
     hrLeaveManagement: s.hrLeaveManagement ?? undefined,
+    hrLeaveManagementNotes: s.hrLeaveManagementNotes ?? undefined,
     hrTimingManagement: s.hrTimingManagement ?? undefined,
+    hrTimingManagementNotes: s.hrTimingManagementNotes ?? undefined,
     hrBacklogNotes: s.hrBacklogNotes ?? undefined,
     hrAdminSignatureName: s.hrAdminSignatureName ?? undefined,
   };
 
   const mgmtDefaults = {
     mgmtIncrementPercentage: decimalToNumber(s.mgmtIncrementPercentage),
-    mgmtEffectiveDate: s.mgmtEffectiveDate?.toISOString().split("T")[0] ?? "",
     mgmtApproverName: s.mgmtApproverName ?? "",
     mgmtFinalRemarks: s.mgmtFinalRemarks ?? "",
     mgmtFeedbackToEmployee: s.mgmtFeedbackToEmployee ?? "",
@@ -62,6 +73,11 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
 
   return (
     <div className="space-y-6">
+      <SuccessToast
+        message={toast ?? ""}
+        show={toast != null}
+        onDismiss={() => setToast(null)}
+      />
       <FormBrandHeader
         subtitle={`${s.employeeName} · ${s.employeeCode}`}
         compact

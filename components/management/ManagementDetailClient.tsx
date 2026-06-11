@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
 import { ChainSection } from "@/components/shared/ChainSection";
@@ -11,6 +12,7 @@ import type { ManagementFormValues } from "@/lib/validations/management-form.sch
 import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { SuccessToast } from "@/components/shared/SuccessToast";
 
 interface ManagementDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
@@ -19,6 +21,7 @@ interface ManagementDetailClientProps {
 
 export function ManagementDetailClient({ submission: s, slabs }: ManagementDetailClientProps) {
   const router = useRouter();
+  const [toast, setToast] = useState<string | null>(null);
 
   async function submit(data: ManagementFormValues, draft = false) {
     const res = await fetch(`/api/submissions/${s.id}/management-submit`, {
@@ -26,8 +29,12 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...data, draft }),
     });
-    if (res.ok) router.refresh();
-    else {
+    if (res.ok) {
+      if (!draft) {
+        setToast("✅ Management decision submitted successfully. Complete file has been sent to HR for finalization.");
+      }
+      router.refresh();
+    } else {
       const err = await res.json();
       alert(err.error ?? "Failed");
     }
@@ -35,7 +42,6 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
 
   const mgmtDefaults: Partial<ManagementFormValues> = {
     mgmtIncrementPercentage: decimalToNumber(s.mgmtIncrementPercentage),
-    mgmtEffectiveDate: s.mgmtEffectiveDate?.toISOString().split("T")[0] ?? "",
     mgmtApproverName: s.mgmtApproverName ?? "",
     mgmtFinalRemarks: s.mgmtFinalRemarks ?? "",
     mgmtFeedbackToEmployee: s.mgmtFeedbackToEmployee ?? "",
@@ -44,6 +50,11 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
 
   return (
     <div className="space-y-6">
+      <SuccessToast
+        message={toast ?? ""}
+        show={toast != null}
+        onDismiss={() => setToast(null)}
+      />
       <FormBrandHeader subtitle={`${s.employeeName} · ${s.employeeCode}`} compact />
       <div>
         <h2 className="text-xl font-semibold">{s.employeeName}</h2>

@@ -114,7 +114,8 @@ export function EmployeeSubmissionView({ submission: s }: EmployeeSectionProps) 
             <InfoRow label="Employee ID" value={displayValue(s.employeeCode)} />
             <InfoRow label="Category" value={categoryLabel(s.category)} />
             <InfoRow label="Manager" value={displayValue(s.manager?.name)} />
-            <InfoRow label="Team/Designation" value={displayValue(s.teamDesignation)} />
+            <InfoRow label="Team" value={displayValue(s.team)} />
+            <InfoRow label="Designation" value={displayValue(s.designation)} />
             <InfoRow label="Date" value={formatDate(s.dateOfSubmission) || "—"} />
             <InfoRow label="Previous field experience" value={displayValue(s.prevExperienceYears)} />
             <InfoRow label="Company experience" value={displayValue(s.companyExperienceYears)} />
@@ -337,8 +338,20 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
                   : "—"}
               </span>
             </div>
+            {item.key === "hrLeaveManagement" && s.hrLeaveManagementNotes ? (
+              <p className="mt-2 text-sm italic text-gray-600">{s.hrLeaveManagementNotes}</p>
+            ) : null}
+            {item.key === "hrTimingManagement" && s.hrTimingManagementNotes ? (
+              <p className="mt-2 text-sm italic text-gray-600">{s.hrTimingManagementNotes}</p>
+            ) : null}
           </div>
         ))}
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-sm text-gray-600">Effective Date</p>
+          <p className="mt-1 text-[15px] font-semibold text-[#1e2740]">
+            {formatDate(s.mgmtEffectiveDate) || "—"}
+          </p>
+        </div>
         <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
           <p className="text-sm text-gray-600">{HR_BACKLOG_QUESTION}</p>
           <p className="mt-2 whitespace-pre-wrap text-[15px] font-semibold text-[#1e2740]">

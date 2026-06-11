@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
 import { ChainSection } from "@/components/shared/ChainSection";
@@ -9,13 +10,16 @@ import { ManagerRemarksForm } from "@/components/forms/ManagerRemarksForm";
 import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { SuccessToast } from "@/components/shared/SuccessToast";
 
 interface ManagerDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
+  managerName: string;
 }
 
-export function ManagerDetailClient({ submission: s }: ManagerDetailClientProps) {
+export function ManagerDetailClient({ submission: s, managerName }: ManagerDetailClientProps) {
   const router = useRouter();
+  const [toast, setToast] = useState<string | null>(null);
 
   async function submit(data: ManagerFormValues, draft = false) {
     const res = await fetch(`/api/submissions/${s.id}/manager-submit`, {
@@ -23,8 +27,12 @@ export function ManagerDetailClient({ submission: s }: ManagerDetailClientProps)
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...data, draft }),
     });
-    if (res.ok) router.refresh();
-    else alert("Failed");
+    if (res.ok) {
+      if (!draft) {
+        setToast("✅ Manager remarks submitted successfully. File has been sent to Management.");
+      }
+      router.refresh();
+    } else alert("Failed");
   }
 
   async function returnToHR(data: ManagerFormValues) {
@@ -39,6 +47,11 @@ export function ManagerDetailClient({ submission: s }: ManagerDetailClientProps)
 
   return (
     <div className="space-y-6">
+      <SuccessToast
+        message={toast ?? ""}
+        show={toast != null}
+        onDismiss={() => setToast(null)}
+      />
       <FormBrandHeader subtitle={`${s.employeeName} · ${s.employeeCode}`} compact />
       <div>
         <h2 className="text-xl font-semibold">{s.employeeName}</h2>
@@ -56,6 +69,7 @@ export function ManagerDetailClient({ submission: s }: ManagerDetailClientProps)
 
       <ChainSection title="Section 3: Manager Remarks Form" accent="amber">
         <ManagerRemarksForm
+          managerName={managerName}
           defaultValues={{
             mgrRecommendation: s.mgrRecommendation as ManagerFormValues["mgrRecommendation"],
             mgrStrongReasons: s.mgrStrongReasons,

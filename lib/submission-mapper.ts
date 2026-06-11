@@ -14,7 +14,8 @@ export function mapEmployeeToPrisma(
     employeeName: data.employeeName ?? "",
     employeeCode: data.employeeCode ?? "",
     manager: { connect: { id: data.managerId! } },
-    teamDesignation: data.teamDesignation,
+    team: data.team,
+    designation: data.designation,
     prevExperienceYears: data.prevExperienceYears,
     companyExperienceYears: data.companyExperienceYears,
     basisOfAppraisal: data.basisOfAppraisal,
@@ -89,11 +90,14 @@ export function mapEmployeeToPrisma(
 export function mapHRToPrisma(data: HRFormValues): Prisma.AppraisalSubmissionUpdateInput {
   return {
     currentSalary: data.currentSalary,
+    mgmtEffectiveDate: data.effective_date ? new Date(data.effective_date) : null,
     hrCodeOfConduct: data.hrCodeOfConduct,
     hrDressCode: data.hrDressCode,
     hrProfessionalism: data.hrProfessionalism,
     hrLeaveManagement: data.hrLeaveManagement,
+    hrLeaveManagementNotes: data.hrLeaveManagementNotes,
     hrTimingManagement: data.hrTimingManagement,
+    hrTimingManagementNotes: data.hrTimingManagementNotes,
     hrBacklogNotes: data.hrBacklogNotes,
     hrAdminSignatureName: data.hrAdminSignatureName,
     hrAdminSignatureDate: data.hrAdminSignatureDate ? new Date(data.hrAdminSignatureDate) : new Date(),
@@ -121,7 +125,6 @@ export function mapManagementToPrisma(
   return {
     mgmtIncrementPercentage: data.mgmtIncrementPercentage,
     mgmtNewSalary: newSalary,
-    mgmtEffectiveDate: new Date(data.mgmtEffectiveDate),
     mgmtApproverName: data.mgmtApproverName,
     mgmtApprovalDate: new Date(),
     mgmtFinalRemarks: data.mgmtFinalRemarks,

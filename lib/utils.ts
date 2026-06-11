@@ -27,6 +27,11 @@ export function formatStage(stage: number): string {
   return labels[stage] ?? `Stage ${stage}`;
 }
 
+export function getDefaultEffectiveDate(): string {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString().split("T")[0];
+}
+
 export function categoryLabel(category: string): string {
   const map: Record<string, string> = {
     GROUP_A: "Group A",
