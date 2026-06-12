@@ -86,7 +86,7 @@ export function HRFeedbackForm({
       <form className="space-y-6">
         <FormBrandHeader subtitle="HR and Admin Feedback" compact />
         <div className="rounded-lg border p-4">
-          <Label htmlFor="currentSalary">Employee Current Monthly Salary (₹) *</Label>
+          <Label htmlFor="currentSalary">Employee Current CTC (₹) *</Label>
           <Input
             id="currentSalary"
             type="number"
@@ -144,7 +144,7 @@ export function HRFeedbackForm({
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Approved By *</Label>
+            <Label>Rating , feedback Give By Hr & Administration *</Label>
             <Input {...register("hrAdminSignatureName")} />
           </div>
           <div>
@@ -158,7 +158,7 @@ export function HRFeedbackForm({
           )}
           {onSubmit && (
             <Button type="button" variant="success" onClick={handleSubmit(onSubmit)}>
-              Submit HR Review and Send to Manager
+              Send To Reporting Manager for Review
             </Button>
           )}
         </div>

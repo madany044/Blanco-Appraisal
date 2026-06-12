@@ -55,7 +55,7 @@ export function Sidebar({ role, userEmail }: SidebarProps) {
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col bg-slate-900 text-white">
       <div className="border-b border-slate-700 p-6">
         <h1 className="text-sm font-bold leading-tight text-white">BLANCO / BLANKA</h1>
-        <p className="text-xs text-slate-400 mt-1">Appraisal System </p>
+        <p className="text-xs text-slate-400 mt-1">Employee Annual Appraisal Portal </p>
       </div>
       <nav className="flex-1 space-y-1 p-4">
         {nav.map((item) => {

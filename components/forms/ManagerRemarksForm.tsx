@@ -72,7 +72,7 @@ export function ManagerRemarksForm({
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Signature Of Team Head</Label>
+            <Label>Reviewed & Signed By Reporting Manager</Label>
             <Input {...register("mgrSignatureName")} />
           </div>
           <div>
@@ -85,7 +85,7 @@ export function ManagerRemarksForm({
           {onReturn && <Button type="button" variant="outline" onClick={handleSubmit(onReturn)}>Return to HR</Button>}
           {onSubmit && (
             <Button type="button" variant="success" onClick={handleSubmit(onSubmit)}>
-              Attach Remarks and Send to Management
+              Send to Management
             </Button>
           )}
         </div>

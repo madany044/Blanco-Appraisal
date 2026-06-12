@@ -189,16 +189,16 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
             <FormHeader managers={managers} />
             <div>
               <Label>1. Basis of appraisal request *</Label> <p className="mt-1 text-sm text-gray-500">
-    Please describe on what basis we should consider your salary appraisal request.
-  </p>
+                  Please describe on what basis we should consider your salary appraisal request.
+              </p>
               <Textarea className="min-h-[120px] mt-1" {...register("basisOfAppraisal")} />
               {errors.basisOfAppraisal && <p className="text-sm text-blanco-danger">{String(errors.basisOfAppraisal.message)}</p>}
             </div>
             <div>
               <Label>2. Support to the company *</Label>
               <p className="mt-1 text-sm text-gray-500">
-    Please describe how you would support the company to grow and generate more income corresponding to your salary appraisal.
-  </p>
+              lease describe how would you support the company to grow and generate more income as similar as your salary appraisal:
+             </p>
               <Textarea className="min-h-[120px] mt-1" {...register("supportToCompany")} />
               {errors.supportToCompany && <p className="text-sm text-blanco-danger">{String(errors.supportToCompany.message)}</p>}
             </div>
@@ -366,7 +366,6 @@ office premises (including perspective vision on your career along with your tea
         {step === 9 && (
           <div>
             <Label>10. Work performance and Time Management *</Label> 
-            <p className="mt-1 text-sm text-gray-500">Please describe your current year work performance and Time Management</p>
             <Textarea className="min-h-[150px] mt-1" {...register("currentYearPerformance")} />
           </div>
         )} 
@@ -374,8 +373,8 @@ office premises (including perspective vision on your career along with your tea
         {step === 10 && (
           <div className="space-y-6">
             <div>
-              <Label>11. 12.Please describe how you would perform and improve your productivity for this upcoming performance
-cycle as similar as your salary grow: *</Label>
+              <Label>11. Work performance and Time Management: *</Label>
+              <p className="mt-1 text-sm text-gray-500">Please describe your current year work performance and Time Management</p>
               <Textarea className="min-h-[120px] mt-1" {...register("productivityImprovement")} />
             </div>
             <div>
@@ -391,7 +390,7 @@ cycle as similar as your salary grow: *</Label>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               <div>
-                <Label>Form Filled By *</Label>
+                <Label>Form Filled And Signed By *</Label>
                 <Input {...register("employeeSignatureName")} />
               </div>
               <div>
@@ -418,7 +417,7 @@ cycle as similar as your salary grow: *</Label>
               <Button type="button" onClick={nextStep}>Next</Button>
             ) : (
               <Button type="submit" variant="success" disabled={submitting}>
-                Submit to HR
+                Submit For Review
               </Button>
             )}
           </div>

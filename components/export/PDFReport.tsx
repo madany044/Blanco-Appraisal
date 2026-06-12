@@ -468,7 +468,7 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
       <View style={s.headerCenter}>
         <Text style={s.headerTitle}>Team Blanco AND Team Blanka</Text>
         <Text style={s.headerSubtitle}>
-          Employee Progress Report Card for Salary Appraisal
+          Employee Annual Appraisal Portal
         </Text>
       </View>
       {logoSrc ? (

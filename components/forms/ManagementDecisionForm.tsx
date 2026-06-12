@@ -252,7 +252,7 @@ export function ManagementDecisionForm({
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Label>Approver Signature *</Label>
+              <Label>Approve & Signed By Management </Label>
               <Input {...register("mgmtApproverName")} />
             </div>
             <div>
@@ -283,7 +283,7 @@ export function ManagementDecisionForm({
                 className="w-full"
                 onClick={() => validateAndSubmit(onSubmit)}
               >
-                Attach Decision &amp; Send to HR
+               Reviewed and Approved By Management
               </Button>
             )}
           </div>
