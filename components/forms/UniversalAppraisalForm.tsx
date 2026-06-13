@@ -146,14 +146,23 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
   }
 
   async function nextStep() {
-    const fieldsByStep: Record<number, (keyof EmployeeFormValues)[]> = {
-      1: ["employeeName", "employeeCode", "managerId", "basisOfAppraisal", "supportToCompany"],
-      2: ["expectationsYesNo", "expectationsReason", "strengthsWeaknesses"],
-      3: ["upcomingGoal", "initiativeFrequency"],
-      4: ["learningCommitment"],
-      9: ["currentYearPerformance"],
-      10: ["productivityImprovement", "overallRating", "employeeSignatureName"],
-    };
+    const fieldsByStep: Record<number, (keyof EmployeeFormValues)[]> = isQC
+      ? {
+          1: ["employeeName", "employeeCode", "managerId", "basisOfAppraisal", "supportToCompany"],
+          2: ["expectationsYesNo", "expectationsReason", "strengthsWeaknesses"],
+          3: ["upcomingGoal", "initiativeFrequency"],
+          4: ["learningCommitment"],
+          9: ["currentYearPerformance"],
+          10: ["productivityImprovement", "overallRating", "employeeSignatureName"],
+        }
+      : {
+          1: ["employeeName", "employeeCode", "managerId", "basisOfAppraisal", "supportToCompany"],
+          2: ["expectationsYesNo", "expectationsReason", "strengthsWeaknesses"],
+          3: ["upcomingGoal", "initiativeFrequency"],
+          4: ["learningCommitment"],
+          7: ["currentYearPerformance"],
+          10: ["productivityImprovement", "overallRating", "employeeSignatureName"],
+        };
     const fields = fieldsByStep[step];
     if (fields) {
       const valid = await trigger(fields);
@@ -361,14 +370,24 @@ office premises (including perspective vision on your career along with your tea
           </div>
         )}
 
-        {step === 7 && <ProductivitySection />}
-        {step === 8 && <ModelerSection category={category} />}
-        {step === 9 && (
+        {/* For non-QC categories: show currentYearPerformance at step 7, then Productivity and Modeler at 8/9.
+            For QC: keep currentYearPerformance at step 9 (QC hides steps 7 and 8). */}
+        {(!isQC && step === 7) && (
           <div>
-            <Label>10. Work performance and Time Management *</Label> 
+            <Label>10. Work performance and Time Management *</Label>
             <Textarea className="min-h-[150px] mt-1" {...register("currentYearPerformance")} />
           </div>
-        )} 
+        )}
+
+        {(!isQC && step === 8) && <ProductivitySection />}
+        {(!isQC && step === 9) && <ModelerSection category={category} />}
+
+        {isQC && step === 9 && (
+          <div>
+            <Label>10. Work performance and Time Management *</Label>
+            <Textarea className="min-h-[150px] mt-1" {...register("currentYearPerformance")} />
+          </div>
+        )}
 
         {step === 10 && (
           <div className="space-y-6">
