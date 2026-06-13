@@ -504,11 +504,11 @@ const s = StyleSheet.create({
   mgrSectionCard: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginBottom: SP.lg,
+    marginBottom: SP.sm,
   },
   mgrSectionHeader: {
     backgroundColor: INK,
-    paddingVertical: SP.sm,
+    paddingVertical: SP.xs + 2,
     paddingHorizontal: SP.md,
     flexDirection: "row",
     alignItems: "center",
@@ -521,8 +521,8 @@ const s = StyleSheet.create({
   mgrOptionRow: {
     flexDirection: "row",
     alignItems: "flex-start",
-    paddingVertical: SP.xs + 2,
-    paddingHorizontal: SP.md,
+    paddingVertical: SP.xs,
+    paddingHorizontal: SP.sm,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
   },
@@ -1402,7 +1402,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SectionBand title="Reporting Manager Feedback" />
 
         {/* Employee ID strip */}
-        <View style={[s.infoGrid, { marginBottom: SP.lg }]}>
+        <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
           <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
           <InfoCell label="Employee Code" value={pdfDisplayValue(sub.employeeCode)} last />
         </View>
@@ -1421,7 +1421,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         })}
 
         {sub.mgrRemarks ? (
-          <View style={[s.qCard, { marginBottom: SP.lg }]} wrap={false}>
+          <View style={[s.qCard, { marginBottom: SP.sm }]} wrap={false}>
             <View style={s.qCardHeader}>
               <Text style={s.qCardTitle}>Additional Remarks</Text>
             </View>
@@ -1453,7 +1453,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </Text>
 
         {/* Slab table */}
-        <View style={{ marginBottom: SP.xl, borderWidth: 1, borderColor: BORDER_GRAY }}>
+        <View style={{ marginBottom: SP.md, borderWidth: 1, borderColor: BORDER_GRAY }}>
           <View style={s.tableHead}>
             <Text style={[s.tableHeadText, { flex: 1 }]}>CTC Range</Text>
             <Text style={[s.tableHeadText, { flex: 1, textAlign: "right" }]}>Increment Percentage</Text>
@@ -1479,7 +1479,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </View>
 
         {/* Increment statement */}
-        <View style={s.highlightStatement}>
+        <View style={[s.highlightStatement, { marginBottom: SP.sm }]}>
           <Text style={s.highlightStatementText}>
             Dear {sub.employeeName} — You have been awarded {incrementPct}% increment based on your report card.
             {newMonthlySalary > 0
@@ -1489,11 +1489,11 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </View>
 
         {/* Feedback box */}
-        <View style={[s.qCard, { marginBottom: SP.lg }]} wrap={false}>
+        <View style={[s.qCard, { marginBottom: SP.sm }]} wrap={false}>
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>Management Feedback to Employee</Text>
           </View>
-          <View style={[s.qCardAnswer, { minHeight: 72 }]}>
+          <View style={[s.qCardAnswer, { minHeight: 48 }]}>
             <Text style={s.qCardAnswerText}>
               {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee) || " "}
             </Text>
