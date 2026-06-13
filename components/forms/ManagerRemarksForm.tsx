@@ -68,7 +68,7 @@ export function ManagerRemarksForm({
         </div>
         <div>
           <Label>Additional Remarks (If Return Back To HR)</Label><p className="mt-1 text-sm text-gray-500">
-                 If Return Back To HR Please explain the reason for returning back this employee form to HR.
+                 Please explain the reason for returning back this employee form to HR.
               </p>
           <Textarea className="mt-1" {...register("mgrRemarks")} />
         </div>
