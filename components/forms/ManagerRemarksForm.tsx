@@ -67,7 +67,9 @@ export function ManagerRemarksForm({
           <RecommendationChecklist />
         </div>
         <div>
-          <Label>Additional Remarks</Label>
+          <Label>Additional Remarks (If Return Back To HR)</Label><p className="mt-1 text-sm text-gray-500">
+                 If Return Back To HR Please explain the reason for returning back this employee form to HR.
+              </p>
           <Textarea className="mt-1" {...register("mgrRemarks")} />
         </div>
         <div className="grid gap-4 md:grid-cols-2">
@@ -82,7 +84,7 @@ export function ManagerRemarksForm({
         </div>
         <div className="flex flex-wrap gap-3">
           {onSaveDraft && <Button type="button" variant="secondary" onClick={handleSubmit(onSaveDraft)}>Save Draft</Button>}
-          {onReturn && <Button type="button" variant="outline" onClick={handleSubmit(onReturn)}>Return to HR</Button>}
+          {onReturn && <Button type="button" variant="outline" onClick={handleSubmit(onReturn)}>Return Back to HR</Button>}
           {onSubmit && (
             <Button type="button" variant="success" onClick={handleSubmit(onSubmit)}>
               Send to Management

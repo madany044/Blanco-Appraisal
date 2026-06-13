@@ -67,7 +67,7 @@ export const STAGE_LABELS = [
   "Submitted",
   "HR Reviewed",
   "Manager Reviewed",
-  "Management Decided",
+  "Management Reviewed",
   "Completed",
 ] as const;
 

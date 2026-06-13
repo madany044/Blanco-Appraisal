@@ -21,7 +21,7 @@ export function formatStage(stage: number): string {
     0: "Submitted",
     1: "With Manager",
     2: "With Management",
-    3: "Returned to HR",
+    3: "Ready To Export",
     4: "Completed",
   };
   return labels[stage] ?? `Stage ${stage}`;
