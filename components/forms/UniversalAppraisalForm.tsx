@@ -349,14 +349,14 @@ office premises (including perspective vision on your career along with your tea
 
         {step === 5 && (
           <div>
-            <h3 className="text-lg font-semibold mb-4">Self Ratings — Part 1 (A to J)</h3>
+            <h3 className="text-lg font-semibold mb-4">Self Ratings</h3>
             <SelfRatingGrid items={RATINGS_PART1} />
           </div>
         )}
 
         {step === 6 && (
           <div>
-            <h3 className="text-lg font-semibold mb-4">Self Ratings — Part 2 (K to T)</h3>
+            <h3 className="text-lg font-semibold mb-4"></h3>
             <SelfRatingGrid items={RATINGS_PART2} />
           </div>
         )}

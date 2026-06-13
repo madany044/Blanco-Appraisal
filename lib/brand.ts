@@ -5,4 +5,4 @@ export const COMPANY_NAME = "Employee Annual Appraisal Portal";
 export const COMPANY_NAME_SHORT = "Team Blanco AND Team Blanka";
 
   
-export const REPORT_TITLE = "EMPLOYEE PROGRESS REPORT CARD FOR SALARY APPRAISAL";
+export const REPORT_TITLE = "EMPLOYEE ANNUAL APPRAISAL PORTAL";
