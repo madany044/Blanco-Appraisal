@@ -24,7 +24,7 @@ export function EmployeeCard({ submission: s, href }: EmployeeCardProps) {
         <p className="text-xs text-muted-foreground">{formatDate(s.submittedAt)}</p>
         <Link href={href}>
           <Button size="sm">
-            {s.stage === 1 ? "Add Remarks" : "View"}
+            {s.stage === 1 ? "View" : "View"}
           </Button>
         </Link>
       </CardContent>

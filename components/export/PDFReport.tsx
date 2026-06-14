@@ -1329,7 +1329,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Employee Declaration & Signature"
           fields={[
-            { label: "Employee Signature", value: pdfDisplayValue(sub.employeeSignatureName) },
+            { label: "Form Filled & Signed By", value: pdfDisplayValue(sub.employeeSignatureName) },
             { label: "Employee Code", value: pdfDisplayValue(sub.employeeCode) },
             {
               label: "Date",
@@ -1389,7 +1389,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Admin Head Signature"
           fields={[
-            { label: "Signature of Admin Head", value: pdfDisplayValue(sub.hrAdminSignatureName) },
+            { label: "Form Filled & Signed By Head Hr & Administration", value: pdfDisplayValue(sub.hrAdminSignatureName) },
             { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
           ]}
         />
@@ -1434,7 +1434,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Team Head Signature"
           fields={[
-            { label: "Signature of Team Head", value: pdfDisplayValue(sub.mgrSignatureName) },
+            { label: "Form Filled & Signed By Team Head", value: pdfDisplayValue(sub.mgrSignatureName) },
             { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
           ]}
         />
@@ -1503,7 +1503,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Approver Signature"
           fields={[
-            { label: "Signature of Approver", value: pdfDisplayValue(sub.mgmtApproverName) },
+            { label: "Aproved By", value: pdfDisplayValue(sub.mgmtApproverName) },
             { label: "Date", value: formatDate(sub.mgmtApprovalDate) || " " },
           ]}
         />

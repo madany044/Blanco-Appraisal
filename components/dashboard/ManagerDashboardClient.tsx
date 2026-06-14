@@ -25,7 +25,7 @@ export function ManagerDashboardClient({ submissions, stats }: ManagerDashboardC
       <Tabs defaultValue="pending">
         <TabsList>
           <TabsTrigger value="pending">Pending ({pending.length})</TabsTrigger>
-          <TabsTrigger value="reviewed">Reviewed ({reviewed.length})</TabsTrigger>
+          <TabsTrigger value="reviewed">Completed ({reviewed.length})</TabsTrigger>
           <TabsTrigger value="all">All Records ({submissions.length})</TabsTrigger>
         </TabsList>
         <TabsContent value="pending" className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
