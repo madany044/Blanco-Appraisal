@@ -19,9 +19,9 @@ export {
 };
 
 export const MGR_RECOMMENDATION_LABELS: Record<string, string> = {
-  STRONGLY_RECOMMEND: "I Strongly recommend this employee",
-  CONDITIONALLY_RECOMMEND: "I May recommend this employee",
-  NOT_RECOMMENDED: "I May OR May Not recommend this employee",
+  STRONGLY_RECOMMEND: "I Strongly recommend this employee for appraisal because of the below reason marked with [ √]",
+  CONDITIONALLY_RECOMMEND: "I May recommend this employee for appraisal with below noted remarking’s denotes with [ √]",
+  NOT_RECOMMENDED: "I May OR May Not recommend this employee for appraisal because of the below reason marked with [ √]",
 };
 
 export function displayValue(value: string | number | null | undefined): string {
