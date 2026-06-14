@@ -60,9 +60,9 @@ export function ManagerRemarksForm({
       <form className="space-y-6">
         <FormBrandHeader subtitle="Team Head Feedback" compact />
         <div>
-          <Label>Recommendation levels *</Label>
+          <Label></Label>
           <p className="text-sm text-muted-foreground mb-3">
-            You may select one or more recommendation groups and check items in each.
+           
           </p>
           <RecommendationChecklist />
         </div>

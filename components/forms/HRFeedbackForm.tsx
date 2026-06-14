@@ -144,7 +144,7 @@ export function HRFeedbackForm({
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Rating , feedback Give By Hr & Administration *</Label>
+            <Label>Rating , feedback Given By Head Hr & Administration *</Label>
             <Input {...register("hrAdminSignatureName")} />
           </div>
           <div>
