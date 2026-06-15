@@ -29,8 +29,10 @@ export function ManagerDetailClient({ submission: s, managerName }: ManagerDetai
     });
     if (res.ok) {
       if (!draft) {
-        setToast("✅ Manager remarks submitted successfully. File has been sent to Management.");
+        router.push("/manager/success");
+        return;
       }
+      setToast("✅ Manager remarks saved as draft.");
       router.refresh();
     } else alert("Failed");
   }

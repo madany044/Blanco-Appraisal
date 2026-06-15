@@ -31,8 +31,10 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
     });
     if (res.ok) {
       if (!draft) {
-        setToast("✅ Management decision submitted successfully. Complete file has been sent to HR for finalization.");
+        router.push("/management/success");
+        return;
       }
+      setToast("✅ Management decision saved as draft.");
       router.refresh();
     } else {
       const err = await res.json();

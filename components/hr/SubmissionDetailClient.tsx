@@ -35,8 +35,10 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
     });
     if (res.ok) {
       if (!draft) {
-        setToast("✅ HR review submitted successfully. File has been sent to the Reporting Manager.");
+        router.push("/hr/success");
+        return;
       }
+      setToast("✅ HR review saved as draft.");
       router.refresh();
     } else alert("Failed to submit");
   }
