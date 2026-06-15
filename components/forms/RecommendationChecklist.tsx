@@ -13,19 +13,19 @@ import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 const GROUPS = [
   {
     level: "STRONGLY_RECOMMEND" as const,
-    title: "I Strongly recommend this employee",
+    title: "I Strongly recommend this employee for appraisal because of the below reason marked with [ √]",
     field: "mgrStrongReasons" as const,
     options: STRONG_REASONS,
   },
   {
     level: "CONDITIONALLY_RECOMMEND" as const,
-    title: "I May recommend this employee",
+    title: "I May recommend this employee for appraisal with below noted remarking’s denotes with [ √]",
     field: "mgrConditionalReasons" as const,
     options: CONDITIONAL_REASONS,
   },
   {
     level: "NOT_RECOMMENDED" as const,
-    title: "I May OR May Not recommend this employee",
+    title: "I May OR May Not recommend this employee for appraisal because of the below reason marked with [ √]",
     field: "mgrNotRecommendedReasons" as const,
     options: NOT_RECOMMENDED_REASONS,
   },

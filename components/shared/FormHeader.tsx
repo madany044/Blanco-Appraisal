@@ -45,24 +45,6 @@ export function FormHeader({ managers }: FormHeaderProps) {
           )}
         </div>
         <div>
-          <Label>Manager Name *</Label>
-          <Select value={managerId ?? ""} onValueChange={(v) => setValue("managerId", v, { shouldValidate: true })}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select your Team Head" />
-            </SelectTrigger>
-            <SelectContent>
-              {managers.map((m) => (
-                <SelectItem key={m.id} value={m.id}>
-                  {m.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.managerId && (
-            <p className="text-sm text-blanco-danger mt-1">{String(errors.managerId.message)}</p>
-          )}
-        </div>
-        <div>
           <Label htmlFor="team">Team</Label>
           <Controller
             name="team"
@@ -88,6 +70,24 @@ export function FormHeader({ managers }: FormHeaderProps) {
           />
           {errors.team && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.team.message)}</p>
+          )}
+        </div>
+        <div>
+          <Label>Manager Name *</Label>
+          <Select value={managerId ?? ""} onValueChange={(v) => setValue("managerId", v, { shouldValidate: true })}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select your Team Head" />
+            </SelectTrigger>
+            <SelectContent>
+              {managers.map((m) => (
+                <SelectItem key={m.id} value={m.id}>
+                  {m.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.managerId && (
+            <p className="text-sm text-blanco-danger mt-1">{String(errors.managerId.message)}</p>
           )}
         </div>
         <div>
