@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,7 +18,7 @@ interface FormHeaderProps {
 }
 
 export function FormHeader({ managers }: FormHeaderProps) {
-  const { register, setValue, watch, formState: { errors } } = useFormContext();
+  const { register, control, setValue, watch, formState: { errors } } = useFormContext();
   const managerId = watch("managerId");
   const today = new Date().toISOString().split("T")[0];
 
@@ -64,7 +64,31 @@ export function FormHeader({ managers }: FormHeaderProps) {
         </div>
         <div>
           <Label htmlFor="team">Team</Label>
-          <Input id="team" {...register("team")} />
+          <Controller
+            name="team"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value ?? ""}
+                onValueChange={(value) => field.onChange(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your team" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Team 1">Team 1</SelectItem>
+                  <SelectItem value="Team 2">Team 2</SelectItem>
+                  <SelectItem value="Team 3">Team 3</SelectItem>
+                  <SelectItem value="Team 4">Team 4</SelectItem>
+                  <SelectItem value="Team 5">Team 5</SelectItem>
+                  <SelectItem value="Team 6">Team 6</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.team && (
+            <p className="text-sm text-blanco-danger mt-1">{String(errors.team.message)}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="designation">Designation</Label>

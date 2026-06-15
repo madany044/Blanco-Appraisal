@@ -983,12 +983,13 @@ interface PDFReportProps {
 
 export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportProps) {
   const isQC = sub.category === "QC";
-  const annualCtc = (sub.currentSalary ?? 0) * 12;
+  const currentMonthlySalary = sub.currentSalary ?? 0;
+  const annualCtc = currentMonthlySalary * 12;
   const incrementPct = decimalToNumber(sub.mgmtIncrementPercentage);
   const newMonthlySalary =
     sub.mgmtNewSalary != null
       ? Math.round(decimalToNumber(sub.mgmtNewSalary))
-      : Math.round((sub.currentSalary ?? 0) * (1 + incrementPct / 100));
+      : Math.round(currentMonthlySalary * (1 + incrementPct / 100));
   const selectedOverall = normalizeOverallRating(sub.overallRating);
 
   const mgrReasonOptions: Record<string, readonly string[]> = {
@@ -1329,7 +1330,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Employee Declaration & Signature"
           fields={[
-            { label: "Form Filled & Signed By", value: pdfDisplayValue(sub.employeeSignatureName) },
+            { label: "Form filled and signed by:", value: pdfDisplayValue(sub.employeeSignatureName) },
             { label: "Employee Code", value: pdfDisplayValue(sub.employeeCode) },
             {
               label: "Date",
@@ -1389,7 +1390,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Admin Head Signature"
           fields={[
-            { label: "Form Filled & Signed By Head Hr & Administration", value: pdfDisplayValue(sub.hrAdminSignatureName) },
+            { label: "Rating , feedback Given By Head Hr & Administration:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
             { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
           ]}
         />
@@ -1434,7 +1435,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Team Head Signature"
           fields={[
-            { label: "Form Filled & Signed By Team Head", value: pdfDisplayValue(sub.mgrSignatureName) },
+            { label: "Reviewed & Signed By Reporting Manager:", value: pdfDisplayValue(sub.mgrSignatureName) },
             { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
           ]}
         />
@@ -1460,7 +1461,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </View>
           {slabs.map((slab, i) => {
             const max = slab.ctcMax ?? Infinity;
-            const active = annualCtc >= slab.ctcMin && annualCtc <= max;
+            const active = currentMonthlySalary >= slab.ctcMin && currentMonthlySalary <= max;
             const isAlt = i % 2 === 1;
             return (
               <View key={slab.id} style={[s.tableRow, isAlt ? s.tableRowAlt : {}, active ? s.tableRowHighlight : {}]}>
@@ -1503,7 +1504,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Approver Signature"
           fields={[
-            { label: "Aproved By", value: pdfDisplayValue(sub.mgmtApproverName) },
+            { label: "Approved & Signed By Management:", value: pdfDisplayValue(sub.mgmtApproverName) },
             { label: "Date", value: formatDate(sub.mgmtApprovalDate) || " " },
           ]}
         />

@@ -307,7 +307,7 @@ export function EmployeeSubmissionView({ submission: s }: EmployeeSectionProps) 
         </div>
 
         <dl className="grid gap-x-6 md:grid-cols-3">
-          <InfoRow label="Employee Signature" value={displayValue(s.employeeSignatureName)} />
+          <InfoRow label="Form filled and signed by:" value={displayValue(s.employeeSignatureName)} />
           <InfoRow label="Employee Code" value={displayValue(s.employeeCode)} />
           <InfoRow label="Date" value={formatDate(s.employeeSignatureDate) || formatDate(s.dateOfSubmission) || "—"} />
         </dl>
@@ -359,7 +359,7 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
           </p>
         </div>
         <dl className="grid gap-x-6 md:grid-cols-2">
-          <InfoRow label="Signature Of Admin Head" value={displayValue(s.hrAdminSignatureName)} />
+          <InfoRow label="Rating , feedback Given By Head Hr & Administration:" value={displayValue(s.hrAdminSignatureName)} />
           <InfoRow label="Date" value={formatDate(s.hrAdminSignatureDate) || "—"} />
         </dl>
       </SectionBody>
@@ -378,6 +378,16 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
     <div className="overflow-hidden rounded-lg">
       <SectionHeader title="SECTION 3 — TEAM HEAD FEEDBACK" color="#c97c10" />
       <SectionBody>
+        <div className="mb-4 rounded-lg border border-slate-200 bg-[#f8f9fc] p-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Employee Name</p>
+            <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">{displayValue(s.employeeName)}</p>
+          </div>
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Employee Code</p>
+            <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">{displayValue(s.employeeCode)}</p>
+          </div>
+        </div>
         <dl className="mb-4 grid gap-x-6 md:grid-cols-2">
           <InfoRow label="Employee Name" value={displayValue(s.employeeName)} />
           <InfoRow label="Employee Code" value={displayValue(s.employeeCode)} />
@@ -415,7 +425,7 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
         ) : null}
 
         <dl className="grid gap-x-6 md:grid-cols-2">
-          <InfoRow label="Signature Of Team Head" value={displayValue(s.mgrSignatureName)} />
+          <InfoRow label="Reviewed & Signed By Reporting Manager:" value={displayValue(s.mgrSignatureName)} />
           <InfoRow label="Date" value={formatDate(s.mgrSignatureDate) || "—"} />
         </dl>
       </SectionBody>

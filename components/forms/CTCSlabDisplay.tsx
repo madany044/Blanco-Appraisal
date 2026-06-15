@@ -41,7 +41,7 @@ export function CTCSlabDisplay({ slabs, highlightCtc, maxAllowed }: CTCSlabDispl
                 color: "#fff",
                 fontWeight: 600,
               }}>
-                CTC Range (Annual)
+                CTC Range (Monthly)
               </th>
               <th style={{
                 padding: "6px 12px",

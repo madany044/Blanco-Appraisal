@@ -103,14 +103,20 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
       </ChainSection>
 
       <ChainSection title="Section 3: Manager Remarks" accent="amber">
-        <ManagerRemarksForm submission={s} readOnly defaultValues={{
-          mgrRecommendation: s.mgrRecommendation as ManagerFormValues["mgrRecommendation"],
-          mgrStrongReasons: s.mgrStrongReasons,
-          mgrConditionalReasons: s.mgrConditionalReasons,
-          mgrNotRecommendedReasons: s.mgrNotRecommendedReasons,
-          mgrRemarks: s.mgrRemarks ?? undefined,
-          mgrSignatureName: s.mgrSignatureName ?? undefined,
-        }} />
+        <ManagerRemarksForm
+          employeeName={s.employeeName}
+          employeeCode={s.employeeCode}
+          submission={s}
+          readOnly
+          defaultValues={{
+            mgrRecommendation: s.mgrRecommendation as ManagerFormValues["mgrRecommendation"],
+            mgrStrongReasons: s.mgrStrongReasons,
+            mgrConditionalReasons: s.mgrConditionalReasons,
+            mgrNotRecommendedReasons: s.mgrNotRecommendedReasons,
+            mgrRemarks: s.mgrRemarks ?? undefined,
+            mgrSignatureName: s.mgrSignatureName ?? undefined,
+          }}
+        />
       </ChainSection>
 
       <ChainSection title="Section 4: Management Decision" accent="purple">

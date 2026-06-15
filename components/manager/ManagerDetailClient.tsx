@@ -70,6 +70,8 @@ export function ManagerDetailClient({ submission: s, managerName }: ManagerDetai
       <ChainSection title="Section 3: Manager Remarks Form" accent="amber">
         <ManagerRemarksForm
           managerName={managerName}
+          employeeName={s.employeeName}
+          employeeCode={s.employeeCode}
           defaultValues={{
             mgrRecommendation: s.mgrRecommendation as ManagerFormValues["mgrRecommendation"],
             mgrStrongReasons: s.mgrStrongReasons,

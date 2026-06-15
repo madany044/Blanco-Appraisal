@@ -40,13 +40,15 @@ export function ManagementDecisionForm({
   onSaveDraft,
   onSubmit,
 }: ManagementDecisionFormProps) {
-  const annualCtc = currentSalary * 12;
-  const maxAllowed = getMaxIncrementPct(annualCtc, slabs);
+  const currentMonthlySalary = currentSalary;
+  const annualCtc = currentMonthlySalary * 12;
+  const maxAllowed = getMaxIncrementPct(currentMonthlySalary, slabs);
 
   const methods = useForm<ManagementFormValues>({
     resolver: zodResolver(managementFormSchema),
     defaultValues: {
       mgmtIncrementPercentage: 0,
+      mgmtApproverName: defaultValues?.mgmtApproverName || "Management",
       ...defaultValues,
     },
   });
@@ -54,8 +56,8 @@ export function ManagementDecisionForm({
   const { register, handleSubmit, watch } = methods;
   const incrementPct = watch("mgmtIncrementPercentage") ?? 0;
   const newMonthlySalary = useMemo(
-    () => Math.round(currentSalary * (1 + incrementPct / 100)),
-    [currentSalary, incrementPct]
+    () => Math.round(currentMonthlySalary * (1 + incrementPct / 100)),
+    [currentMonthlySalary, incrementPct]
   );
 
   async function validateAndSubmit(
@@ -90,7 +92,7 @@ export function ManagementDecisionForm({
       {/* CTC Slab — compact */}
       <CTCSlabDisplay
         slabs={slabs}
-        highlightCtc={annualCtc}
+        highlightCtc={currentMonthlySalary}
         maxAllowed={maxAllowed}
       />
 
@@ -252,7 +254,7 @@ export function ManagementDecisionForm({
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Label>Approve & Signed By Management </Label>
+              <Label>Approved & Signed By Management:</Label>
               <Input {...register("mgmtApproverName")} />
             </div>
             <div>

@@ -14,6 +14,8 @@ import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
 interface ManagerRemarksFormProps {
   managerName?: string;
+  employeeName?: string;
+  employeeCode?: string;
   defaultValues?: Partial<ManagerFormValues>;
   readOnly?: boolean;
   submission?: AppraisalSubmission;
@@ -24,6 +26,8 @@ interface ManagerRemarksFormProps {
 
 export function ManagerRemarksForm({
   managerName,
+  employeeName,
+  employeeCode,
   defaultValues,
   readOnly,
   submission,
@@ -59,6 +63,16 @@ export function ManagerRemarksForm({
     <FormProvider {...methods}>
       <form className="space-y-6">
         <FormBrandHeader subtitle="Team Head Feedback" compact />
+        <div className="rounded-lg border border-slate-200 bg-[#f8f9fc] p-4 mb-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Employee Name</p>
+            <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">{employeeName ?? "—"}</p>
+          </div>
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Employee Code</p>
+            <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">{employeeCode ?? "—"}</p>
+          </div>
+        </div>
         <div>
           <Label></Label>
           <p className="text-sm text-muted-foreground mb-3">
@@ -74,7 +88,7 @@ export function ManagerRemarksForm({
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Reviewed & Signed By Reporting Manager</Label>
+            <Label>Reviewed & Signed By Reporting Manager:</Label>
             <Input {...register("mgrSignatureName")} />
           </div>
           <div>

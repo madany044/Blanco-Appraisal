@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -105,8 +105,15 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
     mode: "onBlur",
   });
 
-  const { register, handleSubmit, watch, setValue, formState: { errors }, trigger } = methods;
+  const { register, handleSubmit, watch, setValue, getValues, formState: { errors }, trigger } = methods;
   const employeeCode = watch("employeeCode");
+  const employeeName = watch("employeeName");
+
+  useEffect(() => {
+    if (employeeName && !getValues("employeeSignatureName")) {
+      setValue("employeeSignatureName", employeeName.toUpperCase());
+    }
+  }, [employeeName, getValues, setValue]);
 
   async function saveSubmission(data: Partial<EmployeeFormValues>, isDraft: boolean) {
     setSubmitting(true);

@@ -42,7 +42,7 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
 
   const mgmtDefaults: Partial<ManagementFormValues> = {
     mgmtIncrementPercentage: decimalToNumber(s.mgmtIncrementPercentage),
-    mgmtApproverName: s.mgmtApproverName ?? "",
+    mgmtApproverName: s.mgmtApproverName ?? "Management",
     mgmtFinalRemarks: s.mgmtFinalRemarks ?? "",
     mgmtFeedbackToEmployee: s.mgmtFeedbackToEmployee ?? "",
     mgmtInternalNotes: s.mgmtInternalNotes ?? "",
