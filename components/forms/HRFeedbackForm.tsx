@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { hrFormSchema, type HRFormValues } from "@/lib/validations/hr-form.schema";
@@ -55,11 +56,18 @@ export function HRFeedbackForm({
       hrLeaveManagement: 5,
       hrTimingManagement: 5,
       effective_date: getDefaultEffectiveDate(),
+      hrAdminSignatureName: "DEEPU M C",
       ...defaultValues,
     },
   });
 
-  const { register, handleSubmit, control, formState: { errors } } = methods;
+  const { register, handleSubmit, control, formState: { errors }, setValue } = methods;
+
+  useEffect(() => {
+    if (!defaultValues?.hrAdminSignatureName) {
+      setValue("hrAdminSignatureName", "DEEPU M C");
+    }
+  }, [defaultValues, setValue]);
 
   if (readOnly && submission) {
     return <HRSubmissionView submission={submission} />;
