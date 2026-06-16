@@ -53,30 +53,16 @@ const AMBER       = "#d97706";
 const AMBER_LIGHT = "#fef3c7";
 const RED_SOFT    = "#c0392b";
 
-// ─── Spacing scale ──────────────────────────────────────────────
-const SP = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 };
+const SP = { xs: 3, sm: 6, md: 10, lg: 14, xl: 20, xxl: 28 };
 
-// ─── Type scale ─────────────────────────────────────────────────
-const TS = {
-  reportTitle:  { fontSize: 14, fontFamily: "Helvetica-Bold" as const },
-  sectionTitle: { fontSize: 11, fontFamily: "Helvetica-Bold" as const },
-  questionTitle:{ fontSize: 9.5, fontFamily: "Helvetica-Bold" as const },
-  supporting:   { fontSize: 8, fontFamily: "Helvetica" as const },
-  answer:       { fontSize: 9, fontFamily: "Helvetica" as const },
-  label:        { fontSize: 7.5, fontFamily: "Helvetica-Bold" as const },
-  value:        { fontSize: 9.5, fontFamily: "Helvetica" as const },
-  caption:      { fontSize: 7, fontFamily: "Helvetica" as const },
-};
-
-// ─── Styles ─────────────────────────────────────────────────────
 const s = StyleSheet.create({
   page: {
     paddingTop: 0,
-    paddingBottom: 36,
+    paddingBottom: 32,
     paddingHorizontal: 0,
     fontSize: 9,
     fontFamily: "Helvetica",
-    lineHeight: 1.5,
+    lineHeight: 1.45,
     color: INK,
     backgroundColor: WHITE,
   },
@@ -84,32 +70,34 @@ const s = StyleSheet.create({
   // ── Header ──────────────────────────────────────────────────────
   headerWrapper: {
     backgroundColor: BLUE_DARK,
-    paddingTop: SP.md,
-    paddingBottom: SP.md,
+    paddingTop: SP.sm,
+    paddingBottom: SP.sm,
     paddingHorizontal: SP.xl,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   headerAccentBar: {
     height: 3,
     backgroundColor: TEAL,
   },
-  logo: { width: 52, height: 38, objectFit: "contain" },
-  headerCenter: { flex: 1, alignItems: "center" },
+  logo: { width: 44, height: 32, objectFit: "contain", marginRight: SP.md },
+  headerCenter: { alignItems: "center" },
   headerTitle: {
-    ...TS.reportTitle,
+    fontSize: 13,
+    fontFamily: "Helvetica-Bold",
     color: WHITE,
     textAlign: "center",
-    letterSpacing: 0.5,
+    letterSpacing: 0.4,
   },
   headerSubtitle: {
-    ...TS.label,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
     color: TEAL_LIGHT,
     textAlign: "center",
-    marginTop: SP.xs,
+    marginTop: 2,
     textTransform: "uppercase",
-    letterSpacing: 1,
+    letterSpacing: 0.8,
   },
 
   // ── Footer ──────────────────────────────────────────────────────
@@ -118,7 +106,7 @@ const s = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 28,
+    height: 24,
     backgroundColor: BLUE_DARK,
     flexDirection: "row",
     alignItems: "center",
@@ -126,63 +114,38 @@ const s = StyleSheet.create({
     paddingHorizontal: SP.lg,
   },
   footerBrand: {
-    ...TS.caption,
+    fontSize: 7,
+    fontFamily: "Helvetica",
     color: TEAL_LIGHT,
     textTransform: "uppercase",
-    letterSpacing: 0.8,
+    letterSpacing: 0.6,
   },
   pageNumBadge: {
     backgroundColor: TEAL,
-    paddingVertical: SP.xs,
+    paddingVertical: 2,
     paddingHorizontal: SP.sm,
-    borderRadius: 4,
+    borderRadius: 3,
   },
   pageNumText: {
-    ...TS.caption,
+    fontSize: 7,
     fontFamily: "Helvetica-Bold",
     color: WHITE,
-    letterSpacing: 0.5,
+    letterSpacing: 0.4,
   },
 
-  // ── Body ────────────────────────────────────────────────────────
   body: {
     paddingHorizontal: SP.xxl,
-    paddingTop: SP.lg,
+    paddingTop: SP.md,
     flex: 1,
   },
 
-  // ── Section heading band ─────────────────────────────────────────
-  sectionBand: {
-    backgroundColor: BLUE,
-    paddingVertical: SP.sm,
-    paddingHorizontal: SP.lg,
-    marginBottom: SP.lg,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  sectionBandAccent: {
-    width: 3,
-    backgroundColor: TEAL,
-    marginRight: SP.sm,
-    alignSelf: "stretch",
-    borderRadius: 1,
-  },
-  sectionBandText: {
-    ...TS.sectionTitle,
-    color: WHITE,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    flex: 1,
-    textAlign: "center",
-  },
-
-  // ── Info grid (2-column) ─────────────────────────────────────────
+  // ── Info grid ───────────────────────────────────────────────────
   infoGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginBottom: SP.lg,
+    marginBottom: SP.md,
   },
   infoCell: {
     width: "50%",
@@ -198,22 +161,22 @@ const s = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
   },
-  infoCellLast: {
-    borderBottomWidth: 0,
-  },
+  infoCellLast: { borderBottomWidth: 0 },
   infoLabel: {
-    ...TS.label,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
     color: SLATE,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: 3,
+    letterSpacing: 0.4,
+    marginBottom: 2,
   },
   infoValue: {
-    ...TS.value,
+    fontSize: 9,
+    fontFamily: "Helvetica",
     color: INK,
   },
   infoValueHighlight: {
-    ...TS.value,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: BLUE,
   },
@@ -222,8 +185,7 @@ const s = StyleSheet.create({
   qCard: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginBottom: SP.lg,
-    flex: 1,
+    marginBottom: SP.md,
   },
   qCardHeader: {
     backgroundColor: BLUE_LIGHT,
@@ -236,9 +198,9 @@ const s = StyleSheet.create({
   },
   qCardNumBadge: {
     backgroundColor: BLUE,
-    borderRadius: 10,
-    width: 20,
-    height: 20,
+    borderRadius: 9,
+    width: 18,
+    height: 18,
     alignItems: "center",
     justifyContent: "center",
     marginRight: SP.sm,
@@ -246,19 +208,20 @@ const s = StyleSheet.create({
     marginTop: 1,
   },
   qCardNumText: {
-    ...TS.caption,
+    fontSize: 7,
     fontFamily: "Helvetica-Bold",
     color: WHITE,
   },
   qCardTitle: {
-    ...TS.questionTitle,
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
     color: BLUE,
     flex: 1,
   },
   qCardBody: {
-    ...TS.supporting,
+    fontSize: 8.5,
+    fontFamily: "Helvetica",
     color: SLATE,
-    fontStyle: "italic",
     paddingVertical: SP.sm,
     paddingHorizontal: SP.md,
     backgroundColor: WHITE,
@@ -268,30 +231,23 @@ const s = StyleSheet.create({
   qCardAnswer: {
     padding: SP.md,
     backgroundColor: LIGHT_GRAY,
-    flex: 1,
-    minHeight: 64,
+    minHeight: 52,
   },
   qCardAnswerText: {
-    ...TS.answer,
+    fontSize: 9,
+    fontFamily: "Helvetica",
     color: INK,
-    lineHeight: 1.6,
+    lineHeight: 1.55,
   },
 
   // ── Checkbox cards ───────────────────────────────────────────────
-  checkGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: SP.sm,
-    marginTop: SP.sm,
-    marginBottom: SP.sm,
-  },
   checkCard: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    borderRadius: 4,
-    paddingVertical: SP.xs + 2,
+    borderRadius: 3,
+    paddingVertical: SP.xs + 1,
     paddingHorizontal: SP.sm,
     marginBottom: SP.xs,
     backgroundColor: WHITE,
@@ -301,9 +257,9 @@ const s = StyleSheet.create({
     backgroundColor: TICK_BG,
   },
   checkDot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
     borderWidth: 1.5,
     borderColor: BORDER_GRAY,
     alignItems: "center",
@@ -316,45 +272,57 @@ const s = StyleSheet.create({
     backgroundColor: TICK_GREEN,
   },
   checkDotInner: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
     backgroundColor: WHITE,
   },
   checkCardText: {
-    ...TS.answer,
+    fontSize: 8.5,
+    fontFamily: "Helvetica",
     color: INK,
     flex: 1,
   },
   checkCardTextSelected: {
-    ...TS.answer,
-    color: TICK_GREEN,
+    fontSize: 8.5,
     fontFamily: "Helvetica-Bold",
+    color: TICK_GREEN,
     flex: 1,
+  },
+
+  // ── 2-column checkbox grid (for manager section) ─────────────────
+  checkGrid2Col: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  checkCard2Col: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: BORDER_GRAY,
+    borderRadius: 3,
+    paddingVertical: SP.xs,
+    paddingHorizontal: SP.sm,
+    marginBottom: SP.xs,
+    marginRight: SP.xs,
+    backgroundColor: WHITE,
+    width: "49%",
+  },
+  checkCard2ColSelected: {
+    borderColor: TICK_GREEN,
+    backgroundColor: TICK_BG,
   },
 
   // ── Self rating table ────────────────────────────────────────────
   ratingTable: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginTop: SP.sm,
-  },
-  ratingTableHead: {
-    flexDirection: "row",
-    backgroundColor: BLUE,
-    paddingVertical: SP.sm,
-    paddingHorizontal: SP.md,
-  },
-  ratingTableHeadText: {
-    ...TS.label,
-    color: WHITE,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
+    marginBottom: SP.sm,
   },
   ratingTableRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: SP.sm,
+    paddingVertical: SP.xs + 1,
     paddingHorizontal: SP.md,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
@@ -363,23 +331,25 @@ const s = StyleSheet.create({
     backgroundColor: LIGHT_GRAY,
   },
   ratingTableAlpha: {
-    width: 20,
-    ...TS.label,
+    width: 18,
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
     color: SLATE,
     flexShrink: 0,
   },
   ratingTableLabel: {
     flex: 1,
-    ...TS.answer,
+    fontSize: 8,
+    fontFamily: "Helvetica",
     paddingRight: SP.sm,
   },
   ratingScoreBadge: {
-    width: 48,
-    height: 28,
+    width: 42,
+    height: 26,
     backgroundColor: BLUE_LIGHT,
     borderWidth: 1,
     borderColor: BLUE,
-    borderRadius: 4,
+    borderRadius: 3,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
@@ -393,114 +363,106 @@ const s = StyleSheet.create({
     borderColor: AMBER,
   },
   ratingScoreText: {
-    ...TS.questionTitle,
+    fontSize: 8.5,
+    fontFamily: "Helvetica-Bold",
     color: BLUE,
   },
-  ratingScoreTextHigh: {
-    color: TICK_GREEN,
-  },
-  ratingScoreTextMid: {
-    color: AMBER,
-  },
+  ratingScoreTextHigh: { color: TICK_GREEN },
+  ratingScoreTextMid: { color: AMBER },
   ratingScoreDenom: {
-    ...TS.caption,
+    fontSize: 6,
+    fontFamily: "Helvetica",
     color: SLATE,
-    marginTop: 1,
   },
 
-  // ── Productivity table ───────────────────────────────────────────
-  prodTable: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    marginBottom: SP.lg,
-  },
-  prodTableHead: {
-    flexDirection: "row",
-    backgroundColor: TEAL,
-    paddingVertical: SP.sm,
-    paddingHorizontal: SP.md,
-  },
-  prodTableHeadText: {
-    ...TS.label,
-    color: WHITE,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  prodTableRow: {
+  // ── Productivity ─────────────────────────────────────────────────
+  prodRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: SP.sm,
+    paddingVertical: SP.xs + 1,
     paddingHorizontal: SP.md,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
   },
-  prodTableRowAlt: {
-    backgroundColor: LIGHT_GRAY,
+  prodRowAlt: { backgroundColor: LIGHT_GRAY },
+  prodTable: {
+    borderWidth: 1,
+    borderColor: BORDER_GRAY,
+    marginBottom: SP.md,
   },
-  prodTableLabel: {
+  prodLabel: {
     flex: 1,
-    ...TS.answer,
+    fontSize: 8,
+    fontFamily: "Helvetica",
     paddingRight: SP.sm,
   },
-  prodTableValue: {
-    width: 100,
-    ...TS.answer,
+  prodValue: {
+    width: 80,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: BLUE,
     textAlign: "right",
     flexShrink: 0,
   },
-  prodTableValueNA: {
-    width: 100,
-    ...TS.answer,
+  prodValueNA: {
+    width: 80,
+    fontSize: 8,
+    fontFamily: "Helvetica",
     color: SLATE,
     textAlign: "right",
     flexShrink: 0,
     fontStyle: "italic",
   },
 
-  // ── HR rating card ───────────────────────────────────────────────
-  hrCardRow: {
+  // ── HR rating ────────────────────────────────────────────────────
+  hrTable: {
+    borderWidth: 1,
+    borderColor: BORDER_GRAY,
+    marginBottom: SP.md,
+  },
+  hrRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: SP.sm,
     paddingHorizontal: SP.md,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
+    minHeight: 32,
   },
-  hrCardRowAlt: {
-    backgroundColor: LIGHT_GRAY,
-  },
-  hrCardLabel: {
+  hrRowAlt: { backgroundColor: LIGHT_GRAY },
+  hrLabel: {
     flex: 1,
-    ...TS.answer,
+    fontSize: 8,
+    fontFamily: "Helvetica",
     paddingRight: SP.sm,
   },
-  hrCardNotes: {
-    ...TS.caption,
+  hrNotes: {
+    fontSize: 7,
+    fontFamily: "Helvetica",
     color: SLATE,
-    fontStyle: "italic",
     marginTop: 2,
   },
   hrScoreBadge: {
-    width: 52,
-    height: 30,
-    borderRadius: 4,
+    width: 44,
+    height: 28,
+    borderRadius: 3,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
   },
   hrScoreText: {
-    ...TS.questionTitle,
+    fontSize: 8.5,
+    fontFamily: "Helvetica-Bold",
     color: WHITE,
   },
   hrScoreDenom: {
-    ...TS.caption,
+    fontSize: 6,
+    fontFamily: "Helvetica",
     color: WHITE,
-    opacity: 0.8,
+    opacity: 0.85,
   },
 
-  // ── Manager sections ─────────────────────────────────────────────
+  // ── Manager section ──────────────────────────────────────────────
   mgrSectionCard: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
@@ -508,175 +470,108 @@ const s = StyleSheet.create({
   },
   mgrSectionHeader: {
     backgroundColor: INK,
-    paddingVertical: SP.xs + 2,
+    paddingVertical: SP.xs + 1,
     paddingHorizontal: SP.md,
-    flexDirection: "row",
-    alignItems: "center",
   },
   mgrSectionHeaderText: {
-    ...TS.questionTitle,
-    color: WHITE,
-    flex: 1,
-  },
-  mgrOptionRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    paddingVertical: SP.xs,
-    paddingHorizontal: SP.sm,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-  },
-  mgrOptionRowSelected: {
-    backgroundColor: TICK_BG,
-  },
-  mgrTickBox: {
-    width: 16,
-    height: 16,
-    borderWidth: 1.5,
-    borderColor: BORDER_GRAY,
-    borderRadius: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: SP.sm,
-    marginTop: 1,
-    flexShrink: 0,
-  },
-  mgrTickBoxSelected: {
-    backgroundColor: TICK_GREEN,
-    borderColor: TICK_GREEN,
-  },
-  mgrTickMark: {
-    ...TS.caption,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: WHITE,
-  },
-  mgrOptionText: {
-    flex: 1,
-    ...TS.answer,
-    color: INK,
-  },
-  mgrOptionTextSelected: {
-    flex: 1,
-    ...TS.answer,
-    fontFamily: "Helvetica-Bold",
-    color: TICK_GREEN,
   },
 
-  // ── Increment table ──────────────────────────────────────────────
+  // ── Increment table (compact) ────────────────────────────────────
   tableHead: {
     flexDirection: "row",
     backgroundColor: BLUE_DARK,
-    paddingVertical: SP.sm,
-    paddingHorizontal: SP.md,
+    paddingVertical: SP.xs,
+    paddingHorizontal: SP.sm,
   },
   tableHeadText: {
-    ...TS.label,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
     color: WHITE,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
     flex: 1,
   },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
-    paddingVertical: SP.sm,
-    paddingHorizontal: SP.md,
+    paddingVertical: SP.xs,
+    paddingHorizontal: SP.sm,
   },
-  tableRowAlt: {
-    backgroundColor: LIGHT_GRAY,
-  },
+  tableRowAlt: { backgroundColor: LIGHT_GRAY },
   tableRowHighlight: {
     backgroundColor: BLUE_LIGHT,
-    borderLeftWidth: 3,
+    borderLeftWidth: 2,
     borderLeftColor: BLUE,
   },
-  tableCell: { flex: 1, ...TS.answer },
-  tableCellRight: { flex: 1, ...TS.answer, textAlign: "right", fontFamily: "Helvetica-Bold" },
+  tableCell: { flex: 1, fontSize: 7.5 },
+  tableCellRight: { flex: 1, fontSize: 7.5, textAlign: "right", fontFamily: "Helvetica-Bold" },
   tableActiveBadge: {
     backgroundColor: BLUE,
-    borderRadius: 3,
-    paddingHorizontal: SP.xs,
+    borderRadius: 2,
+    paddingHorizontal: 3,
     paddingVertical: 1,
-    marginLeft: SP.xs,
+    marginLeft: 3,
+    alignSelf: "center",
   },
   tableActiveBadgeText: {
-    ...TS.caption,
-    color: WHITE,
+    fontSize: 6,
     fontFamily: "Helvetica-Bold",
+    color: WHITE,
   },
 
   // ── Signature block ──────────────────────────────────────────────
   sigContainer: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginTop: SP.lg,
+    marginTop: SP.sm,
   },
   sigHeader: {
     backgroundColor: MID_GRAY,
-    paddingVertical: SP.sm,
+    paddingVertical: SP.xs + 1,
     paddingHorizontal: SP.md,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
   },
   sigHeaderText: {
-    ...TS.label,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
     color: SLATE,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.4,
   },
   sigBody: {
     flexDirection: "row",
     padding: SP.md,
-    gap: SP.lg,
+    gap: SP.md,
   },
-  sigField: {
-    flex: 1,
-  },
+  sigField: { flex: 1 },
   sigLabel: {
-    ...TS.label,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
     color: SLATE,
     marginBottom: SP.xs,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
   sigValue: {
-    ...TS.value,
+    fontSize: 9,
+    fontFamily: "Helvetica",
     color: INK,
     borderBottomWidth: 1,
     borderBottomColor: BORDER_GRAY,
     paddingBottom: SP.xs,
-    minHeight: 22,
-  },
-
-  // ── Answer box (generic) ─────────────────────────────────────────
-  answerBox: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    backgroundColor: LIGHT_GRAY,
-    padding: SP.md,
-    minHeight: 64,
-  },
-  answerBoxText: {
-    ...TS.answer,
-    color: INK,
-    lineHeight: 1.6,
+    minHeight: 20,
   },
 
   // ── Misc ─────────────────────────────────────────────────────────
-  divider: {
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-    marginVertical: SP.md,
-  },
-  sectionDivider: {
-    borderBottomWidth: 1.5,
-    borderBottomColor: TEAL,
-    marginVertical: SP.md,
-  },
   introPara: {
-    ...TS.answer,
-    lineHeight: 1.65,
+    fontSize: 8,
+    fontFamily: "Helvetica",
+    lineHeight: 1.55,
     marginBottom: SP.sm,
     color: SLATE,
   },
@@ -685,35 +580,46 @@ const s = StyleSheet.create({
     backgroundColor: "#fdecea",
     borderWidth: 1,
     borderColor: RED_SOFT,
-    borderRadius: 4,
+    borderRadius: 3,
     paddingVertical: SP.xs,
     paddingHorizontal: SP.sm,
-    marginTop: SP.sm,
+    marginLeft: SP.md,
+    marginBottom: SP.xs,
   },
   naChipText: {
-    ...TS.label,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
     color: RED_SOFT,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.4,
   },
   subheadCenter: {
-    ...TS.questionTitle,
-    textAlign: "center",
+    fontSize: 8.5,
+    fontFamily: "Helvetica-Bold",
     color: TEAL,
+    textAlign: "center",
     textTransform: "uppercase",
-    letterSpacing: 0.8,
-    marginBottom: SP.sm,
+    letterSpacing: 0.6,
+    marginBottom: SP.xs,
+    marginTop: SP.sm,
   },
   highlightStatement: {
     backgroundColor: BLUE_LIGHT,
     borderLeftWidth: 3,
     borderLeftColor: BLUE,
-    padding: SP.md,
-    marginBottom: SP.md,
+    padding: SP.sm,
+    marginBottom: SP.sm,
   },
   highlightStatementText: {
-    ...TS.questionTitle,
+    fontSize: 8.5,
+    fontFamily: "Helvetica-Bold",
     color: BLUE,
+  },
+  qLabel: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: INK,
+    marginBottom: SP.xs,
   },
 });
 
@@ -725,12 +631,11 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
   return (
     <View fixed>
       <View style={s.headerWrapper}>
-        {logoSrc ? <Image src={logoSrc} style={s.logo} /> : <View style={{ width: 52 }} />}
+        {logoSrc ? <Image src={logoSrc} style={s.logo} /> : null}
         <View style={s.headerCenter}>
           <Text style={s.headerTitle}>Team Blanco AND Team Blanka</Text>
-          <Text style={s.headerSubtitle}>EMPLOYEE ANNUAL APPRAISAL PORTAL</Text>
+          <Text style={s.headerSubtitle}>Employee Progress Report Card for Salary Appraisal</Text>
         </View>
-        {logoSrc ? <Image src={logoSrc} style={s.logo} /> : <View style={{ width: 52 }} />}
       </View>
       <View style={s.headerAccentBar} />
     </View>
@@ -740,7 +645,7 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
 function PageFooter({ num }: { num: number }) {
   return (
     <View style={s.footerBar} fixed>
-      <Text style={s.footerBrand}>Salary Appraisal Report</Text>
+      <Text style={s.footerBrand}>Confidential — Salary Appraisal Report</Text>
       <View style={s.pageNumBadge}>
         <Text style={s.pageNumText}>PAGE {num}</Text>
       </View>
@@ -758,28 +663,8 @@ function PdfPage({ num, logoSrc, children }: { num: number; logoSrc?: string; ch
   );
 }
 
-function SectionBand({ title }: { title: string }) {
-  return (
-    <View style={s.sectionBand}>
-      <View style={s.sectionBandAccent} />
-      <Text style={s.sectionBandText}>{title}</Text>
-    </View>
-  );
-}
-
-// Info cell for the 2-column grid
-function InfoCell({
-  label,
-  value,
-  full,
-  last,
-  highlight,
-}: {
-  label: string;
-  value: string;
-  full?: boolean;
-  last?: boolean;
-  highlight?: boolean;
+function InfoCell({ label, value, full, last, highlight }: {
+  label: string; value: string; full?: boolean; last?: boolean; highlight?: boolean;
 }) {
   return (
     <View style={[full ? s.infoCellFull : s.infoCell, last ? s.infoCellLast : {}]}>
@@ -789,26 +674,28 @@ function InfoCell({
   );
 }
 
-// Question card (bordered, header-band style)
-function QCard({
-  num,
-  heading,
-  body,
-  answer,
-  minHeight = 72,
-  flex,
-}: {
-  num?: string | number;
-  heading: string;
-  body?: string;
-  answer: string;
-  minHeight?: number;
-  flex?: number;
-}) {
-  const answerStyle = flex
-    ? [s.qCardAnswer, { flex, minHeight }]
-    : [s.qCardAnswer, { minHeight }];
+// Employee info section heading (only used on page 1)
+function InfoSectionHeading({ title }: { title: string }) {
+  return (
+    <View style={{
+      backgroundColor: BLUE,
+      paddingVertical: SP.sm,
+      paddingHorizontal: SP.md,
+      marginBottom: SP.md,
+      flexDirection: "row",
+      alignItems: "center",
+    }}>
+      <View style={{ width: 3, backgroundColor: TEAL, marginRight: SP.sm, alignSelf: "stretch", borderRadius: 1 }} />
+      <Text style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: WHITE, textTransform: "uppercase", letterSpacing: 1, flex: 1, textAlign: "center" }}>
+        {title}
+      </Text>
+    </View>
+  );
+}
 
+function QCard({ num, heading, body, answer, minHeight = 52, flex }: {
+  num?: string | number; heading: string; body?: string; answer: string; minHeight?: number; flex?: number;
+}) {
   return (
     <View style={[s.qCard, flex ? { flex } : {}]} wrap={false}>
       <View style={s.qCardHeader}>
@@ -820,14 +707,13 @@ function QCard({
         <Text style={s.qCardTitle}>{heading}</Text>
       </View>
       {body ? <Text style={s.qCardBody}>{body}</Text> : null}
-      <View style={answerStyle}>
+      <View style={[s.qCardAnswer, flex ? { flex: 1, minHeight } : { minHeight }]}>
         <Text style={s.qCardAnswerText}>{answer || " "}</Text>
       </View>
     </View>
   );
 }
 
-// Checkbox selection card
 function CheckCard({ checked, label }: { checked: boolean; label: string }) {
   return (
     <View style={[s.checkCard, checked ? s.checkCardSelected : {}]} wrap={false}>
@@ -839,17 +725,20 @@ function CheckCard({ checked, label }: { checked: boolean; label: string }) {
   );
 }
 
-// Self rating table row
-function RatingTableRow({
-  alpha,
-  label,
-  score,
-  index,
-}: {
-  alpha: string;
-  label: string;
-  score: number | null;
-  index: number;
+// 2-column checkbox for manager sections
+function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) {
+  return (
+    <View style={[s.checkCard2Col, checked ? s.checkCard2ColSelected : {}]}>
+      <View style={[s.checkDot, checked ? s.checkDotSelected : {}, { marginRight: 4 }]}>
+        {checked ? <View style={s.checkDotInner} /> : null}
+      </View>
+      <Text style={[checked ? s.checkCardTextSelected : s.checkCardText, { fontSize: 7.5 }]}>{label}</Text>
+    </View>
+  );
+}
+
+function RatingTableRow({ alpha, label, score, index }: {
+  alpha: string; label: string; score: number | null; index: number;
 }) {
   const isAlt = index % 2 === 1;
   const isHigh = score != null && score >= 8;
@@ -869,29 +758,19 @@ function RatingTableRow({
   );
 }
 
-// Productivity table row
 function ProdTableRow({ label, value, index }: { label: string; value: string; index: number }) {
   const isAlt = index % 2 === 1;
   const isNA = !value || value === "—";
   return (
-    <View style={[s.prodTableRow, isAlt ? s.prodTableRowAlt : {}]} wrap={false}>
-      <Text style={s.prodTableLabel}>{label}</Text>
-      <Text style={isNA ? s.prodTableValueNA : s.prodTableValue}>{value || "—"}</Text>
+    <View style={[s.prodRow, isAlt ? s.prodRowAlt : {}]} wrap={false}>
+      <Text style={s.prodLabel}>{label}</Text>
+      <Text style={isNA ? s.prodValueNA : s.prodValue}>{value || "—"}</Text>
     </View>
   );
 }
 
-// HR rating card row
-function HrCardRow({
-  label,
-  score,
-  notes,
-  index,
-}: {
-  label: string;
-  score: number | null;
-  notes?: string | null;
-  index: number;
+function HrTableRow({ label, score, notes, index }: {
+  label: string; score: number | null; notes?: string | null; index: number;
 }) {
   const isAlt = index % 2 === 1;
   const isHigh = score != null && score >= 8;
@@ -899,10 +778,10 @@ function HrCardRow({
   const bgColor = isHigh ? TICK_GREEN : isMid ? AMBER : BLUE;
   const display = score != null ? `${score}` : "—";
   return (
-    <View style={[s.hrCardRow, isAlt ? s.hrCardRowAlt : {}]} wrap={false}>
+    <View style={[s.hrRow, isAlt ? s.hrRowAlt : {}]} wrap={false}>
       <View style={{ flex: 1 }}>
-        <Text style={s.hrCardLabel}>{label}</Text>
-        {notes ? <Text style={s.hrCardNotes}>{notes}</Text> : null}
+        <Text style={s.hrLabel}>{label}</Text>
+        {notes ? <Text style={s.hrNotes}>{notes}</Text> : null}
       </View>
       <View style={[s.hrScoreBadge, { backgroundColor: bgColor }]}>
         <Text style={s.hrScoreText}>{display}</Text>
@@ -912,12 +791,8 @@ function HrCardRow({
   );
 }
 
-function SignatureBlock({
-  title,
-  fields,
-}: {
-  title: string;
-  fields: { label: string; value: string }[];
+function SignatureBlock({ title, fields }: {
+  title: string; fields: { label: string; value: string }[];
 }) {
   return (
     <View style={s.sigContainer} wrap={false}>
@@ -936,31 +811,19 @@ function SignatureBlock({
   );
 }
 
-function MgrSection({
-  header,
-  options,
-  selected,
-}: {
-  header: string;
-  options: readonly string[];
-  selected: string[];
+function MgrSection2Col({ header, options, selected }: {
+  header: string; options: readonly string[]; selected: string[];
 }) {
   return (
     <View style={s.mgrSectionCard} wrap={false}>
       <View style={s.mgrSectionHeader}>
         <Text style={s.mgrSectionHeaderText}>{header}</Text>
       </View>
-      {options.map((opt) => {
-        const isChecked = selected.includes(opt);
-        return (
-          <View key={opt} style={[s.mgrOptionRow, isChecked ? s.mgrOptionRowSelected : {}]}>
-            <View style={[s.mgrTickBox, isChecked ? s.mgrTickBoxSelected : {}]}>
-              {isChecked ? <Text style={s.mgrTickMark}>✓</Text> : null}
-            </View>
-            <Text style={isChecked ? s.mgrOptionTextSelected : s.mgrOptionText}>{opt}</Text>
-          </View>
-        );
-      })}
+      <View style={[s.checkGrid2Col, { padding: SP.xs }]}>
+        {options.map((opt) => (
+          <CheckCard2Col key={opt} checked={selected.includes(opt)} label={opt} />
+        ))}
+      </View>
     </View>
   );
 }
@@ -968,7 +831,7 @@ function MgrSection({
 function formatSlabRange(min: number, max: number | null): string {
   if (max == null) return `${min.toLocaleString("en-IN")} and above`;
   if (min === 0) return `Less than ${(max + 1).toLocaleString("en-IN")}`;
-  return `${min.toLocaleString("en-IN")} to ${max.toLocaleString("en-IN")}`;
+  return `${min.toLocaleString("en-IN")} – ${max.toLocaleString("en-IN")}`;
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -983,13 +846,12 @@ interface PDFReportProps {
 
 export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportProps) {
   const isQC = sub.category === "QC";
-  const currentMonthlySalary = sub.currentSalary ?? 0;
-  const annualCtc = currentMonthlySalary * 12;
+  const annualCtc = (sub.currentSalary ?? 0) * 12;
   const incrementPct = decimalToNumber(sub.mgmtIncrementPercentage);
   const newMonthlySalary =
     sub.mgmtNewSalary != null
       ? Math.round(decimalToNumber(sub.mgmtNewSalary))
-      : Math.round(currentMonthlySalary * (1 + incrementPct / 100));
+      : Math.round((sub.currentSalary ?? 0) * (1 + incrementPct / 100));
   const selectedOverall = normalizeOverallRating(sub.overallRating);
 
   const mgrReasonOptions: Record<string, readonly string[]> = {
@@ -1002,34 +864,29 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
   const nextPage = () => ++p;
   const alphas = "abcdefghijklmnopqrst".split("");
 
+  // Split self-rating into two halves
+  const selfRatingFirst = SELF_RATING_ITEMS.slice(0, 10);
+  const selfRatingSecond = SELF_RATING_ITEMS.slice(10);
+
+  const logoPath = logoSrc ?? "/images/logoooo.jpg";
+
   return (
     <Document>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 1 — Employee Information
+          PAGE 1 — Employee Info + Q1 + Q2
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Employee Information" />
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <InfoSectionHeading title="Employee Information" />
 
         <View style={s.infoGrid}>
           <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
           <InfoCell label="Employee ID" value={pdfDisplayValue(sub.employeeCode)} />
           <InfoCell label="Team" value={pdfDisplayValue((sub as any).team ?? (sub as any).teamDesignation ?? "")} />
           <InfoCell label="Designation" value={pdfDisplayValue((sub as any).designation ?? "")} />
-          <InfoCell
-            label="Previous Experience in Field"
-            value={pdfDisplayValue(sub.prevExperienceYears)}
-          />
-          <InfoCell
-            label="Experience in This Company"
-            value={pdfDisplayValue(sub.companyExperienceYears)}
-          />
-          <InfoCell
-            label="Date of Submission"
-            value={formatDate(sub.dateOfSubmission) || "—"}
-            full
-            last
-          />
+          <InfoCell label="Previous Experience in Field" value={pdfDisplayValue(sub.prevExperienceYears)} />
+          <InfoCell label="Experience in This Company" value={pdfDisplayValue(sub.companyExperienceYears)} />
+          <InfoCell label="Date of Submission" value={formatDate(sub.dateOfSubmission) || "—"} full last />
         </View>
 
         <View style={{ flex: 1, flexDirection: "column" }}>
@@ -1053,8 +910,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       {/* ═══════════════════════════════════════════════
           PAGE 2 — Q3, Q4, Q5
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Employee Self-Assessment" />
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
         <View style={{ flex: 1, flexDirection: "column" }}>
           <QCard
             num="3"
@@ -1081,101 +937,109 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 3 — Q6 (a through e)
+          PAGE 3 — Q6 (a–e) all on one page
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Achievements, Goals & Opportunities" />
-
-        <QCard
-          heading="a. Goal Challenges"
-          body="If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?"
-          answer={pdfDisplayValue(sub.goalChallenges)}
-          minHeight={56}
-        />
-        <QCard
-          heading="b. Upcoming Goal"
-          body="Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?"
-          answer={pdfDisplayValue(sub.upcomingGoal)}
-          minHeight={56}
-        />
-        <QCard
-          heading="c. Three Areas for Improvement"
-          body="What are the 3 things you would like to improve?"
-          answer={pdfDisplayValue(sub.threeImprovements)}
-          minHeight={56}
-        />
-
-        {/* Q6d — initiative frequency */}
-        <View style={[s.qCard, { marginBottom: SP.lg }]} wrap={false}>
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        {/* 6a */}
+        <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>
-              d. Initiative & Innovation Frequency
-            </Text>
+            <Text style={s.qCardTitle}>6a.  Goal Challenges</Text>
+          </View>
+          <Text style={s.qCardBody}>
+            If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?
+          </Text>
+          <View style={[s.qCardAnswer, { minHeight: 40 }]}>
+            <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.goalChallenges) || " "}</Text>
+          </View>
+        </View>
+
+        {/* 6b */}
+        <View style={s.qCard} wrap={false}>
+          <View style={s.qCardHeader}>
+            <Text style={s.qCardTitle}>6b.  Upcoming Goal</Text>
+          </View>
+          <Text style={s.qCardBody}>
+            Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?
+          </Text>
+          <View style={[s.qCardAnswer, { minHeight: 40 }]}>
+            <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.upcomingGoal) || " "}</Text>
+          </View>
+        </View>
+
+        {/* 6c */}
+        <View style={s.qCard} wrap={false}>
+          <View style={s.qCardHeader}>
+            <Text style={s.qCardTitle}>6c.  Three Areas for Improvement</Text>
+          </View>
+          <Text style={s.qCardBody}>What are the 3 things you would like to improve?</Text>
+          <View style={[s.qCardAnswer, { minHeight: 40 }]}>
+            <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.threeImprovements) || " "}</Text>
+          </View>
+        </View>
+
+        {/* 6d — initiative frequency */}
+        <View style={s.qCard} wrap={false}>
+          <View style={s.qCardHeader}>
+            <Text style={s.qCardTitle}>6d.  Initiative &amp; Innovation Frequency</Text>
           </View>
           <Text style={s.qCardBody}>
             Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?
           </Text>
-          <View style={{ padding: SP.md }}>
+          <View style={{ padding: SP.sm }}>
             {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (
               <CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} />
             ))}
           </View>
         </View>
 
-        {/* Q6e — abroad capability */}
-        <View style={[s.qCard, { marginBottom: SP.lg }]} wrap={false}>
+        {/* 6e — abroad capability */}
+        <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>
-              e. International Work Capability
-            </Text>
+            <Text style={s.qCardTitle}>6e.  International Work Capability</Text>
+            {sub.abroadCapabilityNa ? (
+              <View style={[s.naChip, { marginLeft: SP.sm, alignSelf: "center" }]}>
+                <Text style={s.naChipText}>N/A</Text>
+              </View>
+            ) : null}
           </View>
           <Text style={s.qCardBody}>
             Do you have capability of managing yourself if company gives opportunity to work abroad?
           </Text>
-          <View style={{ padding: SP.md }}>
-            {sub.abroadCapabilityNa ? (
-              <>
-                {ABROAD_OPTIONS.map((opt) => (
-                  <CheckCard key={opt} checked={false} label={opt} />
-                ))}
-                <View style={s.naChip}>
-                  <Text style={s.naChipText}>N/A — Not applicable for this category</Text>
-                </View>
-              </>
-            ) : (
-              ABROAD_OPTIONS.map((opt) => (
-                <CheckCard key={opt} checked={sub.abroadCapability === opt} label={opt} />
-              ))
-            )}
+          <View style={{ padding: SP.sm }}>
+            {ABROAD_OPTIONS.map((opt) => (
+              <CheckCard
+                key={opt}
+                checked={!sub.abroadCapabilityNa && sub.abroadCapability === opt}
+                label={opt}
+              />
+            ))}
           </View>
         </View>
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 4 — Q7, Q8, Q9(G)
+          PAGE 4 — Q7, Q8, Q9
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Professional Development & Attitude" />
-
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
         <QCard
           num="7"
           heading="Initiative or Innovation Examples"
           body="Provide examples of instances where you showed initiative or innovation."
           answer={pdfDisplayValue(sub.initiativeInnovation)}
-          minHeight={72}
+          minHeight={60}
         />
 
         {/* Q8 — learning commitment */}
-        <View style={[s.qCard, { marginBottom: SP.lg }]} wrap={false}>
+        <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
             <View style={s.qCardNumBadge}>
               <Text style={s.qCardNumText}>8</Text>
             </View>
             <Text style={s.qCardTitle}>
-              Commitment to Professional Development & Continuous Learning
+              Commitment to Professional Development &amp; Continuous Learning
             </Text>
           </View>
-          <View style={{ padding: SP.md }}>
+          <View style={{ padding: SP.sm }}>
             {LEARNING_COMMITMENT_OPTIONS.map((o) => (
               <CheckCard key={o.value} checked={sub.learningCommitment === o.value} label={o.label} />
             ))}
@@ -1183,32 +1047,39 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </View>
 
         <QCard
-          heading="G. Professionalism and Attitude"
+          num="9"
+          heading="Professionalism and Attitude"
           body="Please describe your professionalism and attitude with your team during office premises (including perspective vision on your career along with your team)."
           answer={pdfDisplayValue(sub.professionalismAttitude)}
-          minHeight={80}
+          minHeight={70}
         />
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 5 — Self Ratings (professional table)
+          PAGE 5 — Self Ratings a–j
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Self Performance Ratings" />
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <View style={{ marginBottom: SP.sm }}>
+          <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.xs }}>
+            Self Performance Ratings
+          </Text>
+          <Text style={{ fontSize: 7.5, color: SLATE }}>
+            Rate yourself out of 10 for each criteria below.
+          </Text>
+        </View>
 
         <View style={s.ratingTable}>
-          <View style={s.ratingTableHead}>
-            <Text style={[s.ratingTableHeadText, { width: 20 }]}>#</Text>
-            <Text style={[s.ratingTableHeadText, { flex: 1 }]}>Performance Criteria</Text>
-            <Text style={[s.ratingTableHeadText, { width: 48, textAlign: "center" }]}>Score</Text>
-          </View>
-          {SELF_RATING_ITEMS.map((item, i) => {
+          {selfRatingFirst.map((item, i) => {
             const score = sub[item.key as keyof AppraisalSubmission] as number | null;
+            // Strip leading "a. " / "b. " etc. prefix that selfRatingLabel may include
+            const rawLabel = selfRatingLabel(item);
+            // Remove duplicate alpha prefix if present (e.g. "a. a. How..." → "How...")
+            const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
             return (
               <RatingTableRow
                 key={item.key}
                 alpha={alphas[i]}
-                label={selfRatingLabel(item)}
+                label={cleanLabel}
                 score={score}
                 index={i}
               />
@@ -1218,22 +1089,47 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          Non-QC: Productivity pages (professional tables)
+          PAGE 6 — Self Ratings k–t
+      ═══════════════════════════════════════════════ */}
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <View style={{ marginBottom: SP.sm }}>
+          <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.xs }}>
+            Self Performance Ratings (continued)
+          </Text>
+        </View>
+
+        <View style={s.ratingTable}>
+          {selfRatingSecond.map((item, i) => {
+            const globalIndex = i + 10;
+            const score = sub[item.key as keyof AppraisalSubmission] as number | null;
+            const rawLabel = selfRatingLabel(item);
+            const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
+            return (
+              <RatingTableRow
+                key={item.key}
+                alpha={alphas[globalIndex]}
+                label={cleanLabel}
+                score={score}
+                index={i}
+              />
+            );
+          })}
+        </View>
+      </PdfPage>
+
+      {/* ═══════════════════════════════════════════════
+          Non-QC: Productivity
       ═══════════════════════════════════════════════ */}
       {!isQC && (
         <>
-          <PdfPage num={nextPage()} logoSrc={logoSrc}>
-            <SectionBand title="Productivity & Time Management" />
-
+          <PdfPage num={nextPage()} logoSrc={logoPath}>
+            <Text style={{ fontSize: 9.5, fontFamily: "Helvetica-Bold", color: INK, marginBottom: SP.xs }}>
+              10.  Productivity and Time Management
+            </Text>
             <Text style={s.introPara}>{PRODUCTIVITY_INTRO}</Text>
 
-            {/* Shop Drafting Table */}
             <Text style={s.subheadCenter}>Shop Drafting and Checker</Text>
-            <View style={[s.prodTable, { marginBottom: SP.xl }]}>
-              <View style={s.prodTableHead}>
-                <Text style={[s.prodTableHeadText, { flex: 1 }]}>Metric</Text>
-                <Text style={[s.prodTableHeadText, { width: 100, textAlign: "right" }]}>Value</Text>
-              </View>
+            <View style={[s.prodTable, { marginBottom: SP.lg }]}>
               {SHOP_DRAFTING_ITEMS.map((item, i) => (
                 <ProdTableRow
                   key={item.key}
@@ -1244,13 +1140,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
               ))}
             </View>
 
-            {/* E-Drafting Table */}
             <Text style={s.subheadCenter}>E-Drafting</Text>
             <View style={s.prodTable}>
-              <View style={s.prodTableHead}>
-                <Text style={[s.prodTableHeadText, { flex: 1 }]}>Metric</Text>
-                <Text style={[s.prodTableHeadText, { width: 100, textAlign: "right" }]}>Value</Text>
-              </View>
               {E_DRAFTING_ITEMS.map((item, i) => (
                 <ProdTableRow
                   key={item.key}
@@ -1262,21 +1153,16 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             </View>
           </PdfPage>
 
-          <PdfPage num={nextPage()} logoSrc={logoSrc}>
-            <SectionBand title="Modeler Productivity" />
-
+          <PdfPage num={nextPage()} logoSrc={logoPath}>
+            <Text style={s.subheadCenter}>Modeler</Text>
             {sub.modelerSectionNa ? (
-              <View style={{ alignItems: "center", marginTop: SP.xxl }}>
+              <View style={{ alignItems: "center", marginTop: SP.xl }}>
                 <View style={s.naChip}>
                   <Text style={s.naChipText}>Not Applicable — This Section Does Not Apply to This Category</Text>
                 </View>
               </View>
             ) : (
               <View style={s.prodTable}>
-                <View style={s.prodTableHead}>
-                  <Text style={[s.prodTableHeadText, { flex: 1 }]}>Metric</Text>
-                  <Text style={[s.prodTableHeadText, { width: 100, textAlign: "right" }]}>Value</Text>
-                </View>
                 {MODELER_ITEMS.map((item, i) => (
                   <ProdTableRow
                     key={item.key}
@@ -1294,9 +1180,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       {/* ═══════════════════════════════════════════════
           PAGE — Q11, Q12, Overall Rating, Employee Signature
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Work Performance & Self-Rating" />
-
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
         <View style={{ flex: 1, flexDirection: "column" }}>
           <QCard
             num="11"
@@ -1314,44 +1198,36 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           />
         </View>
 
-        {/* Overall rating selection cards */}
-        <View style={[s.qCard, { marginBottom: SP.lg, marginTop: SP.sm }]} wrap={false}>
+        <View style={[s.qCard, { marginBottom: SP.sm, marginTop: SP.xs }]} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>Overall Self-Performance Rating</Text>
+            <Text style={s.qCardTitle}>Rate Yourself — Overall Performance</Text>
           </View>
-          <View style={{ padding: SP.md }}>
+          <View style={{ padding: SP.sm }}>
             {OVERALL_RATING_OPTIONS.map((opt) => (
               <CheckCard key={opt} checked={selectedOverall === opt} label={opt} />
             ))}
           </View>
         </View>
 
-        {/* Employee signature */}
         <SignatureBlock
           title="Employee Declaration & Signature"
           fields={[
-            { label: "Form filled and signed by:", value: pdfDisplayValue(sub.employeeSignatureName) },
+            { label: "Employee Signature", value: pdfDisplayValue(sub.employeeSignatureName) },
             { label: "Employee Code", value: pdfDisplayValue(sub.employeeCode) },
-            {
-              label: "Date",
-              value: formatDate(sub.employeeSignatureDate) || formatDate(sub.dateOfSubmission) || " ",
-            },
+            { label: "Date", value: formatDate(sub.employeeSignatureDate) || formatDate(sub.dateOfSubmission) || " " },
           ]}
         />
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — HR and Admin Feedback
+          PAGE — HR and Admin Feedback (single page)
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="HR and Administration Feedback" />
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
+          HR and Admin Feedback
+        </Text>
 
-        {/* HR Ratings Table */}
-        <View style={[s.ratingTable, { marginBottom: SP.lg }]}>
-          <View style={s.ratingTableHead}>
-            <Text style={[s.ratingTableHeadText, { flex: 1 }]}>Assessment Criteria</Text>
-            <Text style={[s.ratingTableHeadText, { width: 52, textAlign: "center" }]}>Score</Text>
-          </View>
+        <View style={[s.hrTable, { marginBottom: SP.sm }]}>
           {HR_RATING_ITEMS.map((item, i) => {
             const val = sub[item.key as keyof AppraisalSubmission] as number | null;
             const notes =
@@ -1360,29 +1236,27 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
                 : item.key === "hrTimingManagement"
                 ? (sub as any).hrTimingManagementNotes
                 : null;
-            return <HrCardRow key={item.key} label={item.label} score={val} notes={notes} index={i} />;
+            return <HrTableRow key={item.key} label={item.label} score={val} notes={notes} index={i} />;
           })}
         </View>
 
-        {/* Effective date */}
-        <View style={[s.qCard, { marginBottom: SP.lg }]} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>Effective Date</Text>
-          </View>
-          <View style={s.qCardAnswer}>
-            <Text style={s.qCardAnswerText}>
-              {formatDate(sub.mgmtEffectiveDate) || "—"}
-            </Text>
-          </View>
+        {/* Effective date — compact inline */}
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: SP.sm }}>
+          <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginRight: SP.sm }}>
+            Effective Date:
+          </Text>
+          <Text style={{ fontSize: 9, fontFamily: "Helvetica", color: INK }}>
+            {formatDate(sub.mgmtEffectiveDate) || "—"}
+          </Text>
         </View>
 
         {/* Backlog notes */}
-        <View style={[s.qCard, { marginBottom: SP.lg }]} wrap={false}>
+        <View style={[s.qCard, { marginBottom: SP.sm }]}>
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>Backlog / Additional Notes</Text>
           </View>
           <Text style={s.qCardBody}>{HR_BACKLOG_QUESTION}</Text>
-          <View style={[s.qCardAnswer, { minHeight: 72 }]}>
+          <View style={[s.qCardAnswer, { minHeight: 60 }]}>
             <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.hrBacklogNotes) || " "}</Text>
           </View>
         </View>
@@ -1390,19 +1264,21 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Admin Head Signature"
           fields={[
-            { label: "Rating , feedback Given By Head Hr & Administration:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
+            { label: "Signature of Admin Head", value: pdfDisplayValue(sub.hrAdminSignatureName) },
             { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
           ]}
         />
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — Team Head Feedback
+          PAGE — Team Head Feedback (single page, 2-col checkboxes)
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Reporting Manager Feedback" />
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
+          Team Head Feedback
+        </Text>
 
-        {/* Employee ID strip */}
+        {/* Employee strip */}
         <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
           <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
           <InfoCell label="Employee Code" value={pdfDisplayValue(sub.employeeCode)} last />
@@ -1412,7 +1288,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           const reasons = (sub[section.field as keyof AppraisalSubmission] as string[]) ?? [];
           const options = mgrReasonOptions[section.field];
           return (
-            <MgrSection
+            <MgrSection2Col
               key={section.level}
               header={section.header}
               options={options}
@@ -1426,7 +1302,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             <View style={s.qCardHeader}>
               <Text style={s.qCardTitle}>Additional Remarks</Text>
             </View>
-            <View style={[s.qCardAnswer, { minHeight: 48 }]}>
+            <View style={[s.qCardAnswer, { minHeight: 36 }]}>
               <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.mgrRemarks)}</Text>
             </View>
           </View>
@@ -1435,33 +1311,35 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Team Head Signature"
           fields={[
-            { label: "Reviewed & Signed By Reporting Manager:", value: pdfDisplayValue(sub.mgrSignatureName) },
+            { label: "Signature of Team Head", value: pdfDisplayValue(sub.mgrSignatureName) },
             { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
           ]}
         />
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — Management Worksheet
+          PAGE — Management Worksheet (single page)
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoSrc}>
-        <SectionBand title="Management Worksheet & Final Conclusion" />
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
+          Management Worksheet &amp; Final Conclusion
+        </Text>
 
         <Text style={s.introPara}>{MANAGEMENT_LETTER_INTRO}</Text>
 
-        <Text style={[s.introPara, { fontFamily: "Helvetica-Bold", color: INK, marginBottom: SP.sm }]}>
+        <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: INK, marginBottom: SP.xs }}>
           Increment Criteria — FY 2026–27
         </Text>
 
-        {/* Slab table */}
-        <View style={{ marginBottom: SP.md, borderWidth: 1, borderColor: BORDER_GRAY }}>
+        {/* Compact slab table */}
+        <View style={{ marginBottom: SP.sm, borderWidth: 1, borderColor: BORDER_GRAY }}>
           <View style={s.tableHead}>
             <Text style={[s.tableHeadText, { flex: 1 }]}>CTC Range</Text>
-            <Text style={[s.tableHeadText, { flex: 1, textAlign: "right" }]}>Increment Percentage</Text>
+            <Text style={[s.tableHeadText, { flex: 1, textAlign: "right" }]}>Increment %</Text>
           </View>
           {slabs.map((slab, i) => {
             const max = slab.ctcMax ?? Infinity;
-            const active = currentMonthlySalary >= slab.ctcMin && currentMonthlySalary <= max;
+            const active = annualCtc >= slab.ctcMin && annualCtc <= max;
             const isAlt = i % 2 === 1;
             return (
               <View key={slab.id} style={[s.tableRow, isAlt ? s.tableRowAlt : {}, active ? s.tableRowHighlight : {}]}>
@@ -1494,7 +1372,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>Management Feedback to Employee</Text>
           </View>
-          <View style={[s.qCardAnswer, { minHeight: 48 }]}>
+          <View style={[s.qCardAnswer, { minHeight: 56 }]}>
             <Text style={s.qCardAnswerText}>
               {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee) || " "}
             </Text>
@@ -1504,7 +1382,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title="Approver Signature"
           fields={[
-            { label: "Approved & Signed By Management:", value: pdfDisplayValue(sub.mgmtApproverName) },
+            { label: "Signature of Approver", value: pdfDisplayValue(sub.mgmtApproverName) },
             { label: "Date", value: formatDate(sub.mgmtApprovalDate) || " " },
           ]}
         />
