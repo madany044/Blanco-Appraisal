@@ -1578,25 +1578,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
               </Text>
             </View>
           </View>
-              
-            <View style={{ width: 140 }}>
-              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
-                Date:
-              </Text>
-              <Text
-                style={{
-                  fontSize: 9,
-                  fontFamily: "Helvetica",
-                  color: INK,
-                  borderBottomWidth: 1,
-                  borderBottomColor: BORDER_GRAY,
-                  paddingBottom: SP.xs,
-                }}
-              >
-                {formatDate(sub.mgmtApprovalDate) || " "}
-              </Text>
-            </View>
-          </View>
         </View>
       </PdfPage>
 
