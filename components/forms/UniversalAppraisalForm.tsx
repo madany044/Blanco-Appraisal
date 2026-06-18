@@ -213,7 +213,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
             <div>
               <Label>2. Support to the company *</Label>
               <p className="mt-1 text-sm text-gray-500">
-              lease describe how would you support the company to grow and generate more income as similar as your salary appraisal:
+              Please describe how would you support the company to grow and generate more income as similar as your salary appraisal:
              </p>
               <Textarea className="min-h-[120px] mt-1" {...register("supportToCompany")} />
               {errors.supportToCompany && <p className="text-sm text-blanco-danger">{String(errors.supportToCompany.message)}</p>}
