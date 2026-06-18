@@ -647,58 +647,71 @@ const s = StyleSheet.create({
   },
 
   // ── Seal (CSS/SVG-like stamp built from Views) ────────────────────
+  sealWrap: {
+    position: "absolute",
+    width: 100,
+    height: 100,
+    alignItems: "center",
+    justifyContent: "center",
+    transform: "rotate(-12deg)",
+  },
   sealOuter: {
-    width: 92,
-    height: 92,
-    borderRadius: 46,
-    borderWidth: 2,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 1.5,
     borderColor: SEAL_NAVY,
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
-    transform: "rotate(-8deg)",
-    opacity: 0.88,
+    opacity: 0.75,
+  },
+  sealRing: {
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    borderWidth: 0.75,
+    borderColor: SEAL_NAVY,
+    alignItems: "center",
+    justifyContent: "center",
   },
   sealInner: {
-    width: 78,
-    height: 78,
-    borderRadius: 39,
-    borderWidth: 1,
-    borderColor: SEAL_NAVY,
+    width: 76,
+    height: 76,
+    borderRadius: 38,
     alignItems: "center",
     justifyContent: "center",
-    padding: 4,
+    paddingHorizontal: 6,
   },
   sealTextTop: {
-    fontSize: 5.4,
+    fontSize: 5,
     fontFamily: "Helvetica-Bold",
     color: SEAL_NAVY,
     textAlign: "center",
-    textTransform: "uppercase",
     letterSpacing: 0.3,
-    lineHeight: 1.15,
+    lineHeight: 1.2,
   },
   sealTextMid: {
-    fontSize: 7,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: SEAL_NAVY,
     textAlign: "center",
-    marginTop: 2,
-    marginBottom: 2,
+    letterSpacing: 0.6,
   },
   sealTextBottom: {
-    fontSize: 5.4,
+    fontSize: 5.2,
     fontFamily: "Helvetica-Bold",
     color: SEAL_NAVY,
     textAlign: "center",
-    textTransform: "uppercase",
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
   },
-  sealStar: {
-    fontSize: 8,
-    color: SEAL_NAVY,
-    marginVertical: 1,
+  sealDivider: {
+    width: 30,
+    height: 0.5,
+    backgroundColor: SEAL_NAVY,
+    marginVertical: 2,
   },
+  
+  
 
   // ── Misc ─────────────────────────────────────────────────────────
   introPara: {
@@ -947,13 +960,20 @@ function MgrSection2Col({ header, options, selected }: {
 
 // Circular stamp/seal built entirely from Views + Text (no image dependency)
 function ApprovalSeal({ companyName = "Blanco Steel Detailing Services" }: { companyName?: string }) {
+  const words = companyName.toUpperCase().split(" ");
   return (
-    <View style={s.sealOuter}>
-      <View style={s.sealInner}>
-        <Text style={s.sealTextTop}>{companyName}</Text>
-        <Text style={s.sealStar}>★</Text>
-        <Text style={s.sealTextMid}>MYSURU</Text>
-        <Text style={s.sealTextBottom}>Approved</Text>
+    <View style={s.sealWrap}>
+      <View style={s.sealOuter}>
+        <View style={s.sealRing}>
+          <View style={s.sealInner}>
+            <Text style={s.sealTextTop}>{words.slice(0, Math.ceil(words.length / 2)).join(" ")}</Text>
+            <Text style={s.sealTextTop}>{words.slice(Math.ceil(words.length / 2)).join(" ")}</Text>
+            <View style={s.sealDivider} />
+            <Text style={s.sealTextMid}>MYSURU</Text>
+            <View style={s.sealDivider} />
+            <Text style={s.sealTextBottom}>★ APPROVED ★</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -1337,9 +1357,9 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </View>
 
         <SignatureBlock
-          title="Employee Declaration & Signature"
+          title=""
           fields={[
-            { label: "Employee Signature", value: pdfDisplayValue(sub.employeeSignatureName) },
+            { label: "Form Filled And Signed By", value: pdfDisplayValue(sub.employeeSignatureName) },
             { label: "Employee Code", value: pdfDisplayValue(sub.employeeCode) },
             { label: "Date", value: formatDate(sub.employeeSignatureDate) || formatDate(sub.dateOfSubmission) || " " },
           ]}
@@ -1394,9 +1414,9 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </View>
 
         <SignatureBlock
-          title="Admin Head Signature"
+          title=""
           fields={[
-            { label: "Signature of Admin Head", value: pdfDisplayValue(sub.hrAdminSignatureName) },
+            { label: "Rating , feedback Given By Head Hr & Administration:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
             { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
           ]}
         />
@@ -1440,9 +1460,9 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         ) : null}
 
         <SignatureBlock
-          title="Team Head Signature"
+          title=""
           fields={[
-            { label: "Signature of Team Head", value: pdfDisplayValue(sub.mgrSignatureName) },
+            { label: "Reviewed & Signed By Reporting Manager:", value: pdfDisplayValue(sub.mgrSignatureName) },
             { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
           ]}
         />
@@ -1513,16 +1533,14 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             performance cycle.
           </Text>
 
-          {/* Signature row with seal overlapping the line, like the manual stamp */}
-          <View style={{ flexDirection: "row", alignItems: "flex-end", marginTop: SP.md }}>
-            <View style={{ flex: 1, position: "relative" }}>
+          // REPLACE WITH:
+          {/* Signature row — seal sits cleanly to the right of the signature line, never touching text */}
+          <View style={{ flexDirection: "row", alignItems: "flex-start", marginTop: SP.lg }}>
+            <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
                 Signature of the Approver:
               </Text>
-              <View style={{ position: "relative", height: 60, justifyContent: "flex-end" }}>
-                <View style={{ position: "absolute", left: 30, bottom: -6 }}>
-                  <ApprovalSeal />
-                </View>
+              <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
                 <Text
                   style={{
                     fontSize: 9,
@@ -1531,13 +1549,36 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
                     borderBottomWidth: 1,
                     borderBottomColor: BORDER_GRAY,
                     paddingBottom: SP.xs,
-                    width: "70%",
+                    width: 160,
+                    marginRight: SP.xl,
                   }}
                 >
                   {pdfDisplayValue(sub.mgmtApproverName) || " "}
                 </Text>
+                <View style={{ width: 100, height: 100, marginBottom: -25 }}>
+                  <ApprovalSeal />
+                </View>
               </View>
             </View>
+            <View style={{ width: 140 }}>
+              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
+                Date:
+              </Text>
+              <Text
+                style={{
+                  fontSize: 9,
+                  fontFamily: "Helvetica",
+                  color: INK,
+                  borderBottomWidth: 1,
+                  borderBottomColor: BORDER_GRAY,
+                  paddingBottom: SP.xs,
+                }}
+              >
+                {formatDate(sub.mgmtApprovalDate) || " "}
+              </Text>
+            </View>
+          </View>
+              
             <View style={{ width: 140 }}>
               <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
                 Date:

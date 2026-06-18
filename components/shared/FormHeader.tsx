@@ -63,7 +63,7 @@ export function FormHeader({ managers }: FormHeaderProps) {
                   <SelectItem value="Team 3">Team 3</SelectItem>
                   <SelectItem value="Team 4">Team 4</SelectItem>
                   <SelectItem value="Team 5">Team 5</SelectItem>
-                  <SelectItem value="Team 6">Team QC/Engineering</SelectItem>
+                  <SelectItem value="Team 6">Team QC / Engineering</SelectItem>
                 </SelectContent>
               </Select>
             )}
