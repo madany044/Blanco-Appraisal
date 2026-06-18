@@ -52,6 +52,7 @@ const TICK_BG     = "#e8f7ef";
 const AMBER       = "#d97706";
 const AMBER_LIGHT = "#fef3c7";
 const RED_SOFT    = "#c0392b";
+const SEAL_NAVY   = "#1c3f6e";
 
 const SP = { xs: 3, sm: 6, md: 10, lg: 14, xl: 20, xxl: 28 };
 
@@ -67,13 +68,12 @@ const s = StyleSheet.create({
     backgroundColor: WHITE,
   },
 
-  // ── Header ──────────────────────────────────────────────────────
+  // ── Header — logo centered ABOVE the two text lines ─────────────
   headerWrapper: {
     backgroundColor: BLUE_DARK,
-    paddingTop: SP.sm,
-    paddingBottom: SP.sm,
+    paddingTop: SP.md,
+    paddingBottom: SP.md,
     paddingHorizontal: SP.xl,
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -81,8 +81,7 @@ const s = StyleSheet.create({
     height: 3,
     backgroundColor: TEAL,
   },
-  logo: { width: 44, height: 32, objectFit: "contain", marginRight: SP.md },
-  headerCenter: { alignItems: "center" },
+  logo: { width: 40, height: 40, objectFit: "contain", marginBottom: SP.xs },
   headerTitle: {
     fontSize: 13,
     fontFamily: "Helvetica-Bold",
@@ -290,7 +289,7 @@ const s = StyleSheet.create({
     flex: 1,
   },
 
-  // ── 2-column checkbox grid (for manager section) ─────────────────
+  // ── 2-column checkbox grid (manager section) ─────────────────────
   checkGrid2Col: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -313,43 +312,66 @@ const s = StyleSheet.create({
     backgroundColor: TICK_BG,
   },
 
-  // ── Self rating table ────────────────────────────────────────────
+  // ── Self rating table (full page utilization) ────────────────────
+  ratingPageHead: {
+    marginBottom: SP.md,
+  },
+  ratingPageTitle: {
+    fontSize: 11,
+    fontFamily: "Helvetica-Bold",
+    color: BLUE,
+    marginBottom: SP.xs,
+  },
+  ratingPageSubtitle: {
+    fontSize: 8,
+    color: SLATE,
+  },
   ratingTable: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginBottom: SP.sm,
+    flex: 1,
+    flexDirection: "column",
   },
   ratingTableRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: SP.xs + 1,
-    paddingHorizontal: SP.md,
+    paddingHorizontal: SP.lg,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
+    flex: 1,
   },
   ratingTableRowAlt: {
     backgroundColor: LIGHT_GRAY,
   },
-  ratingTableAlpha: {
-    width: 18,
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: SLATE,
+  ratingTableAlphaWrap: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: BLUE_LIGHT,
+    alignItems: "center",
+    justifyContent: "center",
     flexShrink: 0,
+    marginRight: SP.md,
+  },
+  ratingTableAlpha: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: BLUE,
   },
   ratingTableLabel: {
     flex: 1,
-    fontSize: 8,
+    fontSize: 9,
     fontFamily: "Helvetica",
-    paddingRight: SP.sm,
+    paddingRight: SP.md,
+    lineHeight: 1.4,
   },
   ratingScoreBadge: {
-    width: 42,
-    height: 26,
+    width: 56,
+    height: 34,
     backgroundColor: BLUE_LIGHT,
-    borderWidth: 1,
+    borderWidth: 1.2,
     borderColor: BLUE,
-    borderRadius: 3,
+    borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
@@ -363,50 +385,66 @@ const s = StyleSheet.create({
     borderColor: AMBER,
   },
   ratingScoreText: {
-    fontSize: 8.5,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: BLUE,
   },
   ratingScoreTextHigh: { color: TICK_GREEN },
   ratingScoreTextMid: { color: AMBER },
   ratingScoreDenom: {
-    fontSize: 6,
+    fontSize: 6.5,
     fontFamily: "Helvetica",
     color: SLATE,
   },
 
-  // ── Productivity ─────────────────────────────────────────────────
+  // ── Productivity (flex full-page rows) ────────────────────────────
+  prodPageHead: { marginBottom: SP.sm },
+  prodPageTitle: {
+    fontSize: 10.5,
+    fontFamily: "Helvetica-Bold",
+    color: INK,
+    marginBottom: SP.xs,
+  },
+  prodSubLabel: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: TEAL,
+    textAlign: "center",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+    paddingVertical: SP.xs + 1,
+    backgroundColor: TEAL_LIGHT,
+  },
+  prodTable: {
+    borderWidth: 1,
+    borderColor: BORDER_GRAY,
+    flexDirection: "column",
+  },
   prodRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: SP.xs + 1,
     paddingHorizontal: SP.md,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
   },
   prodRowAlt: { backgroundColor: LIGHT_GRAY },
-  prodTable: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    marginBottom: SP.md,
-  },
   prodLabel: {
     flex: 1,
-    fontSize: 8,
+    fontSize: 8.5,
     fontFamily: "Helvetica",
     paddingRight: SP.sm,
   },
   prodValue: {
-    width: 80,
-    fontSize: 8,
+    width: 84,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: BLUE,
     textAlign: "right",
     flexShrink: 0,
   },
   prodValueNA: {
-    width: 80,
-    fontSize: 8,
+    width: 84,
+    fontSize: 8.5,
     fontFamily: "Helvetica",
     color: SLATE,
     textAlign: "right",
@@ -414,7 +452,7 @@ const s = StyleSheet.create({
     fontStyle: "italic",
   },
 
-  // ── HR rating ────────────────────────────────────────────────────
+  // ── HR rating (fixed overlap, multi-line safe) ────────────────────
   hrTable: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
@@ -422,36 +460,38 @@ const s = StyleSheet.create({
   },
   hrRow: {
     flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: SP.sm,
+    alignItems: "flex-start",
+    paddingVertical: SP.sm + 1,
     paddingHorizontal: SP.md,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
-    minHeight: 32,
   },
   hrRowAlt: { backgroundColor: LIGHT_GRAY },
+  hrLabelWrap: { flex: 1, paddingRight: SP.md },
   hrLabel: {
-    flex: 1,
-    fontSize: 8,
+    fontSize: 8.5,
     fontFamily: "Helvetica",
-    paddingRight: SP.sm,
+    color: INK,
+    lineHeight: 1.4,
   },
   hrNotes: {
-    fontSize: 7,
+    fontSize: 7.5,
     fontFamily: "Helvetica",
     color: SLATE,
-    marginTop: 2,
+    fontStyle: "italic",
+    marginTop: 3,
+    lineHeight: 1.4,
   },
   hrScoreBadge: {
-    width: 44,
-    height: 28,
-    borderRadius: 3,
+    width: 46,
+    height: 30,
+    borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
   },
   hrScoreText: {
-    fontSize: 8.5,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: WHITE,
   },
@@ -567,6 +607,99 @@ const s = StyleSheet.create({
     minHeight: 20,
   },
 
+  // ── Management letter (paper-style, not boxy) ─────────────────────
+  letterPage: {
+    flex: 1,
+    flexDirection: "column",
+  },
+  letterSalutation: {
+    fontSize: 10,
+    fontFamily: "Helvetica-Bold",
+    color: INK,
+    marginBottom: SP.sm,
+  },
+  letterBody: {
+    fontSize: 9,
+    fontFamily: "Helvetica",
+    lineHeight: 1.65,
+    color: INK,
+    marginBottom: SP.md,
+    textAlign: "justify",
+  },
+  letterHighlight: {
+    fontFamily: "Helvetica-Bold",
+    color: BLUE,
+  },
+  letterSectionLabel: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: INK,
+    textDecoration: "underline",
+    marginBottom: SP.sm,
+  },
+  letterClosing: {
+    fontSize: 9,
+    fontFamily: "Helvetica",
+    lineHeight: 1.6,
+    color: INK,
+    marginTop: SP.sm,
+    marginBottom: SP.lg,
+  },
+
+  // ── Seal (CSS/SVG-like stamp built from Views) ────────────────────
+  sealOuter: {
+    width: 92,
+    height: 92,
+    borderRadius: 46,
+    borderWidth: 2,
+    borderColor: SEAL_NAVY,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+    transform: "rotate(-8deg)",
+    opacity: 0.88,
+  },
+  sealInner: {
+    width: 78,
+    height: 78,
+    borderRadius: 39,
+    borderWidth: 1,
+    borderColor: SEAL_NAVY,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 4,
+  },
+  sealTextTop: {
+    fontSize: 5.4,
+    fontFamily: "Helvetica-Bold",
+    color: SEAL_NAVY,
+    textAlign: "center",
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
+    lineHeight: 1.15,
+  },
+  sealTextMid: {
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
+    color: SEAL_NAVY,
+    textAlign: "center",
+    marginTop: 2,
+    marginBottom: 2,
+  },
+  sealTextBottom: {
+    fontSize: 5.4,
+    fontFamily: "Helvetica-Bold",
+    color: SEAL_NAVY,
+    textAlign: "center",
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
+  },
+  sealStar: {
+    fontSize: 8,
+    color: SEAL_NAVY,
+    marginVertical: 1,
+  },
+
   // ── Misc ─────────────────────────────────────────────────────────
   introPara: {
     fontSize: 8,
@@ -593,16 +726,6 @@ const s = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.4,
   },
-  subheadCenter: {
-    fontSize: 8.5,
-    fontFamily: "Helvetica-Bold",
-    color: TEAL,
-    textAlign: "center",
-    textTransform: "uppercase",
-    letterSpacing: 0.6,
-    marginBottom: SP.xs,
-    marginTop: SP.sm,
-  },
   highlightStatement: {
     backgroundColor: BLUE_LIGHT,
     borderLeftWidth: 3,
@@ -615,12 +738,6 @@ const s = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
     color: BLUE,
   },
-  qLabel: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: INK,
-    marginBottom: SP.xs,
-  },
 });
 
 // ────────────────────────────────────────────────────────────────
@@ -632,10 +749,8 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
     <View fixed>
       <View style={s.headerWrapper}>
         {logoSrc ? <Image src={logoSrc} style={s.logo} /> : null}
-        <View style={s.headerCenter}>
-          <Text style={s.headerTitle}>Team Blanco AND Team Blanka</Text>
-          <Text style={s.headerSubtitle}>Employee Progress Report Card for Salary Appraisal</Text>
-        </View>
+        <Text style={s.headerTitle}>Team Blanco AND Team Blanka</Text>
+        <Text style={s.headerSubtitle}>Employee Progress Report Card for Salary Appraisal</Text>
       </View>
       <View style={s.headerAccentBar} />
     </View>
@@ -674,7 +789,6 @@ function InfoCell({ label, value, full, last, highlight }: {
   );
 }
 
-// Employee info section heading (only used on page 1)
 function InfoSectionHeading({ title }: { title: string }) {
   return (
     <View style={{
@@ -725,7 +839,6 @@ function CheckCard({ checked, label }: { checked: boolean; label: string }) {
   );
 }
 
-// 2-column checkbox for manager sections
 function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) {
   return (
     <View style={[s.checkCard2Col, checked ? s.checkCard2ColSelected : {}]}>
@@ -737,6 +850,7 @@ function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) 
   );
 }
 
+// Full-height self-rating row — uses flex:1 so 10 rows fill the entire page evenly
 function RatingTableRow({ alpha, label, score, index }: {
   alpha: string; label: string; score: number | null; index: number;
 }) {
@@ -746,23 +860,26 @@ function RatingTableRow({ alpha, label, score, index }: {
   const display = score != null ? `${score}` : "—";
   return (
     <View style={[s.ratingTableRow, isAlt ? s.ratingTableRowAlt : {}]} wrap={false}>
-      <Text style={s.ratingTableAlpha}>{alpha}.</Text>
+      <View style={s.ratingTableAlphaWrap}>
+        <Text style={s.ratingTableAlpha}>{alpha}</Text>
+      </View>
       <Text style={s.ratingTableLabel}>{label}</Text>
       <View style={[s.ratingScoreBadge, isHigh ? s.ratingScoreBadgeHigh : isMid ? s.ratingScoreBadgeMid : {}]}>
         <Text style={[s.ratingScoreText, isHigh ? s.ratingScoreTextHigh : isMid ? s.ratingScoreTextMid : {}]}>
           {display}
         </Text>
-        <Text style={s.ratingScoreDenom}>/10</Text>
+        <Text style={s.ratingScoreDenom}>out of 10</Text>
       </View>
     </View>
   );
 }
 
-function ProdTableRow({ label, value, index }: { label: string; value: string; index: number }) {
+// Full-height productivity row
+function ProdTableRow({ label, value, index, flex }: { label: string; value: string; index: number; flex?: number }) {
   const isAlt = index % 2 === 1;
   const isNA = !value || value === "—";
   return (
-    <View style={[s.prodRow, isAlt ? s.prodRowAlt : {}]} wrap={false}>
+    <View style={[s.prodRow, isAlt ? s.prodRowAlt : {}, flex ? { flex } : {}]} wrap={false}>
       <Text style={s.prodLabel}>{label}</Text>
       <Text style={isNA ? s.prodValueNA : s.prodValue}>{value || "—"}</Text>
     </View>
@@ -779,7 +896,7 @@ function HrTableRow({ label, score, notes, index }: {
   const display = score != null ? `${score}` : "—";
   return (
     <View style={[s.hrRow, isAlt ? s.hrRowAlt : {}]} wrap={false}>
-      <View style={{ flex: 1 }}>
+      <View style={s.hrLabelWrap}>
         <Text style={s.hrLabel}>{label}</Text>
         {notes ? <Text style={s.hrNotes}>{notes}</Text> : null}
       </View>
@@ -828,6 +945,20 @@ function MgrSection2Col({ header, options, selected }: {
   );
 }
 
+// Circular stamp/seal built entirely from Views + Text (no image dependency)
+function ApprovalSeal({ companyName = "Blanco Steel Detailing Services" }: { companyName?: string }) {
+  return (
+    <View style={s.sealOuter}>
+      <View style={s.sealInner}>
+        <Text style={s.sealTextTop}>{companyName}</Text>
+        <Text style={s.sealStar}>★</Text>
+        <Text style={s.sealTextMid}>MYSURU</Text>
+        <Text style={s.sealTextBottom}>Approved</Text>
+      </View>
+    </View>
+  );
+}
+
 function formatSlabRange(min: number, max: number | null): string {
   if (max == null) return `${min.toLocaleString("en-IN")} and above`;
   if (min === 0) return `Less than ${(max + 1).toLocaleString("en-IN")}`;
@@ -864,11 +995,15 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
   const nextPage = () => ++p;
   const alphas = "abcdefghijklmnopqrst".split("");
 
-  // Split self-rating into two halves
+  // Self-rating split a–j / k–t
   const selfRatingFirst = SELF_RATING_ITEMS.slice(0, 10);
   const selfRatingSecond = SELF_RATING_ITEMS.slice(10);
 
   const logoPath = logoSrc ?? "/images/logoooo.jpg";
+
+  // ── Slab matching by INCREMENT PERCENTAGE (matches slab whose maxPct >= awarded %, the tightest fit) ──
+  const sortedSlabs = [...slabs].sort((a, b) => decimalToNumber(a.maxPct) - decimalToNumber(b.maxPct));
+  const matchedSlab = sortedSlabs.find((slab) => incrementPct <= decimalToNumber(slab.maxPct)) ?? sortedSlabs[sortedSlabs.length - 1];
 
   return (
     <Document>
@@ -940,7 +1075,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           PAGE 3 — Q6 (a–e) all on one page
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        {/* 6a */}
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>6a.  Goal Challenges</Text>
@@ -953,7 +1087,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </View>
         </View>
 
-        {/* 6b */}
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>6b.  Upcoming Goal</Text>
@@ -966,7 +1099,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </View>
         </View>
 
-        {/* 6c */}
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>6c.  Three Areas for Improvement</Text>
@@ -977,7 +1109,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </View>
         </View>
 
-        {/* 6d — initiative frequency */}
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>6d.  Initiative &amp; Innovation Frequency</Text>
@@ -992,7 +1123,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </View>
         </View>
 
-        {/* 6e — abroad capability */}
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
             <Text style={s.qCardTitle}>6e.  International Work Capability</Text>
@@ -1018,62 +1148,59 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 4 — Q7, Q8, Q9
+          PAGE 4 — Q7, Q8, Q9 (flex to fill full page height)
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <QCard
-          num="7"
-          heading="Initiative or Innovation Examples"
-          body="Provide examples of instances where you showed initiative or innovation."
-          answer={pdfDisplayValue(sub.initiativeInnovation)}
-          minHeight={60}
-        />
+        <View style={{ flex: 1, flexDirection: "column" }}>
+          <QCard
+            num="7"
+            heading="Initiative or Innovation Examples"
+            body="Provide examples of instances where you showed initiative or innovation."
+            answer={pdfDisplayValue(sub.initiativeInnovation)}
+            flex={1}
+            minHeight={70}
+          />
 
-        {/* Q8 — learning commitment */}
-        <View style={s.qCard} wrap={false}>
-          <View style={s.qCardHeader}>
-            <View style={s.qCardNumBadge}>
-              <Text style={s.qCardNumText}>8</Text>
+          <View style={[s.qCard, { flex: 1 }]} wrap={false}>
+            <View style={s.qCardHeader}>
+              <View style={s.qCardNumBadge}>
+                <Text style={s.qCardNumText}>8</Text>
+              </View>
+              <Text style={s.qCardTitle}>
+                Commitment to Professional Development &amp; Continuous Learning
+              </Text>
             </View>
-            <Text style={s.qCardTitle}>
-              Commitment to Professional Development &amp; Continuous Learning
-            </Text>
+            <View style={{ padding: SP.md, flex: 1, justifyContent: "center" }}>
+              {LEARNING_COMMITMENT_OPTIONS.map((o) => (
+                <CheckCard key={o.value} checked={sub.learningCommitment === o.value} label={o.label} />
+              ))}
+            </View>
           </View>
-          <View style={{ padding: SP.sm }}>
-            {LEARNING_COMMITMENT_OPTIONS.map((o) => (
-              <CheckCard key={o.value} checked={sub.learningCommitment === o.value} label={o.label} />
-            ))}
-          </View>
-        </View>
 
-        <QCard
-          num="9"
-          heading="Professionalism and Attitude"
-          body="Please describe your professionalism and attitude with your team during office premises (including perspective vision on your career along with your team)."
-          answer={pdfDisplayValue(sub.professionalismAttitude)}
-          minHeight={70}
-        />
+          <QCard
+            num="9"
+            heading="Professionalism and Attitude"
+            body="Please describe your professionalism and attitude with your team during office premises (including perspective vision on your career along with your team)."
+            answer={pdfDisplayValue(sub.professionalismAttitude)}
+            flex={1}
+            minHeight={70}
+          />
+        </View>
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 5 — Self Ratings a–j
+          PAGE 5 — Self Ratings a–j (full page, even spacing)
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={{ marginBottom: SP.sm }}>
-          <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.xs }}>
-            Self Performance Ratings
-          </Text>
-          <Text style={{ fontSize: 7.5, color: SLATE }}>
-            Rate yourself out of 10 for each criteria below.
-          </Text>
+        <View style={s.ratingPageHead}>
+          <Text style={s.ratingPageTitle}>Self Performance Ratings</Text>
+          <Text style={s.ratingPageSubtitle}>Rate yourself out of 10 for each criteria below.</Text>
         </View>
 
         <View style={s.ratingTable}>
           {selfRatingFirst.map((item, i) => {
             const score = sub[item.key as keyof AppraisalSubmission] as number | null;
-            // Strip leading "a. " / "b. " etc. prefix that selfRatingLabel may include
             const rawLabel = selfRatingLabel(item);
-            // Remove duplicate alpha prefix if present (e.g. "a. a. How..." → "How...")
             const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
             return (
               <RatingTableRow
@@ -1089,13 +1216,12 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 6 — Self Ratings k–t
+          PAGE 6 — Self Ratings k–t (full page, even spacing)
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={{ marginBottom: SP.sm }}>
-          <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.xs }}>
-            Self Performance Ratings (continued)
-          </Text>
+        <View style={s.ratingPageHead}>
+          <Text style={s.ratingPageTitle}>Self Performance Ratings (continued)</Text>
+          <Text style={s.ratingPageSubtitle}>Rate yourself out of 10 for each criteria below.</Text>
         </View>
 
         <View style={s.ratingTable}>
@@ -1118,43 +1244,52 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          Non-QC: Productivity
+          Non-QC: Productivity — Shop Drafting + E-Drafting on
+          ONE flex-filled page, Modeler also flex-filled
       ═══════════════════════════════════════════════ */}
       {!isQC && (
         <>
           <PdfPage num={nextPage()} logoSrc={logoPath}>
-            <Text style={{ fontSize: 9.5, fontFamily: "Helvetica-Bold", color: INK, marginBottom: SP.xs }}>
-              10.  Productivity and Time Management
-            </Text>
-            <Text style={s.introPara}>{PRODUCTIVITY_INTRO}</Text>
-
-            <Text style={s.subheadCenter}>Shop Drafting and Checker</Text>
-            <View style={[s.prodTable, { marginBottom: SP.lg }]}>
-              {SHOP_DRAFTING_ITEMS.map((item, i) => (
-                <ProdTableRow
-                  key={item.key}
-                  label={item.label}
-                  value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
-                  index={i}
-                />
-              ))}
+            <View style={s.prodPageHead}>
+              <Text style={s.prodPageTitle}>10.  Productivity and Time Management</Text>
+              <Text style={s.introPara}>{PRODUCTIVITY_INTRO}</Text>
             </View>
 
-            <Text style={s.subheadCenter}>E-Drafting</Text>
-            <View style={s.prodTable}>
-              {E_DRAFTING_ITEMS.map((item, i) => (
-                <ProdTableRow
-                  key={item.key}
-                  label={item.label}
-                  value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
-                  index={i}
-                />
-              ))}
+            <View style={{ flex: 1, flexDirection: "column" }}>
+              <View style={{ flex: 1, flexDirection: "column" }}>
+                <Text style={s.prodSubLabel}>Shop Drafting and Checker</Text>
+                <View style={[s.prodTable, { flex: 1 }]}>
+                  {SHOP_DRAFTING_ITEMS.map((item, i) => (
+                    <ProdTableRow
+                      key={item.key}
+                      label={item.label}
+                      value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
+                      index={i}
+                      flex={1}
+                    />
+                  ))}
+                </View>
+              </View>
+
+              <View style={{ flex: 1, flexDirection: "column", marginTop: SP.md }}>
+                <Text style={s.prodSubLabel}>E-Drafting</Text>
+                <View style={[s.prodTable, { flex: 1 }]}>
+                  {E_DRAFTING_ITEMS.map((item, i) => (
+                    <ProdTableRow
+                      key={item.key}
+                      label={item.label}
+                      value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
+                      index={i}
+                      flex={1}
+                    />
+                  ))}
+                </View>
+              </View>
             </View>
           </PdfPage>
 
           <PdfPage num={nextPage()} logoSrc={logoPath}>
-            <Text style={s.subheadCenter}>Modeler</Text>
+            <Text style={[s.prodSubLabel, { marginBottom: SP.md }]}>Modeler Productivity</Text>
             {sub.modelerSectionNa ? (
               <View style={{ alignItems: "center", marginTop: SP.xl }}>
                 <View style={s.naChip}>
@@ -1162,13 +1297,14 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
                 </View>
               </View>
             ) : (
-              <View style={s.prodTable}>
+              <View style={[s.prodTable, { flex: 1 }]}>
                 {MODELER_ITEMS.map((item, i) => (
                   <ProdTableRow
                     key={item.key}
                     label={item.label}
                     value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
                     index={i}
+                    flex={1}
                   />
                 ))}
               </View>
@@ -1220,7 +1356,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — HR and Admin Feedback (single page)
+          PAGE — HR and Admin Feedback (fixed overlap +
+          added Current Salary & Increment Effective Date)
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
@@ -1240,14 +1377,18 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           })}
         </View>
 
-        {/* Effective date — compact inline */}
-        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: SP.sm }}>
-          <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginRight: SP.sm }}>
-            Effective Date:
-          </Text>
-          <Text style={{ fontSize: 9, fontFamily: "Helvetica", color: INK }}>
-            {formatDate(sub.mgmtEffectiveDate) || "—"}
-          </Text>
+        {/* Salary / Effective Date strip — added missing fields */}
+        <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
+          <InfoCell
+            label="Employee Current CTC (Monthly)"
+            value={sub.currentSalary != null ? `₹${sub.currentSalary.toLocaleString("en-IN")}` : "—"}
+            highlight
+          />
+          <InfoCell
+            label="Increment Effective Date"
+            value={formatDate(sub.mgmtEffectiveDate) || "—"}
+            last
+          />
         </View>
 
         {/* Backlog notes */}
@@ -1278,7 +1419,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           Team Head Feedback
         </Text>
 
-        {/* Employee strip */}
         <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
           <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
           <InfoCell label="Employee Code" value={pdfDisplayValue(sub.employeeCode)} last />
@@ -1318,74 +1458,114 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — Management Worksheet (single page)
+          PAGE — Management Worksheet — rewritten as a LETTER
+          (matches the warm, readable feel of the handwritten
+          version) + corrected slab matching by increment % +
+          circular approval seal over the signature
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
-          Management Worksheet &amp; Final Conclusion
-        </Text>
+        <View style={s.letterPage}>
+          <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md }}>
+            Management Worksheet &amp; Final Conclusion
+          </Text>
 
-        <Text style={s.introPara}>{MANAGEMENT_LETTER_INTRO}</Text>
+          <Text style={s.letterSalutation}>Dear Employee of Team,</Text>
 
-        <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: INK, marginBottom: SP.xs }}>
-          Increment Criteria — FY 2026–27
-        </Text>
+          <Text style={s.letterBody}>{MANAGEMENT_LETTER_INTRO}</Text>
 
-        {/* Compact slab table */}
-        <View style={{ marginBottom: SP.sm, borderWidth: 1, borderColor: BORDER_GRAY }}>
-          <View style={s.tableHead}>
-            <Text style={[s.tableHeadText, { flex: 1 }]}>CTC Range</Text>
-            <Text style={[s.tableHeadText, { flex: 1, textAlign: "right" }]}>Increment %</Text>
-          </View>
-          {slabs.map((slab, i) => {
-            const max = slab.ctcMax ?? Infinity;
-            const active = annualCtc >= slab.ctcMin && annualCtc <= max;
-            const isAlt = i % 2 === 1;
-            return (
-              <View key={slab.id} style={[s.tableRow, isAlt ? s.tableRowAlt : {}, active ? s.tableRowHighlight : {}]}>
-                <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                  <Text style={s.tableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}</Text>
-                  {active ? (
-                    <View style={s.tableActiveBadge}>
-                      <Text style={s.tableActiveBadgeText}>YOUR SLAB</Text>
-                    </View>
-                  ) : null}
+          <Text style={s.letterSectionLabel}>
+            Below are the criteria of increment with effect from FY 2026–27.
+          </Text>
+
+          {/* Compact slab table */}
+          <View style={{ marginBottom: SP.md, borderWidth: 1, borderColor: BORDER_GRAY }}>
+            <View style={s.tableHead}>
+              <Text style={[s.tableHeadText, { flex: 1 }]}>CTC</Text>
+              <Text style={[s.tableHeadText, { flex: 1, textAlign: "right" }]}>% of Increment</Text>
+            </View>
+            {sortedSlabs.map((slab, i) => {
+              const isActive = matchedSlab?.id === slab.id;
+              const isAlt = i % 2 === 1;
+              return (
+                <View key={slab.id} style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isActive ? s.tableRowHighlight : {}]}>
+                  <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+                    <Text style={s.tableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}</Text>
+                    {isActive ? (
+                      <View style={s.tableActiveBadge}>
+                        <Text style={s.tableActiveBadgeText}>YOUR SLAB</Text>
+                      </View>
+                    ) : null}
+                  </View>
+                  <Text style={s.tableCellRight}>0% to {decimalToNumber(slab.maxPct)}%</Text>
                 </View>
-                <Text style={s.tableCellRight}>0% to {decimalToNumber(slab.maxPct)}%</Text>
-              </View>
-            );
-          })}
-        </View>
+              );
+            })}
+          </View>
 
-        {/* Increment statement */}
-        <View style={[s.highlightStatement, { marginBottom: SP.sm }]}>
-          <Text style={s.highlightStatementText}>
-            Dear {sub.employeeName} — You have been awarded {incrementPct}% increment based on your report card.
+          {/* Letter-style increment statement, not a boxed banner */}
+          <Text style={s.letterBody}>
+            Dear Employee <Text style={s.letterHighlight}>{sub.employeeName}</Text> — You have been awarded{" "}
+            <Text style={s.letterHighlight}>{incrementPct}%</Text> of Increment based on your report card.
             {newMonthlySalary > 0
-              ? ` Your new monthly salary is ₹${newMonthlySalary.toLocaleString("en-IN")}.`
+              ? ` Your new monthly salary will be ₹${newMonthlySalary.toLocaleString("en-IN")}.`
               : ""}
           </Text>
-        </View>
 
-        {/* Feedback box */}
-        <View style={[s.qCard, { marginBottom: SP.sm }]} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>Management Feedback to Employee</Text>
-          </View>
-          <View style={[s.qCardAnswer, { minHeight: 56 }]}>
-            <Text style={s.qCardAnswerText}>
-              {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee) || " "}
+          {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee) ? (
+            <Text style={s.letterBody}>
+              {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee)}
             </Text>
+          ) : null}
+
+          <Text style={s.letterClosing}>
+            We wish you all the success in your career and hope you deliver your best performance in the upcoming
+            performance cycle.
+          </Text>
+
+          {/* Signature row with seal overlapping the line, like the manual stamp */}
+          <View style={{ flexDirection: "row", alignItems: "flex-end", marginTop: SP.md }}>
+            <View style={{ flex: 1, position: "relative" }}>
+              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
+                Signature of the Approver:
+              </Text>
+              <View style={{ position: "relative", height: 60, justifyContent: "flex-end" }}>
+                <View style={{ position: "absolute", left: 30, bottom: -6 }}>
+                  <ApprovalSeal />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 9,
+                    fontFamily: "Helvetica",
+                    color: INK,
+                    borderBottomWidth: 1,
+                    borderBottomColor: BORDER_GRAY,
+                    paddingBottom: SP.xs,
+                    width: "70%",
+                  }}
+                >
+                  {pdfDisplayValue(sub.mgmtApproverName) || " "}
+                </Text>
+              </View>
+            </View>
+            <View style={{ width: 140 }}>
+              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
+                Date:
+              </Text>
+              <Text
+                style={{
+                  fontSize: 9,
+                  fontFamily: "Helvetica",
+                  color: INK,
+                  borderBottomWidth: 1,
+                  borderBottomColor: BORDER_GRAY,
+                  paddingBottom: SP.xs,
+                }}
+              >
+                {formatDate(sub.mgmtApprovalDate) || " "}
+              </Text>
+            </View>
           </View>
         </View>
-
-        <SignatureBlock
-          title="Approver Signature"
-          fields={[
-            { label: "Signature of Approver", value: pdfDisplayValue(sub.mgmtApproverName) },
-            { label: "Date", value: formatDate(sub.mgmtApprovalDate) || " " },
-          ]}
-        />
       </PdfPage>
 
     </Document>
