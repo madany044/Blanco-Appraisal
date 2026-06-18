@@ -8,22 +8,22 @@ const DEFAULT_PASSWORD = "Blanco@2026";
 
 const USERS = [
   { email: "hr.blanco@gmail.com", role: "hr", name: "HR Admin" },
-  { email: "management.blanco@gmail.com", role: "management", name: "Management" },
+  { email: "sud.blanco@gmail.com", role: "management", name: "Management" },
   { email: "sudeep.blanco@gmail.com", role: "manager", name: "Sudeep M C" },
-  { email: "yogesh.blanco@gmail.com", role: "manager", name: "Yogesha S" },
-  { email: "naveen.blanco@gmail.com", role: "manager", name: "Naveena G S" },
-  { email: "pradeep.blanco@gmail.com", role: "manager", name: "Pradeep Kumar B S" },
-  { email: "shashi.blanco@gmail.com", role: "manager", name: "Shashikumar M S" },
-  { email: "kumaraswamy.blanco@gmail.com", role: "manager", name: "Kumaraswamy M P" },
+  { email: "yog.blanco@gmail.com", role: "manager", name: "Yogesha S" },
+  { email: "gsn.blanco@gmail.com", role: "manager", name: "Naveena G S" },
+  { email: "bsp.blanco@gmail.com", role: "manager", name: "Pradeep Kumar B S" },
+  { email: "sms.blanco@gmail.com", role: "manager", name: "Shashikumar M S" },
+  { email: "mpk.blanco@gmail.com", role: "manager", name: "Kumaraswamy M P" },
 ] as const;
 
 const MANAGERS = [
   { name: "Sudeep M C", email: "sudeep.blanco@gmail.com" },
-  { name: "Yogesha S", email: "yogesh.blanco@gmail.com" },
-  { name: "Naveena G S", email: "naveen.blanco@gmail.com" },
-  { name: "Pradeep Kumar B S", email: "pradeep.blanco@gmail.com" },
-  { name: "Shashikumar M S", email: "shashi.blanco@gmail.com" },
-  { name: "Kumaraswamy M P", email: "kumaraswamy.blanco@gmail.com" },
+  { name: "Yogesha S", email: "yog.blanco@gmail.com" },
+  { name: "Naveena G S", email: "gsn.blanco@gmail.com" },
+  { name: "Pradeep Kumar B S", email: "bsp.blanco@gmail.com" },
+  { name: "Shashikumar M S", email: "sms.blanco@gmail.com" },
+  { name: "Kumaraswamy M P", email: "mpk.blanco@gmail.com" },
 ] as const;
 
 const SLABS = [
