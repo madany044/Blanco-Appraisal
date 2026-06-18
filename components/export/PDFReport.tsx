@@ -1002,10 +1002,12 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
   const logoPath = logoSrc ?? "/images/logoooo.jpg";
 
   // ── Slab matching by INCREMENT PERCENTAGE (matches slab whose maxPct >= awarded %, the tightest fit) ──
+  // REPLACE WITH:
+  const currentMonthlySalary = sub.currentSalary ?? 0;
   const sortedSlabs = [...slabs].sort((a, b) => a.ctcMin - b.ctcMin);
   const matchedSlab = sortedSlabs.find((slab) => {
     const max = slab.ctcMax ?? Infinity;
-    return annualCtc >= slab.ctcMin && annualCtc <= max;
+    return currentMonthlySalary >= slab.ctcMin && currentMonthlySalary <= max;
   }) ?? sortedSlabs[sortedSlabs.length - 1];
 
   return (
