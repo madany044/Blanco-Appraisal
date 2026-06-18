@@ -55,7 +55,7 @@ export function FormHeader({ managers }: FormHeaderProps) {
                 onValueChange={(value) => field.onChange(value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select your team" />
+                  <SelectValue placeholder="Select your Team Name" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Team 1">Team 1</SelectItem>
@@ -63,7 +63,7 @@ export function FormHeader({ managers }: FormHeaderProps) {
                   <SelectItem value="Team 3">Team 3</SelectItem>
                   <SelectItem value="Team 4">Team 4</SelectItem>
                   <SelectItem value="Team 5">Team 5</SelectItem>
-                  <SelectItem value="Team 6">Team 6</SelectItem>
+                  <SelectItem value="Team 6">Team QC/Engineering</SelectItem>
                 </SelectContent>
               </Select>
             )}
