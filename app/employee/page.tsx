@@ -8,7 +8,7 @@ const CATEGORIES = [
   { href: "/employee/group-a", title: "Group A", desc: "5 Years & Above With All Departments" },
   { href: "/employee/group-b", title: "Group B", desc: "Below 5 Years With Only Modeling Department" },
   { href: "/employee/group-c", title: "Group C", desc: "Below 5 Years With Erection, Shop & Checking Departments" },
-  { href: "/employee/qc", title: "QC / Engineer", desc: "Department Of QC / Engineering" },
+  { href: "/employee/qc", title: "QC / Engineering", desc: "Department Of QC / Engineering" },
 ];
 
 export default function EmployeeCategoryPage() {
