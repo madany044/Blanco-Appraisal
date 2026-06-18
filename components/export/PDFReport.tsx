@@ -760,7 +760,7 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
 function PageFooter({ num }: { num: number }) {
   return (
     <View style={s.footerBar} fixed>
-      <Text style={s.footerBrand}>Confidential — Salary Appraisal Report</Text>
+      <Text style={s.footerBrand}>Salary Appraisal Report</Text>
       <View style={s.pageNumBadge}>
         <Text style={s.pageNumText}>PAGE {num}</Text>
       </View>
@@ -1002,8 +1002,11 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
   const logoPath = logoSrc ?? "/images/logoooo.jpg";
 
   // ── Slab matching by INCREMENT PERCENTAGE (matches slab whose maxPct >= awarded %, the tightest fit) ──
-  const sortedSlabs = [...slabs].sort((a, b) => decimalToNumber(a.maxPct) - decimalToNumber(b.maxPct));
-  const matchedSlab = sortedSlabs.find((slab) => incrementPct <= decimalToNumber(slab.maxPct)) ?? sortedSlabs[sortedSlabs.length - 1];
+  const sortedSlabs = [...slabs].sort((a, b) => a.ctcMin - b.ctcMin);
+  const matchedSlab = sortedSlabs.find((slab) => {
+    const max = slab.ctcMax ?? Infinity;
+    return annualCtc >= slab.ctcMin && annualCtc <= max;
+  }) ?? sortedSlabs[sortedSlabs.length - 1];
 
   return (
     <Document>
@@ -1019,7 +1022,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           <InfoCell label="Employee ID" value={pdfDisplayValue(sub.employeeCode)} />
           <InfoCell label="Team" value={pdfDisplayValue((sub as any).team ?? (sub as any).teamDesignation ?? "")} />
           <InfoCell label="Designation" value={pdfDisplayValue((sub as any).designation ?? "")} />
-          <InfoCell label="Previous Experience in Field" value={pdfDisplayValue(sub.prevExperienceYears)} />
+          <InfoCell label="Previous number of years experience in this field " value={pdfDisplayValue(sub.prevExperienceYears)} />
           <InfoCell label="Experience in This Company" value={pdfDisplayValue(sub.companyExperienceYears)} />
           <InfoCell label="Date of Submission" value={formatDate(sub.dateOfSubmission) || "—"} full last />
         </View>
@@ -1063,8 +1066,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           />
           <QCard
             num="5"
-            heading="Teamwork Examples"
-            body="Provide examples of instances where you demonstrated strong teamwork:"
+            heading="Provide examples of instances where you demonstrated strong teamwork"
             answer={pdfDisplayValue(sub.teamworkExamples)}
             flex={1}
           />
@@ -1077,10 +1079,10 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>6a.  Goal Challenges</Text>
+            <Text style={s.qCardTitle}>6. Achievements, Goal &amp; Opportunities:</Text>
           </View>
           <Text style={s.qCardBody}>
-            If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?
+            a. If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?
           </Text>
           <View style={[s.qCardAnswer, { minHeight: 40 }]}>
             <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.goalChallenges) || " "}</Text>
@@ -1089,11 +1091,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>6b.  Upcoming Goal</Text>
+            <Text style={s.qCardTitle}>b. Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?</Text>
           </View>
-          <Text style={s.qCardBody}>
-            Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?
-          </Text>
           <View style={[s.qCardAnswer, { minHeight: 40 }]}>
             <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.upcomingGoal) || " "}</Text>
           </View>
@@ -1101,9 +1100,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>6c.  Three Areas for Improvement</Text>
+            <Text style={s.qCardTitle}>c. What are the 3 things you would like to improve?</Text>
           </View>
-          <Text style={s.qCardBody}>What are the 3 things you would like to improve?</Text>
           <View style={[s.qCardAnswer, { minHeight: 40 }]}>
             <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.threeImprovements) || " "}</Text>
           </View>
@@ -1111,11 +1109,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>6d.  Initiative &amp; Innovation Frequency</Text>
+            <Text style={s.qCardTitle}>d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?</Text>
           </View>
-          <Text style={s.qCardBody}>
-            Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?
-          </Text>
           <View style={{ padding: SP.sm }}>
             {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (
               <CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} />
@@ -1125,16 +1120,13 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <View style={s.qCard} wrap={false}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>6e.  International Work Capability</Text>
+            <Text style={s.qCardTitle}>e. Do you have capability of managing yourself if company gives opportunity to work in abroad:</Text>
             {sub.abroadCapabilityNa ? (
               <View style={[s.naChip, { marginLeft: SP.sm, alignSelf: "center" }]}>
                 <Text style={s.naChipText}>N/A</Text>
               </View>
             ) : null}
           </View>
-          <Text style={s.qCardBody}>
-            Do you have capability of managing yourself if company gives opportunity to work abroad?
-          </Text>
           <View style={{ padding: SP.sm }}>
             {ABROAD_OPTIONS.map((opt) => (
               <CheckCard
@@ -1154,8 +1146,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <View style={{ flex: 1, flexDirection: "column" }}>
           <QCard
             num="7"
-            heading="Initiative or Innovation Examples"
-            body="Provide examples of instances where you showed initiative or innovation."
+            heading="Provide examples of instances where you showed initiative or innovation."
             answer={pdfDisplayValue(sub.initiativeInnovation)}
             flex={1}
             minHeight={70}
@@ -1167,7 +1158,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
                 <Text style={s.qCardNumText}>8</Text>
               </View>
               <Text style={s.qCardTitle}>
-                Commitment to Professional Development &amp; Continuous Learning
+                Reflect on your commitment to professional development and continuous learning.
               </Text>
             </View>
             <View style={{ padding: SP.md, flex: 1, justifyContent: "center" }}>
@@ -1194,7 +1185,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <View style={s.ratingPageHead}>
           <Text style={s.ratingPageTitle}>Self Performance Ratings</Text>
-          <Text style={s.ratingPageSubtitle}>Rate yourself out of 10 for each criteria below.</Text>
         </View>
 
         <View style={s.ratingTable}>
@@ -1327,8 +1317,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           />
           <QCard
             num="12"
-            heading="Productivity Improvement Plan"
-            body="Please describe how you would perform and improve your productivity for this upcoming performance cycle as similar as your salary grow:"
+            heading="Please describe how you would perform and improve your productivity for this upcoming performance cycle as similar as your salary grow:"
             answer={pdfDisplayValue(sub.productivityImprovement)}
             flex={1}
           />
@@ -1361,7 +1350,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
-          HR and Admin Feedback
+          Head HR and Admin Feedback
         </Text>
 
         <View style={[s.hrTable, { marginBottom: SP.sm }]}>
