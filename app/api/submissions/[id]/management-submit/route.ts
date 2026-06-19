@@ -38,8 +38,7 @@ export async function POST(
     const slabs = serializeIncrementSlabs(
       await prisma.incrementSlab.findMany({ orderBy: { ctcMin: "asc" } })
     );
-    const annualCtc = existing.currentSalary * 12;
-    const maxPct = getMaxIncrementPct(annualCtc, slabs);
+    const maxPct = getMaxIncrementPct(existing.currentSalary, slabs);
 
     if (!draft && parsed.data.mgmtIncrementPercentage > maxPct) {
       return NextResponse.json(
