@@ -128,17 +128,16 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
           currentSalary={s.currentSalary ?? 0}
           defaultValues={mgmtDefaults}
           readOnly
+          hideSalarySection
         />
       </ChainSection>
 
       {s.stage === 3 && (
         <div className="flex flex-wrap gap-3 p-4 bg-green-50 rounded-lg border border-green-200">
           <Button onClick={() => downloadPDF(s)}>Download Full 4-Form PDF Report</Button>
-          <Button variant="outline" onClick={() => exportSubmissionExcel(s)}>
-            Export Excel
-          </Button>
+
           <Button variant="success" onClick={handleComplete}>
-            Archive and Mark as Completed
+            Mark as Completed
           </Button>
         </div>
       )}

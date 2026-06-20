@@ -56,7 +56,7 @@ export function HRFeedbackForm({
       hrLeaveManagement: 5,
       hrTimingManagement: 5,
       effective_date: getDefaultEffectiveDate(),
-      hrAdminSignatureName: "DEEPU M C",
+      hrAdminSignatureName: "Head Hr & Administration",
       ...defaultValues,
     },
   });
@@ -65,7 +65,7 @@ export function HRFeedbackForm({
 
   useEffect(() => {
     if (!defaultValues?.hrAdminSignatureName) {
-      setValue("hrAdminSignatureName", "DEEPU M C");
+      setValue("hrAdminSignatureName", "Head Hr & Administration");
     }
   }, [defaultValues, setValue]);
 
@@ -152,7 +152,7 @@ export function HRFeedbackForm({
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Rating , feedback Given By Head Hr & Administration:</Label>
+            <Label>Rating , feedback Given By:</Label>
             <Input {...register("hrAdminSignatureName")} />
           </div>
           <div>

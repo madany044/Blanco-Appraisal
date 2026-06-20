@@ -359,7 +359,7 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
           </p>
         </div>
         <dl className="grid gap-x-6 md:grid-cols-2">
-          <InfoRow label="Rating , feedback Given By Head Hr & Administration:" value={displayValue(s.hrAdminSignatureName)} />
+          <InfoRow label="Rating , feedback Given By:" value={displayValue(s.hrAdminSignatureName)} />
           <InfoRow label="Date" value={formatDate(s.hrAdminSignatureDate) || "—"} />
         </dl>
       </SectionBody>

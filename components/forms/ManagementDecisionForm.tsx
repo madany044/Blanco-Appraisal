@@ -27,6 +27,7 @@ interface ManagementDecisionFormProps {
   currentSalary: number;
   defaultValues?: Partial<ManagementFormValues>;
   readOnly?: boolean;
+  hideSalarySection?: boolean;
   onSaveDraft?: (data: ManagementFormValues) => Promise<void>;
   onSubmit?: (data: ManagementFormValues) => Promise<void>;
 }
@@ -37,6 +38,7 @@ export function ManagementDecisionForm({
   currentSalary,
   defaultValues,
   readOnly,
+  hideSalarySection,
   onSaveDraft,
   onSubmit,
 }: ManagementDecisionFormProps) {
@@ -96,112 +98,113 @@ export function ManagementDecisionForm({
         maxAllowed={maxAllowed}
       />
 
-      {/* Salary section */}
-      <div style={{
-        border: "1px solid #e2e6ef",
-        borderRadius: 10,
-        padding: "16px 20px",
-        background: "#fff",
-      }}>
-        <p style={{
-          fontSize: 13,
-          fontWeight: 700,
-          color: "#1a4b8c",
-          marginBottom: 14,
-          textTransform: "uppercase",
-          letterSpacing: "0.05em",
-        }}>
-          Salary Section
-        </p>
-
-        {/* Current salary display */}
+      {!hideSalarySection && (
         <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 16,
-          marginBottom: 20,
+          border: "1px solid #e2e6ef",
+          borderRadius: 10,
+          padding: "16px 20px",
+          background: "#fff",
         }}>
-          <div>
-            <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
-              textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-              Current Monthly Salary
-            </p>
-            <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
-              {formatSalary(currentSalary)}
-            </p>
-          </div>
-          <div>
-            <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
-              textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-              Current Annual CTC
-            </p>
-            <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
-              {formatSalary(annualCtc)}
-            </p>
-          </div>
-        </div>
+          <p style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#1a4b8c",
+            marginBottom: 14,
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+          }}>
+            Salary Section
+          </p>
 
-        {readOnly ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <p style={{ fontSize: 13 }}>
-              <strong>Increment:</strong> {incrementPct}%
-            </p>
-            <p style={{ fontSize: 13 }}>
-              <strong>New Monthly Salary:</strong> {formatSalary(newMonthlySalary)}
-            </p>
-          </div>
-        ) : (
-          <>
-            <div style={{ marginBottom: 16 }}>
-              <Label htmlFor="mgmtIncrementPercentage">Increment Percentage (%)</Label>
-              <Input
-                id="mgmtIncrementPercentage"
-                type="number"
-                min={0}
-                max={100}
-                step={0.5}
-                placeholder="Enter increment %"
-                {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
-                style={{
-                  width: 200,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  padding: "10px 14px",
-                  border: "2px solid #e2e6ef",
-                  borderRadius: 8,
-                  textAlign: "center",
-                  marginTop: 8,
-                }}
-              />
-              <p style={{ color: "#6b7a99", fontSize: 12, marginTop: 8 }}>
-                Maximum allowed for this salary range: {maxAllowed}%
+          {/* Current salary display */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 16,
+            marginBottom: 20,
+          }}>
+            <div>
+              <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
+                textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+                Current Monthly Salary
               </p>
-
-              {incrementPct > maxAllowed && (
-                <p style={{ color: "#c0392b", fontSize: 12, marginTop: 8 }}>
-                  ⚠ {incrementPct}% exceeds maximum allowed ({maxAllowed}%)
-                </p>
-              )}
-
-              {incrementPct >= 0 && incrementPct <= maxAllowed && incrementPct > 0 && (
-                <div style={{
-                  marginTop: 10,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  background: "#e6f5ee",
-                  borderRadius: 20,
-                  padding: "6px 14px",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: "#1a8c5a",
-                }}>
-                  ✓ {incrementPct}% — New salary: {formatSalary(newMonthlySalary)}
-                </div>
-              )}
+              <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
+                {formatSalary(currentSalary)}
+              </p>
             </div>
-          </>
-        )}
-      </div>
+            <div>
+              <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600,
+                textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+                Current Annual CTC
+              </p>
+              <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
+                {formatSalary(annualCtc)}
+              </p>
+            </div>
+          </div>
+
+          {readOnly ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <p style={{ fontSize: 13 }}>
+                <strong>Increment:</strong> {incrementPct}%
+              </p>
+              <p style={{ fontSize: 13 }}>
+                <strong>New Monthly Salary:</strong> {formatSalary(newMonthlySalary)}
+              </p>
+            </div>
+          ) : (
+            <>
+              <div style={{ marginBottom: 16 }}>
+                <Label htmlFor="mgmtIncrementPercentage">Increment Percentage (%)</Label>
+                <Input
+                  id="mgmtIncrementPercentage"
+                  type="number"
+                  min={0}
+                  max={100}
+                  step={0.5}
+                  placeholder="Enter increment %"
+                  {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
+                  style={{
+                    width: 200,
+                    fontSize: 16,
+                    fontWeight: 600,
+                    padding: "10px 14px",
+                    border: "2px solid #e2e6ef",
+                    borderRadius: 8,
+                    textAlign: "center",
+                    marginTop: 8,
+                  }}
+                />
+                <p style={{ color: "#6b7a99", fontSize: 12, marginTop: 8 }}>
+                  Maximum allowed for this salary range: {maxAllowed}%
+                </p>
+
+                {incrementPct > maxAllowed && (
+                  <p style={{ color: "#c0392b", fontSize: 12, marginTop: 8 }}>
+                    ⚠ {incrementPct}% exceeds maximum allowed ({maxAllowed}%)
+                  </p>
+                )}
+
+                {incrementPct >= 0 && incrementPct <= maxAllowed && incrementPct > 0 && (
+                  <div style={{
+                    marginTop: 10,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    background: "#e6f5ee",
+                    borderRadius: 20,
+                    padding: "6px 14px",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "#1a8c5a",
+                  }}>
+                    ✓ {incrementPct}% — New salary: {formatSalary(newMonthlySalary)}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Letter conclusion */}
       <div style={{
@@ -243,13 +246,6 @@ export function ManagementDecisionForm({
               className="mt-1 min-h-[120px]"
               placeholder="Write feedback, areas of improvement, or any specific message for the employee..."
               {...register("mgmtFinalRemarks")}
-            />
-          </div>
-          <div>
-            <Label>Internal Management Notes (not shared)</Label>
-            <Textarea
-              className="mt-1 min-h-[80px]"
-              {...register("mgmtInternalNotes")}
             />
           </div>
           <div className="grid gap-4 md:grid-cols-2">

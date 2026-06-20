@@ -26,14 +26,7 @@ export default async function ManagementDashboardPage() {
   return (
     <DashboardLayout role="management" userEmail={user.email} title="Management Dashboard">
       <div className="space-y-6">
-        <Alert>
-          <AlertTitle>Review Instructions</AlertTitle>
-          <AlertDescription>
-            You receive files with Employee + HR + Manager forms already attached. Review all 3,
-            fill the Management Decision Form with salary details and increment percentage, then
-            send the complete 4-form package back to HR for finalization.
-          </AlertDescription>
-        </Alert>
+        
 
         <div className="grid gap-4 md:grid-cols-4">
           <StatCard title="Pending Decision" value={stats.pending} accent="warning" />

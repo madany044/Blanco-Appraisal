@@ -1416,7 +1416,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <SignatureBlock
           title=""
           fields={[
-            { label: "Rating , feedback Given By Head Hr & Administration:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
+            { label: "Rating , feedback Given By:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
             { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
           ]}
         />

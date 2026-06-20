@@ -24,7 +24,7 @@ export function CTCSlabDisplay({ slabs, highlightCtc, maxAllowed }: CTCSlabDispl
         color: "#6b7a99",
         marginBottom: 8,
       }}>
-        Increment Slab Reference
+        Below are the criteria of increment 
       </p>
       <div style={{
         background: "#f8f9fc",
