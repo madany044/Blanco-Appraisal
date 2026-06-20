@@ -229,6 +229,4 @@ export function formatExpectationsAnswer(s: AppraisalSubmission): string {
   return reason ? `${s.expectationsYesNo} — ${reason}` : s.expectationsYesNo;
 }
 
-export const MANAGEMENT_LETTER_INTRO = `Dear Employee of Team,
-
-We are happy to receive your appraisal request and the feedback from your team head. We will be evaluating everything, and your increment letter will be e-mailed to you soon. Kindly note that revised Increment criteria have been already e-mailed to your registered e-mail IDs with the company (also noted below) and the criteria will remain the same, but we will assure you as best as close to the percentage noted below but purely depends on your performance report card.`;
+export const MANAGEMENT_LETTER_INTRO = `We are happy to receive your appraisal request and the feedback from your team head. We will be evaluating everything, and your increment letter will be e-mailed to you soon. Kindly note that revised Increment criteria have been already e-mailed to your registered e-mail IDs with the company (also noted below) and the criteria will remain the same, but we will assure you as best as close to the percentage noted below but purely depends on your performance report card.`;

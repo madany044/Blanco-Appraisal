@@ -61,9 +61,9 @@ const s = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 32,
     paddingHorizontal: 0,
-    fontSize: 9,
+    fontSize: 9.5,
     fontFamily: "Helvetica",
-    lineHeight: 1.45,
+    lineHeight: 1.5,
     color: INK,
     backgroundColor: WHITE,
   },
@@ -162,7 +162,7 @@ const s = StyleSheet.create({
   },
   infoCellLast: { borderBottomWidth: 0 },
   infoLabel: {
-    fontSize: 7,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: SLATE,
     textTransform: "uppercase",
@@ -170,12 +170,12 @@ const s = StyleSheet.create({
     marginBottom: 2,
   },
   infoValue: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica",
     color: INK,
   },
   infoValueHighlight: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: BLUE,
   },
@@ -212,13 +212,13 @@ const s = StyleSheet.create({
     color: WHITE,
   },
   qCardTitle: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: BLUE,
     flex: 1,
   },
   qCardBody: {
-    fontSize: 8.5,
+    fontSize: 9,
     fontFamily: "Helvetica",
     color: SLATE,
     paddingVertical: SP.sm,
@@ -233,7 +233,7 @@ const s = StyleSheet.create({
     minHeight: 52,
   },
   qCardAnswerText: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica",
     color: INK,
     lineHeight: 1.55,
@@ -605,7 +605,7 @@ const s = StyleSheet.create({
   },
   sigField: { flex: 1 },
   sigLabel: {
-    fontSize: 7,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: SLATE,
     marginBottom: SP.xs,
@@ -613,7 +613,7 @@ const s = StyleSheet.create({
     letterSpacing: 0.3,
   },
   sigValue: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica",
     color: INK,
     borderBottomWidth: 1,
@@ -634,9 +634,9 @@ const s = StyleSheet.create({
     marginBottom: SP.sm,
   },
   letterBody: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica",
-    lineHeight: 1.65,
+    lineHeight: 1.7,
     color: INK,
     marginBottom: SP.md,
     textAlign: "justify",
@@ -646,16 +646,16 @@ const s = StyleSheet.create({
     color: BLUE,
   },
   letterSectionLabel: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: INK,
     textDecoration: "underline",
     marginBottom: SP.sm,
   },
   letterClosing: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica",
-    lineHeight: 1.6,
+    lineHeight: 1.7,
     color: INK,
     marginTop: SP.sm,
     marginBottom: SP.lg,
@@ -1497,6 +1497,9 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </Text>
 
 
+          <Text style={s.letterBody}>
+            Dear <Text style={s.letterHighlight}>{sub.employeeName}</Text>,
+          </Text>
           <Text style={s.letterBody}>{MANAGEMENT_LETTER_INTRO}</Text>
 
           <Text style={s.letterSectionLabel}>

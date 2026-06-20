@@ -17,10 +17,6 @@ import { getMaxIncrementPct } from "@/lib/workflow";
 import { formatSalary } from "@/lib/submission-display";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 
-const LETTER_INTRO = `Dear Employee of Team,
-
-We are happy to receive your appraisal request and the feedback from your team head. We will be evaluating everything, and your increment letter will be e-mailed to you soon. Kindly note that revised Increment criteria have been already e-mailed to your registered e-mail IDs with the company (also noted below) and the criteria will remain the same, but we will assure you as best as close to the percentage noted below but purely depends on your performance report card.`;
-
 interface ManagementDecisionFormProps {
   slabs: SerializedIncrementSlab[];
   employeeName: string;
@@ -42,6 +38,10 @@ export function ManagementDecisionForm({
   onSaveDraft,
   onSubmit,
 }: ManagementDecisionFormProps) {
+  const LETTER_INTRO = `Dear ${employeeName},
+
+We are happy to receive your appraisal request and the feedback from your team head. We will be evaluating everything, and your increment letter will be e-mailed to you soon. Kindly note that revised Increment criteria have been already e-mailed to your registered e-mail IDs with the company (also noted below) and the criteria will remain the same, but we will assure you as best as close to the percentage noted below but purely depends on your performance report card.`;
+
   const currentMonthlySalary = currentSalary;
   const annualCtc = currentMonthlySalary * 12;
   const maxAllowed = getMaxIncrementPct(currentMonthlySalary, slabs);
@@ -216,10 +216,10 @@ export function ManagementDecisionForm({
         color: "#1e2740",
         fontStyle: "italic",
       }}>
-        Dear Employee <strong style={{ fontStyle: "normal" }}>{employeeName}</strong>,
+        Dear <strong style={{ fontStyle: "normal" }}>{employeeName}</strong>,
         You have been obtained{" "}
         <strong style={{ fontStyle: "normal", color: "#1a4b8c" }}>{incrementPct}%</strong>{" "}
-        of Increment based on your report card,
+        of Increment based on your report card.
       </div>
 
       {/* Remarks and signature */}
