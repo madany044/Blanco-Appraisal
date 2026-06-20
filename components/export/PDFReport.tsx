@@ -483,23 +483,23 @@ const s = StyleSheet.create({
     lineHeight: 1.4,
   },
   hrScoreBadge: {
-    width: 46,
-    height: 30,
-    borderRadius: 4,
+    width: 56,
+    height: 34,
+    borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
   },
   hrScoreText: {
-    fontSize: 9,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: WHITE,
   },
   hrScoreDenom: {
-    fontSize: 6,
+    fontSize: 6.5,
     fontFamily: "Helvetica",
     color: WHITE,
-    opacity: 0.85,
+    opacity: 0.9,
   },
 
   // ── Manager section ──────────────────────────────────────────────
@@ -524,7 +524,7 @@ const s = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: BLUE_DARK,
     paddingVertical: SP.xs,
-    paddingHorizontal: SP.sm,
+    paddingHorizontal: SP.md,
   },
   tableHeadText: {
     fontSize: 7,
@@ -532,23 +532,38 @@ const s = StyleSheet.create({
     color: WHITE,
     textTransform: "uppercase",
     letterSpacing: 0.3,
-    flex: 1,
+  },
+  tableHeadLeft: {
+    width: 160,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
+    color: WHITE,
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
+  },
+  tableHeadRight: {
+    width: 100,
+    fontSize: 7,
+    fontFamily: "Helvetica-Bold",
+    color: WHITE,
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
+    textAlign: "right",
   },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
-    paddingVertical: SP.xs,
-    paddingHorizontal: SP.sm,
+    paddingVertical: SP.sm,
+    paddingHorizontal: SP.md,
   },
   tableRowAlt: { backgroundColor: LIGHT_GRAY },
   tableRowHighlight: {
     backgroundColor: BLUE_LIGHT,
-    borderLeftWidth: 2,
-    borderLeftColor: BLUE,
+    borderLeftWidth: 0,
   },
-  tableCell: { flex: 1, fontSize: 7.5 },
-  tableCellRight: { flex: 1, fontSize: 7.5, textAlign: "right", fontFamily: "Helvetica-Bold" },
+  tableCell: { width: 160, fontSize: 8, paddingRight: SP.md, borderRightWidth: 1, borderRightColor: BORDER_GRAY },
+  tableCellRight: { width: 100, fontSize: 8, textAlign: "right", fontFamily: "Helvetica-Bold" },
   tableActiveBadge: {
     backgroundColor: BLUE,
     borderRadius: 2,
@@ -751,6 +766,18 @@ const s = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
     color: BLUE,
   },
+  highlightStatementYellow: {
+    backgroundColor: "#FFFF99",
+    padding: SP.sm,
+    marginBottom: SP.md,
+    borderRadius: 3,
+  },
+  highlightStatementYellowText: {
+    fontSize: 9,
+    fontFamily: "Helvetica",
+    color: INK,
+    lineHeight: 1.65,
+  },
 });
 
 // ────────────────────────────────────────────────────────────────
@@ -905,17 +932,19 @@ function HrTableRow({ label, score, notes, index }: {
   const isAlt = index % 2 === 1;
   const isHigh = score != null && score >= 8;
   const isMid = score != null && score >= 5 && score < 8;
-  const bgColor = isHigh ? TICK_GREEN : isMid ? AMBER : BLUE;
   const display = score != null ? `${score}` : "—";
+  // Reuse the rating badge styles so HR shows "9 out of 10" style
+  const badgeStyle = isHigh ? s.ratingScoreBadgeHigh : isMid ? s.ratingScoreBadgeMid : s.ratingScoreBadge;
+  const textStyle = isHigh ? s.ratingScoreTextHigh : isMid ? s.ratingScoreTextMid : s.ratingScoreText;
   return (
     <View style={[s.hrRow, isAlt ? s.hrRowAlt : {}]} wrap={false}>
       <View style={s.hrLabelWrap}>
         <Text style={s.hrLabel}>{label}</Text>
         {notes ? <Text style={s.hrNotes}>{notes}</Text> : null}
       </View>
-      <View style={[s.hrScoreBadge, { backgroundColor: bgColor }]}>
-        <Text style={s.hrScoreText}>{display}</Text>
-        <Text style={s.hrScoreDenom}>/10</Text>
+      <View style={[s.ratingScoreBadge, badgeStyle, { backgroundColor: isHigh ? TICK_BG : undefined }]}> 
+        <Text style={[s.ratingScoreText, textStyle]}>{display}</Text>
+        <Text style={s.ratingScoreDenom}>out of 10</Text>
       </View>
     </View>
   );
@@ -1232,8 +1261,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <View style={s.ratingPageHead}>
-          <Text style={s.ratingPageTitle}>Self Performance Ratings (continued)</Text>
-          <Text style={s.ratingPageSubtitle}>Rate yourself out of 10 for each criteria below.</Text>
+          <Text style={s.ratingPageTitle}>Self Performance Ratings </Text>
         </View>
 
         <View style={s.ratingTable}>
@@ -1371,9 +1399,9 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           added Current Salary & Increment Effective Date)
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
-          Head HR and Admin Feedback
-        </Text>
+        <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
+            HR &amp; Admin Feedback
+          </Text>
 
         <View style={[s.hrTable, { marginBottom: SP.sm }]}>
           {HR_RATING_ITEMS.map((item, i) => {
@@ -1389,23 +1417,11 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </View>
 
         {/* Salary / Effective Date strip — added missing fields */}
-        <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
-          <InfoCell
-            label="Employee Current CTC (Monthly)"
-            value={sub.currentSalary != null ? `₹${sub.currentSalary.toLocaleString("en-IN")}` : "—"}
-            highlight
-          />
-          <InfoCell
-            label="Increment Effective Date"
-            value={formatDate(sub.mgmtEffectiveDate) || "—"}
-            last
-          />
-        </View>
+        
 
         {/* Backlog notes */}
         <View style={[s.qCard, { marginBottom: SP.sm }]}>
           <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>Backlog / Additional Notes</Text>
           </View>
           <Text style={s.qCardBody}>{HR_BACKLOG_QUESTION}</Text>
           <View style={[s.qCardAnswer, { minHeight: 60 }]}>
@@ -1426,9 +1442,9 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           PAGE — Team Head Feedback (single page, 2-col checkboxes)
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.sm }}>
-          Team Head Feedback
-        </Text>
+        <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
+            Team Head Feedback
+          </Text>
 
         <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
           <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
@@ -1476,11 +1492,10 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <View style={s.letterPage}>
-          <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md }}>
+          <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
             Management Worksheet &amp; Final Conclusion
           </Text>
 
-          <Text style={s.letterSalutation}>Dear Employee of Team,</Text>
 
           <Text style={s.letterBody}>{MANAGEMENT_LETTER_INTRO}</Text>
 
@@ -1488,25 +1503,18 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             Below are the criteria of increment with effect from FY 2026–27.
           </Text>
 
-          {/* Compact slab table */}
-          <View style={{ marginBottom: SP.md, borderWidth: 1, borderColor: BORDER_GRAY }}>
+          {/* Compact slab table — fixed width, center-aligned */}
+          <View style={{ marginBottom: SP.md, alignItems: "flex-start" }}>
             <View style={s.tableHead}>
-              <Text style={[s.tableHeadText, { flex: 1 }]}>CTC</Text>
-              <Text style={[s.tableHeadText, { flex: 1, textAlign: "right" }]}>% of Increment</Text>
+              <Text style={s.tableHeadLeft}>CTC</Text>
+              <Text style={s.tableHeadRight}>% of Increment</Text>
             </View>
             {sortedSlabs.map((slab, i) => {
               const isActive = matchedSlab?.id === slab.id;
               const isAlt = i % 2 === 1;
               return (
                 <View key={slab.id} style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isActive ? s.tableRowHighlight : {}]}>
-                  <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                    <Text style={s.tableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}</Text>
-                    {isActive ? (
-                      <View style={s.tableActiveBadge}>
-                        <Text style={s.tableActiveBadgeText}>YOUR SLAB</Text>
-                      </View>
-                    ) : null}
-                  </View>
+                  <Text style={s.tableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}{isActive ? "" : ""}</Text>
                   <Text style={s.tableCellRight}>0% to {decimalToNumber(slab.maxPct)}%</Text>
                 </View>
               );
@@ -1515,17 +1523,21 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
           {/* Letter-style increment statement, not a boxed banner */}
           <Text style={s.letterBody}>
-            Dear Employee <Text style={s.letterHighlight}>{sub.employeeName}</Text> — You have been awarded{" "}
+            Dear <Text style={s.letterHighlight}>{sub.employeeName}</Text> — You have been obtained{" "}
             <Text style={s.letterHighlight}>{incrementPct}%</Text> of Increment based on your report card.
-            {newMonthlySalary > 0
-              ? ` Your new monthly salary will be ₹${newMonthlySalary.toLocaleString("en-IN")}.`
-              : ""}
+            
+          </Text>
+
+          <Text style={s.letterBody}>
+            However, the company would like to support you as best as possible by considering that you will upgrade yourself with any and all backlogs as described by yourself in the attached report card.
           </Text>
 
           {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee) ? (
-            <Text style={s.letterBody}>
-              {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee)}
-            </Text>
+            <View style={s.highlightStatementYellow}>
+              <Text style={s.highlightStatementYellowText}>
+                {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee)}
+              </Text>
+            </View>
           ) : null}
 
           <Text style={s.letterClosing}>
@@ -1533,7 +1545,6 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             performance cycle.
           </Text>
 
-          // REPLACE WITH:
           {/* Signature row — seal sits cleanly to the right of the signature line, never touching text */}
           <View style={{ flexDirection: "row", alignItems: "flex-start", marginTop: SP.lg }}>
             <View style={{ flex: 1 }}>
@@ -1555,9 +1566,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
                 >
                   {pdfDisplayValue(sub.mgmtApproverName) || " "}
                 </Text>
-                <View style={{ width: 100, height: 100, marginBottom: -25 }}>
-                  <ApprovalSeal />
-                </View>
+                {/* approval seal removed per design preference */}
               </View>
             </View>
             <View style={{ width: 140 }}>
