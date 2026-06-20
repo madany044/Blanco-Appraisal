@@ -38,10 +38,10 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blanco-primary to-slate-800">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center text-white mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2 leading-tight max-w-3xl mx-auto">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight max-w-4xl mx-auto">
             {COMPANY_NAME}
           </h1>
-          <p className="text-xs text-slate-300 mt-3 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-base text-slate-300 mt-3 max-w-xl mx-auto leading-relaxed">
             {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
             {/* @ts-ignore */}
             <marquee> Welcome to the Employee Annual Appraisal Portal </marquee>
