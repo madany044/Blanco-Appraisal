@@ -16,15 +16,9 @@ export function ExportsClient({ submissions }: ExportsClientProps) {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Bulk Export</CardTitle>
+          <CardTitle>Export The Submissions</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button onClick={() => exportSubmissionsExcel(submissions)}>
-            Export All Ready Submissions to Excel
-          </Button>
-          <p className="text-sm text-muted-foreground mt-2">
-            {submissions.length} submission(s) at stage 3 or completed
-          </p>
         </CardContent>
       </Card>
 
