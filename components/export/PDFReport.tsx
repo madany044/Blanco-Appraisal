@@ -1526,7 +1526,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
           {/* Letter-style increment statement, not a boxed banner */}
           <Text style={s.letterBody}>
-            Dear <Text style={s.letterHighlight}>{sub.employeeName}</Text> — You have been obtained{" "}
+             You have been obtained{" "}
             <Text style={s.letterHighlight}>{incrementPct}%</Text> of Increment based on your report card.
             
           </Text>
