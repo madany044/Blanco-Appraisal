@@ -59,7 +59,7 @@ const SP = { xs: 3, sm: 6, md: 10, lg: 14, xl: 20, xxl: 28 };
 const s = StyleSheet.create({
   page: {
     paddingTop: 0,
-    paddingBottom: 32,
+    paddingBottom: 24,
     paddingHorizontal: 0,
     fontSize: 9.5,
     fontFamily: "Helvetica",
@@ -71,8 +71,8 @@ const s = StyleSheet.create({
   // ── Header — logo centered ABOVE the two text lines ─────────────
   headerWrapper: {
     backgroundColor: BLUE_DARK,
-    paddingTop: SP.md,
-    paddingBottom: SP.md,
+    paddingTop: SP.sm,
+    paddingBottom: SP.sm,
     paddingHorizontal: SP.xl,
     alignItems: "center",
     justifyContent: "center",
@@ -105,12 +105,12 @@ const s = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 24,
+    height: 18,
     backgroundColor: BLUE_DARK,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: SP.lg,
+    paddingHorizontal: SP.md,
   },
   footerBrand: {
     fontSize: 7,
@@ -134,7 +134,7 @@ const s = StyleSheet.create({
 
   body: {
     paddingHorizontal: SP.xxl,
-    paddingTop: SP.md,
+    paddingTop: SP.xs,
     flex: 1,
   },
 
@@ -300,10 +300,10 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: BORDER_GRAY,
     borderRadius: 3,
-    paddingVertical: SP.xs,
-    paddingHorizontal: SP.sm,
-    marginBottom: SP.xs,
-    marginRight: SP.xs,
+    paddingVertical: 2,
+    paddingHorizontal: 4,
+    marginBottom: 2,
+    marginRight: 2,
     backgroundColor: WHITE,
     width: "49%",
   },
@@ -506,11 +506,11 @@ const s = StyleSheet.create({
   mgrSectionCard: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginBottom: SP.sm,
+    marginBottom: SP.xs,
   },
   mgrSectionHeader: {
     backgroundColor: INK,
-    paddingVertical: SP.xs + 1,
+    paddingVertical: SP.xs,
     paddingHorizontal: SP.md,
   },
   mgrSectionHeaderText: {
@@ -582,7 +582,7 @@ const s = StyleSheet.create({
   sigContainer: {
     borderWidth: 1,
     borderColor: BORDER_GRAY,
-    marginTop: SP.sm,
+    marginTop: SP.xs,
   },
   sigHeader: {
     backgroundColor: MID_GRAY,
@@ -600,8 +600,8 @@ const s = StyleSheet.create({
   },
   sigBody: {
     flexDirection: "row",
-    padding: SP.md,
-    gap: SP.md,
+    padding: 4,
+    gap: 4,
   },
   sigField: { flex: 1 },
   sigLabel: {
@@ -619,7 +619,7 @@ const s = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: BORDER_GRAY,
     paddingBottom: SP.xs,
-    minHeight: 20,
+    minHeight: 16,
   },
 
   // ── Management letter (paper-style, not boxy) ─────────────────────
@@ -1465,7 +1465,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         })}
 
         {sub.mgrRemarks ? (
-          <View style={[s.qCard, { marginBottom: SP.sm }]} wrap={false}>
+          <View style={[s.qCard, { marginBottom: SP.xs }]} wrap={false}>
             <View style={s.qCardHeader}>
               <Text style={s.qCardTitle}>Additional Remarks</Text>
             </View>
