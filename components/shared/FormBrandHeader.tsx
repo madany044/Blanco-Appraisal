@@ -19,10 +19,10 @@ export function FormBrandHeader({ subtitle, className, compact }: FormBrandHeade
       )}
     >
       <CompanyLogo size={compact ? "sm" : "md"} className="mb-2" />
-      <p className="text-xs font-semibold uppercase tracking-wide text-[#1a4b8c]">
+      <p className="text-sm md:text-base font-semibold uppercase tracking-wide text-[#1a4b8c]">
         {COMPANY_NAME_SHORT}
       </p>
-      <p className="text-[11px] text-slate-600 mt-0.5">{REPORT_TITLE}</p>
+      <p className="text-base md:text-lg text-slate-600 mt-0.5">{REPORT_TITLE}</p>
       {subtitle ? <p className="text-sm text-muted-foreground mt-2">{subtitle}</p> : null}
     </div>
   );
