@@ -39,7 +39,6 @@ export function ExportsClient({ submissions }: ExportsClientProps) {
               <div className="flex items-center gap-3">
                 <StageBadge stage={s.stage} />
                 <Button size="sm" variant="outline" onClick={() => downloadPDF(s)}>PDF</Button>
-                <Button size="sm" variant="outline" onClick={() => exportSubmissionsExcel([s])}>Excel</Button>
               </div>
             </CardContent>
           </Card>
