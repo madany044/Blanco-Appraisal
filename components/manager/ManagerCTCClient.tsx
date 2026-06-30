@@ -10,7 +10,7 @@ import type { AppraisalSubmission } from "@prisma/client";
 import { StageBadge } from "@/components/shared/StageBadge";
 
 interface ManagerCTCClientProps {
-  submissions: (AppraisalSubmission & { previousIncrementPercentage?: number })[];
+  submissions: AppraisalSubmission[];
 }
 
 export function ManagerCTCClient({ submissions }: ManagerCTCClientProps) {
@@ -64,7 +64,7 @@ export function ManagerCTCClient({ submissions }: ManagerCTCClientProps) {
             ) : (
               filtered.map((s) => {
                 const current = s.currentSalary ?? 0;
-                const hrPrevPct = s.previousIncrementPercentage ?? 0;
+                const hrPrevPct = decimalToNumber(s.previousIncrementPercentage) ?? 0;
                 const mgrPct = decimalToNumber(s.mgmtIncrementPercentage);
                 const projected = Math.round(current * (1 + mgrPct / 100));
                 return (
