@@ -33,7 +33,7 @@ import {
   ABROAD_OPTIONS,
 } from "@/lib/types";
 
-type SubmissionWithManager = AppraisalSubmission & { manager?: Manager; previousIncrementPercentage?: number };
+type SubmissionWithManager = AppraisalSubmission & { manager?: Manager };
 
 function QuestionCard({
   label,
