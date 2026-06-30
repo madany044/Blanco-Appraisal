@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -51,16 +51,58 @@ We are happy to receive your appraisal request and the feedback from your team h
     defaultValues: {
       mgmtIncrementPercentage: 0,
       mgmtApproverName: defaultValues?.mgmtApproverName || "Management",
+      mgmtFeedbackToEmployee: defaultValues?.mgmtFeedbackToEmployee,
       ...defaultValues,
     },
   });
 
-  const { register, handleSubmit, watch } = methods;
+  const { register, handleSubmit, watch, setValue, getValues } = methods;
   const incrementPct = watch("mgmtIncrementPercentage") ?? 0;
+  const feedbackValue = watch("mgmtFeedbackToEmployee");
   const newMonthlySalary = useMemo(
     () => Math.round(currentMonthlySalary * (1 + incrementPct / 100)),
     [currentMonthlySalary, incrementPct]
   );
+
+  const TEMPLATE = `Including speeding up the work process. Effective work, Sharing the knowledge, supervising the team and assigned tasks, Improving English communication with co-workers, improving self-learning capabilities, improving leadership qualities, motivate juniors/coworkers/team and improve team-building activities apart from the individual performance, improving engineering knowledge and exploring to achieve more, as a responsible Drafting Engineer) and the management would be willing to give you the best of a ___% Increment of your current Total CTC.`;
+  const generatedFeedback = TEMPLATE.replace('___%', `${incrementPct}%`);
+
+  // Prefill editable statement on mount if not provided
+  useEffect(() => {
+    const existing = getValues("mgmtFeedbackToEmployee");
+    if (!existing) {
+      setValue("mgmtFeedbackToEmployee", TEMPLATE);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // When feedback text changes, parse percentage and update mgmtIncrementPercentage
+  const feedbackText = watch("mgmtFeedbackToEmployee");
+  useEffect(() => {
+    if (!feedbackText) return;
+    const m = feedbackText.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (m) {
+      const parsed = parseFloat(m[1]);
+      if (!Number.isNaN(parsed) && parsed !== incrementPct) {
+        setValue("mgmtIncrementPercentage", parsed, { shouldValidate: true });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feedbackText]);
+
+  // When numeric percentage changes, replace placeholder or existing number in statement
+  useEffect(() => {
+    const fb = getValues("mgmtFeedbackToEmployee") || TEMPLATE;
+    const pct = incrementPct ?? 0;
+    let updated = fb;
+    if (/(\d+(?:\.\d+)?)\s*%/.test(fb)) {
+      updated = fb.replace(/(\d+(?:\.\d+)?)\s*%/, `${pct}%`);
+    } else if (fb.includes("___%")) {
+      updated = fb.replace("___%", `${pct}%`);
+    }
+    if (updated !== fb) setValue("mgmtFeedbackToEmployee", updated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [incrementPct]);
 
   async function validateAndSubmit(
     handler?: (data: ManagementFormValues) => Promise<void>
@@ -69,6 +111,9 @@ We are happy to receive your appraisal request and the feedback from your team h
       if (data.mgmtIncrementPercentage > maxAllowed) {
         alert(`Increment cannot exceed slab maximum of ${maxAllowed}%`);
         return;
+      }
+      if (!data.mgmtFeedbackToEmployee?.trim()) {
+        data.mgmtFeedbackToEmployee = generatedFeedback;
       }
       await handler?.(data);
     })();
@@ -155,36 +200,16 @@ We are happy to receive your appraisal request and the feedback from your team h
           ) : (
             <>
               <div style={{ marginBottom: 16 }}>
-                <Label htmlFor="mgmtIncrementPercentage">Increment Percentage (%)</Label>
-                <Input
-                  id="mgmtIncrementPercentage"
-                  type="number"
-                  min={0}
-                  max={100}
-                  step={0.5}
-                  placeholder="Enter increment %"
-                  {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
-                  style={{
-                    width: 200,
-                    fontSize: 16,
-                    fontWeight: 600,
-                    padding: "10px 14px",
-                    border: "2px solid #e2e6ef",
-                    borderRadius: 8,
-                    textAlign: "center",
-                    marginTop: 8,
-                  }}
-                />
-                <p style={{ color: "#6b7a99", fontSize: 12, marginTop: 8 }}>
-                  Maximum allowed for this salary range: {maxAllowed}%
-                </p>
-
+                <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Increment Percentage (from statement)</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ fontSize: 18, fontWeight: 700 }}>{incrementPct}%</div>
+                  <div style={{ color: '#6b7a99', fontSize: 12 }}>Maximum allowed: {maxAllowed}%</div>
+                </div>
                 {incrementPct > maxAllowed && (
                   <p style={{ color: "#c0392b", fontSize: 12, marginTop: 8 }}>
                     ⚠ {incrementPct}% exceeds maximum allowed ({maxAllowed}%)
                   </p>
                 )}
-
                 {incrementPct >= 0 && incrementPct <= maxAllowed && incrementPct > 0 && (
                   <div style={{
                     marginTop: 10,
@@ -200,6 +225,18 @@ We are happy to receive your appraisal request and the feedback from your team h
                     ✓ {incrementPct}% — New salary: {formatSalary(newMonthlySalary)}
                   </div>
                 )}
+              </div>
+              <div>
+                <Label htmlFor="mgmtFeedbackToEmployee">Management Statement for Review & PDF</Label>
+                <Textarea
+                  id="mgmtFeedbackToEmployee"
+                  className="mt-1 min-h-[140px]"
+                  {...register("mgmtFeedbackToEmployee")}
+                  placeholder={generatedFeedback}
+                />
+                <p style={{ color: "#6b7a99", fontSize: 12, marginTop: 8 }}>
+                  This message is auto-generated from the increment percentage and can be edited.
+                </p>
               </div>
             </>
           )}

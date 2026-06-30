@@ -90,6 +90,7 @@ export function mapEmployeeToPrisma(
 export function mapHRToPrisma(data: HRFormValues): Prisma.AppraisalSubmissionUpdateInput {
   return {
     currentSalary: data.currentSalary,
+    previousIncrementPercentage: data.previousIncrementPercentage ?? null,
     mgmtEffectiveDate: data.effective_date ? new Date(data.effective_date) : null,
     hrCodeOfConduct: data.hrCodeOfConduct,
     hrDressCode: data.hrDressCode,

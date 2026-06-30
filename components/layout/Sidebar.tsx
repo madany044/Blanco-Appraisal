@@ -33,10 +33,12 @@ const HR_NAV: NavItem[] = [
 
 const MANAGER_NAV: NavItem[] = [
   { href: "/manager", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/manager/ctc", label: "CTC Review", icon: FileText },
 ];
 
 const MGMT_NAV: NavItem[] = [
   { href: "/management", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/management/exports", label: "Exports", icon: Download },
 ];
 
 export function Sidebar({ role, userEmail }: SidebarProps) {

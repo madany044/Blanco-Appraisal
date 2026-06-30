@@ -4,6 +4,7 @@ const rating = z.coerce.number().min(0).max(10);
 
 export const hrFormSchema = z.object({
   currentSalary: z.coerce.number().min(0, "Please enter a valid salary"),
+  previousIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
   effective_date: z.string().optional(),
   hrCodeOfConduct: rating,
   hrDressCode: rating,

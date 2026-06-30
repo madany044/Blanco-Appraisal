@@ -1447,8 +1447,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </Text>
 
         <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
-          <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
-          <InfoCell label="Employee Code" value={pdfDisplayValue(sub.employeeCode)} last />
+  
         </View>
 
         {MGR_RECOMMENDATION_SECTIONS.map((section) => {
@@ -1535,10 +1534,10 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             However, the company would like to support you as best as possible by considering that you will upgrade yourself with any and all backlogs as described by yourself in the attached report card.
           </Text>
 
-          {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee) ? (
+          {pdfDisplayValue(sub.mgmtFeedbackToEmployee ?? sub.mgmtFinalRemarks) ? (
             <View style={s.highlightStatementYellow}>
               <Text style={s.highlightStatementYellowText}>
-                {pdfDisplayValue(sub.mgmtFinalRemarks ?? sub.mgmtFeedbackToEmployee)}
+                {pdfDisplayValue(sub.mgmtFeedbackToEmployee ?? sub.mgmtFinalRemarks)}
               </Text>
             </View>
           ) : null}

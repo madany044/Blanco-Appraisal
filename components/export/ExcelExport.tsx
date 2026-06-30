@@ -20,6 +20,7 @@ function submissionToRow(s: AppraisalSubmission): Record<string, string | number
     rate_quality_of_work: s.rateQualityOfWork ?? "",
     overall_rating: s.overallRating ?? "",
     hr_code_of_conduct: s.hrCodeOfConduct ?? "",
+    previous_increment_percentage: decimalToNumber(s.previousIncrementPercentage),
     current_salary: s.currentSalary ?? "",
     mgr_recommendation: (s.mgrRecommendation ?? []).join("; "),
     mgmt_increment_percentage: decimalToNumber(s.mgmtIncrementPercentage),

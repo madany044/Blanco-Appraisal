@@ -111,6 +111,25 @@ export function HRFeedbackForm({
           )}
         </div>
         <div className="rounded-lg border p-4">
+          <Label htmlFor="previousIncrementPercentage">Previous Increment Percentage (%)</Label>
+          <Input
+            id="previousIncrementPercentage"
+            type="number"
+            min={0}
+            max={100}
+            step={0.1}
+            placeholder="Enter previous increment percentage"
+            className="mt-1"
+            {...register("previousIncrementPercentage", { valueAsNumber: true })}
+          />
+          <p className="mt-1 text-sm text-muted-foreground">
+            This value is stored for dashboard review and does not appear in PDF exports.
+          </p>
+          {errors.previousIncrementPercentage && (
+            <p className="text-sm text-blanco-danger mt-1">{String(errors.previousIncrementPercentage.message)}</p>
+          )}
+        </div>
+        <div className="rounded-lg border p-4">
           <Label htmlFor="effective_date">Increment Effective Date</Label>
           <Input
             id="effective_date"

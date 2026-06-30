@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,6 +20,14 @@ interface FormHeaderProps {
 export function FormHeader({ managers }: FormHeaderProps) {
   const { register, control, setValue, watch, formState: { errors } } = useFormContext();
   const managerId = watch("managerId");
+  const uniqueManagers = useMemo(() => {
+    const seen = new Set<string>();
+    return managers.filter((manager) => {
+      if (seen.has(manager.name)) return false;
+      seen.add(manager.name);
+      return true;
+    });
+  }, [managers]);
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
@@ -63,7 +71,8 @@ export function FormHeader({ managers }: FormHeaderProps) {
                   <SelectItem value="Team 3">Team 3</SelectItem>
                   <SelectItem value="Team 4">Team 4</SelectItem>
                   <SelectItem value="Team 5">Team 5</SelectItem>
-                  <SelectItem value="Team 6">Team QC / Engineering</SelectItem>
+                  <SelectItem value="Team 6">Team Admin</SelectItem>
+                  <SelectItem value="Team 7">Team QC / Engineering</SelectItem>
                 </SelectContent>
               </Select>
             )}
@@ -79,7 +88,7 @@ export function FormHeader({ managers }: FormHeaderProps) {
               <SelectValue placeholder="Select your Team Head" />
             </SelectTrigger>
             <SelectContent>
-              {managers.map((m) => (
+              {uniqueManagers.map((m) => (
                 <SelectItem key={m.id} value={m.id}>
                   {m.name}
                 </SelectItem>

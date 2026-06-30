@@ -48,7 +48,11 @@ export async function GET(request: NextRequest) {
     where.stage = { gte: 2 };
   }
 
-  if (managerId && managerId !== "all" && user.role === "hr") where.managerId = managerId;
+  if (managerId && managerId !== "all") {
+    if (user.role === "hr" || user.role === "management") {
+      where.managerId = managerId;
+    }
+  }
   if (category && category !== "all") where.category = category as Prisma.AppraisalSubmissionWhereInput["category"];
   if (stage && stage !== "all") where.stage = parseInt(stage, 10);
   if (financialYear && financialYear !== "all") where.financialYear = financialYear;

@@ -24,6 +24,7 @@ const MANAGERS = [
   { name: "Pradeep Kumar B S", email: "bsp.blanco@gmail.com" },
   { name: "Shashikumar M S", email: "sms.blanco@gmail.com" },
   { name: "Kumaraswamy M P", email: "mpk.blanco@gmail.com" },
+  { name: "Deepu M C", email: "deepu.blanco@gmail.com" },
 ] as const;
 
 const SLABS = [

@@ -33,7 +33,7 @@ import {
   ABROAD_OPTIONS,
 } from "@/lib/types";
 
-type SubmissionWithManager = AppraisalSubmission & { manager?: Manager };
+type SubmissionWithManager = AppraisalSubmission & { manager?: Manager; previousIncrementPercentage?: number };
 
 function QuestionCard({
   label,
@@ -325,6 +325,12 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
           <p className="text-sm text-gray-600">Employee Current Monthly Salary (₹)</p>
           <p className="mt-1 text-[15px] font-semibold text-[#1e2740]">
             {s.currentSalary != null ? formatSalary(s.currentSalary) : "—"}
+          </p>
+        </div>
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-sm text-gray-600">Previous Increment Percentage (%)</p>
+          <p className="mt-1 text-[15px] font-semibold text-[#1e2740]">
+            {s.previousIncrementPercentage != null ? `${s.previousIncrementPercentage}%` : "—"}
           </p>
         </div>
         {HR_RATING_ITEMS.map((item) => (
