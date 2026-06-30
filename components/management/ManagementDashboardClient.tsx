@@ -45,7 +45,7 @@ export function ManagementDashboardClient({ managers, initialSubmissions, stats 
 
   return (
     <div className="space-y-6">
-      <Alert variant="info">
+      <Alert variant="default">
         <AlertTitle>Management Review Dashboard</AlertTitle>
         <AlertDescription>
           Use the filters to narrow down submissions by manager, category, stage, or employee search.
