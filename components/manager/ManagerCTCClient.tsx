@@ -11,9 +11,10 @@ import { StageBadge } from "@/components/shared/StageBadge";
 
 interface ManagerCTCClientProps {
   submissions: AppraisalSubmission[];
+  managerId: string;
 }
 
-export function ManagerCTCClient({ submissions }: ManagerCTCClientProps) {
+export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientProps) {
   const [search, setSearch] = useState("");
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
