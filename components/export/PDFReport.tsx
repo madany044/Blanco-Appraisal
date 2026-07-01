@@ -461,7 +461,7 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: BORDER_GRAY,
     marginBottom: SP.md,
-    flex: 1,
+    flex: 0,
   },
   hrRow: {
     flexDirection: "row",
@@ -470,7 +470,6 @@ const s = StyleSheet.create({
     paddingHorizontal: SP.md,
     borderBottomWidth: 0.5,
     borderBottomColor: BORDER_GRAY,
-    flex: 1,
   },
   hrRowAlt: { backgroundColor: LIGHT_GRAY },
   hrLabelWrap: { flex: 1, paddingRight: SP.md },
@@ -513,7 +512,6 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: BORDER_GRAY,
     marginBottom: SP.xs,
-    flex: 1,
   },
   mgrSectionHeader: {
     backgroundColor: INK,
