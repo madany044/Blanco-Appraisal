@@ -370,16 +370,16 @@ const s = StyleSheet.create({
     lineHeight: 1.4,
   },
   ratingScoreBadge: {
-    width: 48,
-    height: 30,
-    backgroundColor: BLUE_LIGHT,
-    borderWidth: 1.2,
-    borderColor: BLUE,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-  },
+  width: 56,          // was 48
+  height: 38,          // was 30
+  backgroundColor: BLUE_LIGHT,
+  borderWidth: 1.2,
+  borderColor: BLUE,
+  borderRadius: 5,
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+},
   ratingScoreBadgeHigh: {
     backgroundColor: TICK_BG,
     borderColor: TICK_GREEN,
