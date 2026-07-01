@@ -464,29 +464,30 @@ const s = StyleSheet.create({
     flex: 0,
   },
   hrRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    paddingVertical: SP.xs,
-    paddingHorizontal: SP.md,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-  },
+  flexDirection: "row",
+  alignItems: "flex-start",
+  paddingVertical: SP.sm,        // was SP.xs — more row height
+  paddingHorizontal: SP.md,
+  borderBottomWidth: 0.5,
+  borderBottomColor: BORDER_GRAY,
+  minHeight: 50,                  // was 36 — taller rows
+},
   hrRowAlt: { backgroundColor: LIGHT_GRAY },
   hrLabelWrap: { flex: 1, paddingRight: SP.md },
   hrLabel: {
-    fontSize: 8,
-    fontFamily: "Helvetica",
-    color: INK,
-    lineHeight: 1.3,
-  },
+  fontSize: 9.5,                  // was 8 — bigger text
+  fontFamily: "Helvetica",
+  color: INK,
+  lineHeight: 1.4,
+},
   hrNotes: {
-    fontSize: 7.5,
-    fontFamily: "Helvetica",
-    color: SLATE,
-    fontStyle: "italic",
-    marginTop: 3,
-    lineHeight: 1.4,
-  },
+  fontSize: 8.5,                  // was 7.5
+  fontFamily: "Helvetica",
+  color: SLATE,
+  fontStyle: "italic",
+  marginTop: 4,
+  lineHeight: 1.4,
+},
   hrScoreBadge: {
     width: 56,
     height: 34,
@@ -1401,87 +1402,79 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — HR and Admin Feedback (fixed overlap +
-          added Current Salary & Increment Effective Date)
-      ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={s.fillPage}>
-          <View>
-            <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
-              HR &amp; Admin Feedback
-            </Text>
+    PAGE — HR and Admin Feedback
+═══════════════════════════════════════════════ */}
+<PdfPage num={nextPage()} logoSrc={logoPath}>
+  <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
+    HR &amp; Admin Feedback
+  </Text>
 
-            <View style={[s.hrTable, { marginBottom: SP.sm }]}>
-              {HR_RATING_ITEMS.map((item, i) => {
-                const val = sub[item.key as keyof AppraisalSubmission] as number | null;
-                const notes =
-                  item.key === "hrLeaveManagement"
-                    ? (sub as any).hrLeaveManagementNotes
-                    : item.key === "hrTimingManagement"
-                    ? (sub as any).hrTimingManagementNotes
-                    : null;
-                return <HrTableRow key={item.key} label={item.label} score={val} notes={notes} index={i} />;
-              })}
-            </View>
+  <View style={{ borderWidth: 1, borderColor: BORDER_GRAY, marginBottom: SP.md }}>
+    {HR_RATING_ITEMS.map((item, i) => {
+      const val = sub[item.key as keyof AppraisalSubmission] as number | null;
+      const notes =
+        item.key === "hrLeaveManagement"
+          ? (sub as any).hrLeaveManagementNotes
+          : item.key === "hrTimingManagement"
+          ? (sub as any).hrTimingManagementNotes
+          : null;
+      return <HrTableRow key={item.key} label={item.label} score={val} notes={notes} index={i} />;
+    })}
+  </View>
 
-            {/* Backlog notes */}
-            <View style={[s.qCard, { marginBottom: SP.sm }]}>
-              <View style={s.qCardHeader}></View>
-              <Text style={s.qCardBody}>{HR_BACKLOG_QUESTION}</Text>
-              <View style={[s.qCardAnswer, { minHeight: 48 }]}> 
-                <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.hrBacklogNotes) || " "}</Text>
-              </View>
-            </View>
-          </View>
+  <View style={[s.qCard, { marginBottom: SP.lg }]}>
+    <View style={s.qCardHeader}></View>
+    <Text style={s.qCardBody}>{HR_BACKLOG_QUESTION}</Text>
+    <View style={[s.qCardAnswer, { minHeight: 48 }]}>
+      <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.hrBacklogNotes) || " "}</Text>
+    </View>
+  </View>
 
-          <SignatureBlock
-            title=""
-            fields={[
-              { label: "Rating , feedback Given By:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
-              { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
-            ]}
-          />
-        </View>
-      </PdfPage>
+  <SignatureBlock
+    title=""
+    fields={[
+      { label: "Rating , feedback Given By:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
+      { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
+    ]}
+  />
+</PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — Team Head Feedback (single page, 2-col checkboxes)
-      ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={s.fillPage}>
-          <View>
-            <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
-              Team Head Feedback
-            </Text>
+    PAGE — Team Head Feedback (single page, 2-col checkboxes)
+═══════════════════════════════════════════════ */}
+<PdfPage num={nextPage()} logoSrc={logoPath}>
+  <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
+    Team Head Feedback
+  </Text>
 
-            <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
-              <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
-              <InfoCell label="Employee ID" value={pdfDisplayValue(sub.employeeCode)} />
-            </View>
+  <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
+    <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
+    <InfoCell label="Employee ID" value={pdfDisplayValue(sub.employeeCode)} />
+  </View>
 
-            {MGR_RECOMMENDATION_SECTIONS.map((section) => {
-              const reasons = (sub[section.field as keyof AppraisalSubmission] as string[]) ?? [];
-              const options = mgrReasonOptions[section.field];
-              return (
-                <MgrSection2Col
-                  key={section.level}
-                  header={section.header}
-                  options={options}
-                  selected={reasons}
-                />
-              );
-            })}
-          </View>
+  {MGR_RECOMMENDATION_SECTIONS.map((section) => {
+    const reasons = (sub[section.field as keyof AppraisalSubmission] as string[]) ?? [];
+    const options = mgrReasonOptions[section.field];
+    return (
+      <MgrSection2Col
+        key={section.level}
+        header={section.header}
+        options={options}
+        selected={reasons}
+      />
+    );
+  })}
 
-          <SignatureBlock
-            title=""
-            fields={[
-              { label: "Reviewed & Signed By Reporting Manager:", value: pdfDisplayValue(sub.mgrSignatureName) },
-              { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
-            ]}
-          />
-        </View>
-      </PdfPage>
+  <View style={{ marginTop: SP.lg }}>
+    <SignatureBlock
+      title=""
+      fields={[
+        { label: "Reviewed & Signed By Reporting Manager:", value: pdfDisplayValue(sub.mgrSignatureName) },
+        { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
+      ]}
+    />
+  </View>
+</PdfPage>
 
       {/* ═══════════════════════════════════════════════
           PAGE — Management Worksheet — rewritten as a LETTER
