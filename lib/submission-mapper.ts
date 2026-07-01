@@ -111,6 +111,7 @@ export function mapManagerToPrisma(data: ManagerFormValues): Prisma.AppraisalSub
     mgrStrongReasons: data.mgrStrongReasons,
     mgrConditionalReasons: data.mgrConditionalReasons,
     mgrNotRecommendedReasons: data.mgrNotRecommendedReasons,
+    mgrSuggestedIncrementPercentage: data.mgrSuggestedIncrementPercentage ?? null,
     mgrRemarks: data.mgrRemarks,
     mgrSignatureName: data.mgrSignatureName,
     mgrSignatureDate: data.mgrSignatureDate ? new Date(data.mgrSignatureDate) : new Date(),
@@ -125,6 +126,7 @@ export function mapManagementToPrisma(
 
   return {
     mgmtIncrementPercentage: data.mgmtIncrementPercentage,
+    mgmtStatementPercentage: data.mgmtStatementPercentage ?? null,
     mgmtNewSalary: newSalary,
     mgmtApproverName: data.mgmtApproverName,
     mgmtApprovalDate: new Date(),

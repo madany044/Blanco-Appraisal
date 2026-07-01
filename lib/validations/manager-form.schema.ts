@@ -12,6 +12,7 @@ export const managerFormSchema = z
     mgrStrongReasons: z.array(z.string()).default([]),
     mgrConditionalReasons: z.array(z.string()).default([]),
     mgrNotRecommendedReasons: z.array(z.string()).default([]),
+    mgrSuggestedIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
     mgrRemarks: z.string().optional(),
     mgrSignatureName: z.string().min(1, "Signature required"),
     mgrSignatureDate: z.string().optional(),

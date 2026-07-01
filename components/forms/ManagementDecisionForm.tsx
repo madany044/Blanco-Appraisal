@@ -50,6 +50,7 @@ We are happy to receive your appraisal request and the feedback from your team h
     resolver: zodResolver(managementFormSchema),
     defaultValues: {
       mgmtIncrementPercentage: 0,
+      mgmtStatementPercentage: defaultValues?.mgmtStatementPercentage ?? 0,
       mgmtApproverName: defaultValues?.mgmtApproverName || "Management",
       mgmtFeedbackToEmployee: defaultValues?.mgmtFeedbackToEmployee,
       ...defaultValues,
@@ -58,6 +59,7 @@ We are happy to receive your appraisal request and the feedback from your team h
 
   const { register, handleSubmit, watch, setValue, getValues } = methods;
   const incrementPct = watch("mgmtIncrementPercentage") ?? 0;
+  const statementPct = watch("mgmtStatementPercentage") ?? 0;
   const feedbackValue = watch("mgmtFeedbackToEmployee");
   const newMonthlySalary = useMemo(
     () => Math.round(currentMonthlySalary * (1 + incrementPct / 100)),
@@ -65,7 +67,7 @@ We are happy to receive your appraisal request and the feedback from your team h
   );
 
   const TEMPLATE = `Including speeding up the work process. Effective work, Sharing the knowledge, supervising the team and assigned tasks, Improving English communication with co-workers, improving self-learning capabilities, improving leadership qualities, motivate juniors/coworkers/team and improve team-building activities apart from the individual performance, improving engineering knowledge and exploring to achieve more, as a responsible Drafting Engineer) and the management would be willing to give you the best of a ___% Increment of your current Total CTC.`;
-  const generatedFeedback = TEMPLATE.replace('___%', `${incrementPct}%`);
+  const generatedFeedback = TEMPLATE.replace('___%', `${statementPct}%`);
 
   // Prefill editable statement on mount if not provided
   useEffect(() => {
@@ -76,24 +78,24 @@ We are happy to receive your appraisal request and the feedback from your team h
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // When feedback text changes, parse percentage and update mgmtIncrementPercentage
+  // When feedback text changes, parse percentage and update mgmtStatementPercentage
   const feedbackText = watch("mgmtFeedbackToEmployee");
   useEffect(() => {
     if (!feedbackText) return;
     const m = feedbackText.match(/(\d+(?:\.\d+)?)\s*%/);
     if (m) {
       const parsed = parseFloat(m[1]);
-      if (!Number.isNaN(parsed) && parsed !== incrementPct) {
-        setValue("mgmtIncrementPercentage", parsed, { shouldValidate: true });
+      if (!Number.isNaN(parsed) && parsed !== statementPct) {
+        setValue("mgmtStatementPercentage", parsed, { shouldValidate: true });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedbackText]);
 
-  // When numeric percentage changes, replace placeholder or existing number in statement
+  // When statement percentage changes, replace placeholder or existing number in statement
   useEffect(() => {
     const fb = getValues("mgmtFeedbackToEmployee") || TEMPLATE;
-    const pct = incrementPct ?? 0;
+    const pct = statementPct ?? 0;
     let updated = fb;
     if (/(\d+(?:\.\d+)?)\s*%/.test(fb)) {
       updated = fb.replace(/(\d+(?:\.\d+)?)\s*%/, `${pct}%`);
@@ -102,16 +104,12 @@ We are happy to receive your appraisal request and the feedback from your team h
     }
     if (updated !== fb) setValue("mgmtFeedbackToEmployee", updated);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [incrementPct]);
+  }, [statementPct]);
 
   async function validateAndSubmit(
     handler?: (data: ManagementFormValues) => Promise<void>
   ) {
     return handleSubmit(async (data) => {
-      if (data.mgmtIncrementPercentage > maxAllowed) {
-        alert(`Increment cannot exceed slab maximum of ${maxAllowed}%`);
-        return;
-      }
       if (!data.mgmtFeedbackToEmployee?.trim()) {
         data.mgmtFeedbackToEmployee = generatedFeedback;
       }
@@ -191,7 +189,10 @@ We are happy to receive your appraisal request and the feedback from your team h
           {readOnly ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <p style={{ fontSize: 13 }}>
-                <strong>Increment:</strong> {incrementPct}%
+                <strong>Statement Increment:</strong> {statementPct}%
+              </p>
+              <p style={{ fontSize: 13 }}>
+                <strong>Approved Increment:</strong> {incrementPct}%
               </p>
               <p style={{ fontSize: 13 }}>
                 <strong>New Monthly Salary:</strong> {formatSalary(newMonthlySalary)}
@@ -199,32 +200,30 @@ We are happy to receive your appraisal request and the feedback from your team h
             </div>
           ) : (
             <>
-              <div style={{ marginBottom: 16 }}>
-                <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Increment Percentage (from statement)</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ fontSize: 18, fontWeight: 700 }}>{incrementPct}%</div>
-                  <div style={{ color: '#6b7a99', fontSize: 12 }}>Maximum allowed: {maxAllowed}%</div>
+              <div style={{ marginBottom: 16, display: "grid", gap: 16 }}>
+                <div>
+                  <Label htmlFor="mgmtStatementPercentage">Increment Percentage (from statement)</Label>
+                  <Input
+                    id="mgmtStatementPercentage"
+                    type="number"
+                    step="0.01"
+                    className="mt-1"
+                    {...register("mgmtStatementPercentage", { valueAsNumber: true })}
+                  />
                 </div>
-                {incrementPct > maxAllowed && (
-                  <p style={{ color: "#c0392b", fontSize: 12, marginTop: 8 }}>
-                    ⚠ {incrementPct}% exceeds maximum allowed ({maxAllowed}%)
+                <div>
+                  <Label htmlFor="mgmtIncrementPercentage">Approved Increment Percentage</Label>
+                  <Input
+                    id="mgmtIncrementPercentage"
+                    type="number"
+                    step="0.01"
+                    className="mt-1"
+                    {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
+                  />
+                  <p style={{ color: '#6b7a99', fontSize: 12, marginTop: 8 }}>
+                    Slab guidance maximum: {maxAllowed}%. Management may approve a different increment.
                   </p>
-                )}
-                {incrementPct >= 0 && incrementPct <= maxAllowed && incrementPct > 0 && (
-                  <div style={{
-                    marginTop: 10,
-                    display: "inline-flex",
-                    alignItems: "center",
-                    background: "#e6f5ee",
-                    borderRadius: 20,
-                    padding: "6px 14px",
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: "#1a8c5a",
-                  }}>
-                    ✓ {incrementPct}% — New salary: {formatSalary(newMonthlySalary)}
-                  </div>
-                )}
+                </div>
               </div>
               <div>
                 <Label htmlFor="mgmtFeedbackToEmployee">Management Statement for Review & PDF</Label>
@@ -235,9 +234,24 @@ We are happy to receive your appraisal request and the feedback from your team h
                   placeholder={generatedFeedback}
                 />
                 <p style={{ color: "#6b7a99", fontSize: 12, marginTop: 8 }}>
-                  This message is auto-generated from the increment percentage and can be edited.
+                  This message is auto-generated from the statement increment percentage and can be edited.
                 </p>
               </div>
+              {incrementPct > 0 && (
+                <div style={{
+                  marginTop: 10,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  background: "#e6f5ee",
+                  borderRadius: 20,
+                  padding: "6px 14px",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "#1a8c5a",
+                }}>
+                  ✓ Approved increment: {incrementPct}% — New salary: {formatSalary(newMonthlySalary)}
+                </div>
+              )}
             </>
           )}
         </div>
@@ -278,7 +292,7 @@ We are happy to receive your appraisal request and the feedback from your team h
       ) : (
         <>
           <div>
-            <Label>Additional Feedback / Remarks to Employee *</Label>
+            <Label>Additional Feedback / Remarks to Employee</Label>
             <Textarea
               className="mt-1 min-h-[120px]"
               placeholder="Write feedback, areas of improvement, or any specific message for the employee..."

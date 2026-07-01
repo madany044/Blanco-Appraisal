@@ -6,11 +6,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { formatSalary } from "@/lib/submission-display";
 import { decimalToNumber } from "@/lib/utils";
-import type { AppraisalSubmission } from "@prisma/client";
+import type { AppraisalSubmission, Prisma } from "@prisma/client";
 import { StageBadge } from "@/components/shared/StageBadge";
 
+type AppraisalSubmissionWithSuggested = AppraisalSubmission & {
+  mgrSuggestedIncrementPercentage?: Prisma.Decimal | null;
+};
+
 interface ManagerCTCClientProps {
-  submissions: AppraisalSubmission[];
+  submissions: AppraisalSubmissionWithSuggested[];
   managerId: string;
 }
 
@@ -49,6 +53,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
               <TableHead>Employee</TableHead>
               <TableHead>Current CTC</TableHead>
               <TableHead>Previous Increment</TableHead>
+              <TableHead>Suggested Increment</TableHead>
               <TableHead>Manager Increment</TableHead>
               <TableHead>Projected CTC</TableHead>
               <TableHead>Stage</TableHead>
@@ -58,7 +63,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
                   No matching employees found.
                 </TableCell>
               </TableRow>
@@ -66,6 +71,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
               filtered.map((s) => {
                 const current = s.currentSalary ?? 0;
                 const hrPrevPct = decimalToNumber(s.previousIncrementPercentage) ?? 0;
+                const suggestedPct = decimalToNumber(s.mgrSuggestedIncrementPercentage);
                 const mgrPct = decimalToNumber(s.mgmtIncrementPercentage);
                 const projected = Math.round(current * (1 + mgrPct / 100));
                 return (
@@ -73,6 +79,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
                     <TableCell className="font-medium">{s.employeeName}</TableCell>
                     <TableCell>{formatSalary(current)}</TableCell>
                     <TableCell>{hrPrevPct ? `${hrPrevPct}%` : "—"}</TableCell>
+                    <TableCell>{suggestedPct ? `${suggestedPct}%` : "—"}</TableCell>
                     <TableCell>{mgrPct ? `${mgrPct}%` : "—"}</TableCell>
                     <TableCell>{projected ? formatSalary(projected) : "—"}</TableCell>
                     <TableCell><StageBadge stage={s.stage} /></TableCell>

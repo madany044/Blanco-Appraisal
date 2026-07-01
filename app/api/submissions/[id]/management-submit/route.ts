@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { transitionStage, getMaxIncrementPct } from "@/lib/workflow";
+import { transitionStage } from "@/lib/workflow";
 import { mapManagementToPrisma } from "@/lib/submission-mapper";
 import { managementFormSchema } from "@/lib/validations/management-form.schema";
 import { serializeIncrementSlabs } from "@/lib/utils";
@@ -38,14 +38,9 @@ export async function POST(
     const slabs = serializeIncrementSlabs(
       await prisma.incrementSlab.findMany({ orderBy: { ctcMin: "asc" } })
     );
-    const maxPct = getMaxIncrementPct(existing.currentSalary, slabs);
 
-    if (!draft && parsed.data.mgmtIncrementPercentage > maxPct) {
-      return NextResponse.json(
-        { error: `Increment exceeds maximum allowed ${maxPct}%` },
-        { status: 400 }
-      );
-    }
+    // Keep slab guidance visible, but do not block management-approved increments.
+    void slabs;
 
     const mgmtData = mapManagementToPrisma(parsed.data, existing.currentSalary);
 

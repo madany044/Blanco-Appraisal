@@ -63,15 +63,17 @@ export function ManagerRemarksForm({
     <FormProvider {...methods}>
       <form className="space-y-6">
         <FormBrandHeader subtitle="Team Head Feedback" compact />
-        <div className="rounded-lg border border-slate-200 bg-[#f8f9fc] p-4 mb-4 grid gap-4 sm:grid-cols-2">
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Employee Name</p>
-            <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">{employeeName ?? "—"}</p>
-          </div>
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Employee Code</p>
-            <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">{employeeCode ?? "—"}</p>
-          </div>
+        <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
+          <Label>Suggested Increment Percentage (%)</Label>
+          <Input
+            type="number"
+            step="0.01"
+            className="mt-2"
+            {...register("mgrSuggestedIncrementPercentage", { valueAsNumber: true })}
+          />
+          <p className="text-sm text-muted-foreground mt-2">
+            Optional suggestion for the increment percentage you recommend to management.
+          </p>
         </div>
         <div>
           <Label></Label>

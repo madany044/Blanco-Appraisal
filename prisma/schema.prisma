@@ -163,11 +163,13 @@ model AppraisalSubmission {
   mgrStrongReasons           String[] @default([]) @map("mgr_strong_reasons")
   mgrConditionalReasons      String[] @default([]) @map("mgr_conditional_reasons")
   mgrNotRecommendedReasons   String[] @default([]) @map("mgr_not_recommended_reasons")
+  mgrSuggestedIncrementPercentage Decimal? @map("mgr_suggested_increment_percentage") @db.Decimal(5, 2)
   mgrRemarks                 String? @map("mgr_remarks")
   mgrSignatureDate           DateTime? @map("mgr_signature_date") @db.Date
   mgrSignatureName           String? @map("mgr_signature_name")
 
   mgmtIncrementPercentage   Decimal? @map("mgmt_increment_percentage") @db.Decimal(5, 2)
+  mgmtStatementPercentage   Decimal? @map("mgmt_statement_percentage") @db.Decimal(5, 2)
   mgmtNewSalary             Decimal? @map("mgmt_new_salary") @db.Decimal(10, 2)
   mgmtEffectiveDate         DateTime? @map("mgmt_effective_date") @db.Date
   mgmtApproverName          String? @map("mgmt_approver_name")

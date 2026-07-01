@@ -1,6 +1,6 @@
 "use client";
 
-import type { AppraisalSubmission, Manager } from "@prisma/client";
+import type { AppraisalSubmission, Manager, Prisma } from "@prisma/client";
 import { RatingPillReadOnly } from "@/components/forms/RatingPillInput";
 import {
   EMPLOYEE_QUESTIONS,
@@ -25,6 +25,7 @@ import {
   getSubmissionField,
   formatSalary,
 } from "@/lib/submission-display";
+import { decimalToNumber } from "@/lib/utils";
 import { categoryLabel, formatDate, cn } from "@/lib/utils";
 import {
   STRONG_REASONS,
@@ -34,6 +35,9 @@ import {
 } from "@/lib/types";
 
 type SubmissionWithManager = AppraisalSubmission & { manager?: Manager };
+type AppraisalSubmissionWithSuggested = AppraisalSubmission & {
+  mgrSuggestedIncrementPercentage?: Prisma.Decimal | null;
+};
 
 function QuestionCard({
   label,
@@ -397,6 +401,12 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
         <dl className="mb-4 grid gap-x-6 md:grid-cols-2">
           <InfoRow label="Employee Name" value={displayValue(s.employeeName)} />
           <InfoRow label="Employee Code" value={displayValue(s.employeeCode)} />
+          {s.mgrSuggestedIncrementPercentage != null ? (
+            <InfoRow
+              label="Suggested Increment Percentage"
+              value={`${decimalToNumber(s.mgrSuggestedIncrementPercentage)}%`}
+            />
+          ) : null}
         </dl>
 
         {MGR_RECOMMENDATION_SECTIONS.map((section) => {
