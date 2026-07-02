@@ -14,6 +14,7 @@ import { StageBadge } from "@/components/shared/StageBadge";
 import { FormChips } from "@/components/shared/FormChips";
 import { categoryLabel, formatDate } from "@/lib/utils";
 import type { SubmissionWithManager } from "@/lib/types";
+import { VerificationPhotoButton } from "@/components/shared/VerificationPhotoButton";
 
 interface SubmissionsTableProps {
   submissions: SubmissionWithManager[];
@@ -33,13 +34,14 @@ export function SubmissionsTable({ submissions, detailPath }: SubmissionsTablePr
             <TableHead>Date</TableHead>
             <TableHead>Stage</TableHead>
             <TableHead>Forms</TableHead>
+            <TableHead>Photo</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {submissions.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
                 No submissions found
               </TableCell>
             </TableRow>
@@ -53,6 +55,7 @@ export function SubmissionsTable({ submissions, detailPath }: SubmissionsTablePr
                 <TableCell>{formatDate(s.submittedAt)}</TableCell>
                 <TableCell><StageBadge stage={s.stage} /></TableCell>
                 <TableCell><FormChips submission={s} /></TableCell>
+                <TableCell><VerificationPhotoButton photoUrl={s.verificationPhotoUrl} /></TableCell>
                 <TableCell>
                   <Link href={`${detailPath}/${s.id}`}>
                     <Button size="sm" variant="outline">View</Button>

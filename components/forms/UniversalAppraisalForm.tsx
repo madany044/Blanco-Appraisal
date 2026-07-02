@@ -22,6 +22,8 @@ import {
 import { OVERALL_RATINGS, ABROAD_OPTIONS, type AppraisalCategory } from "@/lib/types";
 import type { Manager } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { CameraCapture } from "@/components/forms/CameraCapture";
+import { createClient } from "@/lib/supabase/client";
 
 const RATINGS_PART1 = [
   { name: "rateTeamwork", label: "a. Teamwork and Collaboration" },
@@ -88,6 +90,7 @@ interface UniversalAppraisalFormProps {
 export function UniversalAppraisalForm({ category, managers, brandSubtitle }: UniversalAppraisalFormProps) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [verificationPhoto, setVerificationPhoto] = useState<string | null>(null);
   const router = useRouter();
   const showAbroad = category === "GROUP_B" || category === "GROUP_C";
   const isQC = category === "QC";
@@ -115,33 +118,63 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
     }
   }, [employeeName, getValues, setValue]);
 
-  async function saveSubmission(data: Partial<EmployeeFormValues>, isDraft: boolean) {
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/submissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          ...(isQC ? QC_PRODUCTIVITY_NULLS : {}),
-          category,
-          stage: isDraft ? -1 : 0,
-          abroadCapabilityNa: !showAbroad,
-          modelerSectionNa: isQC ? true : category === "GROUP_B" || category === "GROUP_C",
-        }),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? "Submission failed");
-      }
-      if (!isDraft) router.push("/employee/success");
-      else alert("Draft saved successfully");
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Failed to save");
-    } finally {
-      setSubmitting(false);
+  async function uploadVerificationPhoto(dataUrl: string, employeeCode: string): Promise<string | null> {
+  try {
+    const supabase = createClient();
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    const fileName = `${employeeCode || "unknown"}_${Date.now()}.jpg`;
+
+    const { error } = await supabase.storage
+      .from("verification-photos")
+      .upload(fileName, blob, { contentType: "image/jpeg" });
+
+    if (error) {
+      console.error("Photo upload failed:", error);
+      return null;
     }
+
+    const { data } = supabase.storage.from("verification-photos").getPublicUrl(fileName);
+    return data.publicUrl;
+  } catch (e) {
+    console.error("Photo upload error:", e);
+    return null;
   }
+}
+
+  async function saveSubmission(data: Partial<EmployeeFormValues>, isDraft: boolean) {
+  setSubmitting(true);
+  try {
+    let verificationPhotoUrl: string | null = null;
+    if (!isDraft && verificationPhoto) {
+      verificationPhotoUrl = await uploadVerificationPhoto(verificationPhoto, data.employeeCode ?? "unknown");
+    }
+
+    const res = await fetch("/api/submissions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...data,
+        ...(isQC ? QC_PRODUCTIVITY_NULLS : {}),
+        category,
+        stage: isDraft ? -1 : 0,
+        abroadCapabilityNa: !showAbroad,
+        modelerSectionNa: isQC ? true : category === "GROUP_B" || category === "GROUP_C",
+        ...(verificationPhotoUrl ? { verificationPhotoUrl } : {}),
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error ?? "Submission failed");
+    }
+    if (!isDraft) router.push("/employee/success");
+    else alert("Draft saved successfully");
+  } catch (e) {
+    alert(e instanceof Error ? e.message : "Failed to save");
+  } finally {
+    setSubmitting(false);
+  }
+}
 
   async function onDraft() {
     const data = methods.getValues();
@@ -192,6 +225,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-6">
         <FormBrandHeader compact subtitle={brandSubtitle} />
+        <CameraCapture onCapture={setVerificationPhoto} />
         <div className="sticky top-0 z-10 bg-white py-4 border-b shadow-sm">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-blanco-primary">Step {displayStep} of {totalSteps}</span>
@@ -442,8 +476,8 @@ office premises (including perspective vision on your career along with your tea
             {step < lastStep ? (
               <Button type="button" onClick={nextStep}>Next</Button>
             ) : (
-              <Button type="submit" variant="success" disabled={submitting}>
-                Submit For Review
+              <Button type="submit" variant="success" disabled={submitting || !verificationPhoto}>
+               Submit For Review
               </Button>
             )}
           </div>

@@ -177,6 +177,7 @@ model AppraisalSubmission {
   mgmtFinalRemarks          String? @map("mgmt_final_remarks")
   mgmtFeedbackToEmployee    String? @map("mgmt_feedback_to_employee")
   mgmtInternalNotes         String? @map("mgmt_internal_notes")
+  verificationPhotoUrl      String? @map("verification_photo_url")
 
   manager Manager @relation(fields: [managerId], references: [id])
 

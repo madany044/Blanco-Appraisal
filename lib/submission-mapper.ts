@@ -13,6 +13,7 @@ export function mapEmployeeToPrisma(
     stage: data.stage,
     employeeName: data.employeeName ?? "",
     employeeCode: data.employeeCode ?? "",
+    verificationPhotoUrl: (data as any).verificationPhotoUrl ?? null,
     manager: { connect: { id: data.managerId! } },
     team: data.team,
     designation: data.designation,

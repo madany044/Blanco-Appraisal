@@ -8,6 +8,7 @@ import { formatSalary } from "@/lib/submission-display";
 import { decimalToNumber } from "@/lib/utils";
 import type { AppraisalSubmission, Prisma } from "@prisma/client";
 import { StageBadge } from "@/components/shared/StageBadge";
+import { VerificationPhotoButton } from "@/components/shared/VerificationPhotoButton";
 
 type AppraisalSubmissionWithSuggested = AppraisalSubmission & {
   mgrSuggestedIncrementPercentage?: Prisma.Decimal | null;
@@ -57,13 +58,14 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
               <TableHead>Manager Increment</TableHead>
               <TableHead>Projected CTC</TableHead>
               <TableHead>Stage</TableHead>
+              <TableHead>Photo</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
                   No matching employees found.
                 </TableCell>
               </TableRow>
@@ -83,6 +85,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
                     <TableCell>{mgrPct ? `${mgrPct}%` : "—"}</TableCell>
                     <TableCell>{projected ? formatSalary(projected) : "—"}</TableCell>
                     <TableCell><StageBadge stage={s.stage} /></TableCell>
+                    <TableCell><VerificationPhotoButton photoUrl={s.verificationPhotoUrl} /></TableCell>
                     <TableCell>
                       <Button size="sm" variant="outline" asChild>
                         <a href={`/manager/${s.id}`}>View</a>

@@ -17,6 +17,7 @@ import { downloadPDF } from "@/components/export/PDFDownload";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { SuccessToast } from "@/components/shared/SuccessToast";
 import { exportSubmissionExcel } from "@/components/export/ExcelExport";
+import { VerificationPhotoButton } from "@/components/shared/VerificationPhotoButton";
 
 interface SubmissionDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
@@ -87,6 +88,7 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
       <div>
         <h2 className="text-xl font-semibold">{s.employeeName}</h2>
         <p className="text-muted-foreground">{s.employeeCode} · {s.manager.name}</p>
+        <VerificationPhotoButton photoUrl={s.verificationPhotoUrl} />
       </div>
       <WorkflowBar currentStage={s.stage} />
 
