@@ -103,9 +103,7 @@ export function HRFeedbackForm({
             className="mt-1"
             {...register("currentSalary", { valueAsNumber: true })}
           />
-          <p className="mt-1 text-sm text-muted-foreground">
-            This value is used to calculate increment amounts in the Management decision form.
-          </p>
+          
           {errors.currentSalary && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.currentSalary.message)}</p>
           )}
@@ -122,9 +120,6 @@ export function HRFeedbackForm({
             className="mt-1"
             {...register("previousIncrementPercentage", { valueAsNumber: true })}
           />
-          <p className="mt-1 text-sm text-muted-foreground">
-            This value is stored for dashboard review and does not appear in PDF exports.
-          </p>
           {errors.previousIncrementPercentage && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.previousIncrementPercentage.message)}</p>
           )}

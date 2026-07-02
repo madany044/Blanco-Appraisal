@@ -72,7 +72,7 @@ export function ManagerRemarksForm({
             {...register("mgrSuggestedIncrementPercentage", { valueAsNumber: true })}
           />
           <p className="text-sm text-muted-foreground mt-2">
-            Optional suggestion for the increment percentage you recommend to management.
+            suggestion for the increment percentage you recommend to management.
           </p>
         </div>
         <div>

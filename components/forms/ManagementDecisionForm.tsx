@@ -66,7 +66,7 @@ We are happy to receive your appraisal request and the feedback from your team h
     [currentMonthlySalary, incrementPct]
   );
 
-  const TEMPLATE = `Including speeding up the work process. Effective work, Sharing the knowledge, supervising the team and assigned tasks, Improving English communication with co-workers, improving self-learning capabilities, improving leadership qualities, motivate juniors/coworkers/team and improve team-building activities apart from the individual performance, improving engineering knowledge and exploring to achieve more, as a responsible Drafting Engineer) and the management would be willing to give you the best of a ___% Increment of your current Total CTC.`;
+  const TEMPLATE = `Including speeding up the work process. Effective work, Sharing the knowledge, supervising the team and assigned tasks, Improving English communication with co-workers, improving self-learning capabilities, improving leadership qualities, motivate juniors/coworkers/team and improve team-building activities apart from the individual performance, improving engineering knowledge and exploring to achieve more, as a responsible Employee and the management would be willing to give you the best of a ___% Increment of your current Total CTC.`;
   const generatedFeedback = TEMPLATE.replace('___%', `${statementPct}%`);
 
   // Prefill editable statement on mount if not provided
