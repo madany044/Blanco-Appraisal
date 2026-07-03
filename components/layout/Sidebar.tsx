@@ -34,6 +34,7 @@ const HR_NAV: NavItem[] = [
 const MANAGER_NAV: NavItem[] = [
   { href: "/manager", label: "Dashboard", icon: LayoutDashboard },
   { href: "/manager/ctc", label: "CTC Review", icon: FileText },
+  { href: "/manager/exports", label: "Exports", icon: Download },
 ];
 
 const MGMT_NAV: NavItem[] = [
