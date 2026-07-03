@@ -398,9 +398,7 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
             <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">{displayValue(s.employeeCode)}</p>
           </div>
         </div>
-        <dl className="mb-4 grid gap-x-6 md:grid-cols-2">
-          <InfoRow label="Employee Name" value={displayValue(s.employeeName)} />
-          <InfoRow label="Employee Code" value={displayValue(s.employeeCode)} />
+        <dl className="mb-4 rounded-lg border border-slate-200 bg-[#f8f9fc] p-4 grid gap-4 gap-x-6 sm:grid-cols-2 md:grid-cols-2">
           {s.mgrSuggestedIncrementPercentage != null ? (
             <InfoRow
               label="Suggested Increment Percentage"
