@@ -94,7 +94,7 @@ export function CameraCapture({ onCapture }: CameraCaptureProps) {
     <div className="rounded-lg border border-slate-200 bg-white p-4">
       <p className="text-sm font-semibold text-[#1e2740] mb-1">Identity Verification</p>
       <p className="text-xs text-muted-foreground mb-3">
-        Please enable your camera and take a quick photo to verify you are filling this form yourself.
+        "Please enable your camera and take a quick photo to verify your identity. This image will be used solely for verification by office management and will not be shared, stored, or retained beyond this purpose."
       </p>
 
       {status === "idle" && (
