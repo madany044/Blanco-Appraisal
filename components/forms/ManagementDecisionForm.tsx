@@ -66,7 +66,7 @@ We are happy to receive your appraisal request and the feedback from your team h
     [currentMonthlySalary, incrementPct]
   );
 
-  const TEMPLATE = `Including speeding up the work process. Effective work, Sharing the knowledge, supervising the team and assigned tasks, Improving English communication with co-workers, improving self-learning capabilities, improving leadership qualities, motivate juniors/coworkers/team and improve team-building activities apart from the individual performance, improving engineering knowledge and exploring to achieve more, as a responsible Employee and the management would be happy to offer you a revised compensation, based on your performance and commitment to growth.`;
+  const TEMPLATE = `This revised compensation also takes into account your commitment to overall professional growth, which includes but is not limited to: improving work efficiency, knowledge sharing, team supervision, task management, communication skills, self-learning capabilities, leadership qualities, motivating colleagues, team-building activities, and enhancing engineering expertise — all beyond individual performance. As a responsible employee, we value your dedication and contribution to the organization.`;
   const generatedFeedback = TEMPLATE.replace('___%', `${statementPct}%`);
 
   // Prefill editable statement on mount if not provided
@@ -202,7 +202,7 @@ We are happy to receive your appraisal request and the feedback from your team h
             <>
               <div style={{ marginBottom: 16, display: "grid", gap: 16 }}>
                 <div>
-                  <Label htmlFor="mgmtStatementPercentage">Increment Percentage (from statement)</Label>
+                  <Label htmlFor="mgmtStatementPercentage">Increment Percentage (Based on Report card)</Label>
                   <Input
                     id="mgmtStatementPercentage"
                     type="number"
@@ -212,7 +212,7 @@ We are happy to receive your appraisal request and the feedback from your team h
                   />
                 </div>
                 <div>
-                  <Label htmlFor="mgmtIncrementPercentage">Approved Increment Percentage</Label>
+                  <Label htmlFor="mgmtIncrementPercentage">Company Approved Increment Percentage</Label>
                   <Input
                     id="mgmtIncrementPercentage"
                     type="number"
@@ -221,7 +221,7 @@ We are happy to receive your appraisal request and the feedback from your team h
                     {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
                   />
                   <p style={{ color: '#6b7a99', fontSize: 12, marginTop: 8 }}>
-                    Slab guidance maximum: {maxAllowed}%. Management may approve a different increment.
+                    Slab guidance maximum: {maxAllowed}%. Management can approve a different increment.
                   </p>
                 </div>
               </div>
@@ -291,14 +291,7 @@ We are happy to receive your appraisal request and the feedback from your team h
         </div>
       ) : (
         <>
-          <div>
-            <Label>Additional Feedback / Remarks to Employee</Label>
-            <Textarea
-              className="mt-1 min-h-[120px]"
-              placeholder="Write feedback, areas of improvement, or any specific message for the employee..."
-              {...register("mgmtFinalRemarks")}
-            />
-          </div>
+          
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <Label>Approved & Signed By Management:</Label>

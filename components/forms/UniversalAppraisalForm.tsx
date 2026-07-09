@@ -186,6 +186,10 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
   }
 
   async function nextStep() {
+     if (step === 1 && !verificationPhoto) {
+    alert("Please capture your verification photo before proceeding.");
+    return;
+  }
     const fieldsByStep: Record<number, (keyof EmployeeFormValues)[]> = isQC
       ? {
           1: ["employeeName", "employeeCode", "managerId", "basisOfAppraisal", "supportToCompany"],

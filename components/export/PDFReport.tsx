@@ -370,8 +370,8 @@ const s = StyleSheet.create({
     lineHeight: 1.4,
   },
   ratingScoreBadge: {
-  width: 56,          // was 48
-  height: 38,          // was 30
+  width: 56,
+  height: 38,
   backgroundColor: BLUE_LIGHT,
   borderWidth: 1.2,
   borderColor: BLUE,
@@ -466,22 +466,22 @@ const s = StyleSheet.create({
   hrRow: {
   flexDirection: "row",
   alignItems: "flex-start",
-  paddingVertical: SP.sm,        // was SP.xs — more row height
+  paddingVertical: SP.sm,
   paddingHorizontal: SP.md,
   borderBottomWidth: 0.5,
   borderBottomColor: BORDER_GRAY,
-  minHeight: 50,                  // was 36 — taller rows
+  minHeight: 50,
 },
   hrRowAlt: { backgroundColor: LIGHT_GRAY },
   hrLabelWrap: { flex: 1, paddingRight: SP.md },
   hrLabel: {
-  fontSize: 9.5,                  // was 8 — bigger text
+  fontSize: 9.5,
   fontFamily: "Helvetica",
   color: INK,
   lineHeight: 1.4,
 },
   hrNotes: {
-  fontSize: 8.5,                  // was 7.5
+  fontSize: 8.5,
   fontFamily: "Helvetica",
   color: SLATE,
   fontStyle: "italic",
@@ -731,8 +731,6 @@ const s = StyleSheet.create({
     backgroundColor: SEAL_NAVY,
     marginVertical: 2,
   },
-  
-  
 
   // ── Misc ─────────────────────────────────────────────────────────
   introPara: {
@@ -896,7 +894,6 @@ function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) 
   );
 }
 
-// Full-height self-rating row — uses flex:1 so 10 rows fill the entire page evenly
 function RatingTableRow({ alpha, label, score, index }: {
   alpha: string; label: string; score: number | null; index: number;
 }) {
@@ -920,7 +917,6 @@ function RatingTableRow({ alpha, label, score, index }: {
   );
 }
 
-// Full-height productivity row
 function ProdTableRow({ label, value, index, flex }: { label: string; value: string; index: number; flex?: number }) {
   const isAlt = index % 2 === 1;
   const isNA = !value || value === "—";
@@ -939,7 +935,6 @@ function HrTableRow({ label, score, notes, index }: {
   const isHigh = score != null && score >= 8;
   const isMid = score != null && score >= 5 && score < 8;
   const display = score != null ? `${score}` : "—";
-  // Reuse the rating badge styles so HR shows "9 out of 10" style
   const badgeStyle = isHigh ? s.ratingScoreBadgeHigh : isMid ? s.ratingScoreBadgeMid : s.ratingScoreBadge;
   const textStyle = isHigh ? s.ratingScoreTextHigh : isMid ? s.ratingScoreTextMid : s.ratingScoreText;
   return (
@@ -948,7 +943,7 @@ function HrTableRow({ label, score, notes, index }: {
         <Text style={s.hrLabel}>{label}</Text>
         {notes ? <Text style={s.hrNotes}>{notes}</Text> : null}
       </View>
-      <View style={[s.ratingScoreBadge, badgeStyle, { backgroundColor: isHigh ? TICK_BG : undefined }]}> 
+      <View style={[s.ratingScoreBadge, badgeStyle, { backgroundColor: isHigh ? TICK_BG : undefined }]}>
         <Text style={[s.ratingScoreText, textStyle]}>{display}</Text>
         <Text style={s.ratingScoreDenom}>out of 10</Text>
       </View>
@@ -993,7 +988,6 @@ function MgrSection2Col({ header, options, selected }: {
   );
 }
 
-// Circular stamp/seal built entirely from Views + Text (no image dependency)
 function ApprovalSeal({ companyName = "Blanco Steel Detailing Services" }: { companyName?: string }) {
   const words = companyName.toUpperCase().split(" ");
   return (
@@ -1051,14 +1045,11 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
   const nextPage = () => ++p;
   const alphas = "abcdefghijklmnopqrst".split("");
 
-  // Self-rating split a–j / k–t
   const selfRatingFirst = SELF_RATING_ITEMS.slice(0, 10);
   const selfRatingSecond = SELF_RATING_ITEMS.slice(10);
 
   const logoPath = logoSrc ?? "/images/logoooo.jpg";
 
-  // ── Slab matching by INCREMENT PERCENTAGE (matches slab whose maxPct >= awarded %, the tightest fit) ──
-  // REPLACE WITH:
   const currentMonthlySalary = sub.currentSalary ?? 0;
   const sortedSlabs = [...slabs].sort((a, b) => a.ctcMin - b.ctcMin);
   const matchedSlab = sortedSlabs.find((slab) => {
@@ -1477,10 +1468,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE — Management Worksheet — rewritten as a LETTER
-          (matches the warm, readable feel of the handwritten
-          version) + corrected slab matching by increment % +
-          circular approval seal over the signature
+          PAGE — Management Worksheet & Final Conclusion
+          Signature only here — Seal goes on the footer below
       ═══════════════════════════════════════════════ */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <View style={s.letterPage}>
@@ -1490,7 +1479,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
 
           <Text style={s.letterBody}>
-            Dear <Text style={s.letterHighlight}>{sub.employeeName}</Text>,
+            Dear <Text style={[s.letterHighlight, { fontSize: 12.5, fontWeight: 'bold', color: '#1a3a5c' }]}>{sub.employeeName}</Text>,
           </Text>
           <Text style={s.letterBody}>{MANAGEMENT_LETTER_INTRO}</Text>
 
@@ -1498,7 +1487,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             Below are the criteria of increment with effect from FY 2026–27.
           </Text>
 
-          {/* Compact slab table — fixed width, center-aligned */}
+          {/* Compact slab table */}
           <View style={{ marginBottom: SP.md, alignItems: "flex-start" }}>
             <View style={s.tableHead}>
               <Text style={s.tableHeadLeft}>CTC</Text>
@@ -1509,16 +1498,15 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
               const isAlt = i % 2 === 1;
               return (
                 <View key={slab.id} style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isActive ? s.tableRowHighlight : {}]}>
-                  <Text style={s.tableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}{isActive ? "" : ""}</Text>
+                  <Text style={s.tableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}</Text>
                   <Text style={s.tableCellRight}>0% to {decimalToNumber(slab.maxPct)}%</Text>
                 </View>
               );
             })}
           </View>
 
-          {/* Letter-style increment statement, not a boxed banner */}
           <Text style={s.letterBody}>
-            You have been obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card.
+            You have been obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card. which is within the range as per the CTC slab.
           </Text>
 
           <Text style={s.letterBody}>
@@ -1526,7 +1514,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           </Text>
 
           <Text style={s.letterBody}>
-            Thus, the management would be willing to give you the best of a <Text style={s.letterHighlight}>{approvedPct}%</Text> Increment of your current Total CTC.
+            Therefore, the company is pleased to offer you the best of <Text style={[s.letterHighlight, { fontSize: 12.5, fontWeight: 'bold', color: '#1a3a5c' }]}>{approvedPct}% </Text>Increment of your current Total CTC.
           </Text>
 
           {pdfDisplayValue(sub.mgmtFeedbackToEmployee ?? sub.mgmtFinalRemarks) ? (
@@ -1542,7 +1530,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             performance cycle.
           </Text>
 
-          {/* Signature row — seal sits cleanly to the right of the signature line, never touching text */}
+           {/* Signature row — seal sits cleanly to the right of the signature line, never touching text */}
           <View style={{ flexDirection: "row", alignItems: "flex-start", marginTop: SP.lg }}>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
