@@ -93,6 +93,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
   const [submitting, setSubmitting] = useState(false);
   const [verificationPhoto, setVerificationPhoto] = useState<string | null>(null);
   const router = useRouter();
+  
   const showAbroad = category === "GROUP_B" || category === "GROUP_C";
   const isQC = category === "QC";
   const visibleSteps = isQC ? ALL_STEPS.filter((s) => s !== 7 && s !== 8) : [...ALL_STEPS];
@@ -120,62 +121,64 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
   }, [employeeName, getValues, setValue]);
 
   async function uploadVerificationPhoto(dataUrl: string, employeeCode: string): Promise<string | null> {
-  try {
-    const supabase = createClient();
-    const res = await fetch(dataUrl);
-    const blob = await res.blob();
-    const fileName = `${employeeCode || "unknown"}_${Date.now()}.jpg`;
+    try {
+      const supabase = createClient();
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const fileName = `${employeeCode || "unknown"}_${Date.now()}.jpg`;
 
-    const { error } = await supabase.storage
-      .from("verification-photos")
-      .upload(fileName, blob, { contentType: "image/jpeg" });
+      const { error } = await supabase.storage
+        .from("verification-photos")
+        .upload(fileName, blob, { contentType: "image/jpeg" });
 
-    if (error) {
-      console.error("Photo upload failed:", error);
+      if (error) {
+        console.error("Photo upload failed:", error);
+        return null;
+      }
+
+      const { data } = supabase.storage.from("verification-photos").getPublicUrl(fileName);
+      return data.publicUrl;
+    } catch (e) {
+      console.error("Photo upload error:", e);
       return null;
     }
-
-    const { data } = supabase.storage.from("verification-photos").getPublicUrl(fileName);
-    return data.publicUrl;
-  } catch (e) {
-    console.error("Photo upload error:", e);
-    return null;
   }
-}
 
   async function saveSubmission(data: Partial<EmployeeFormValues>, isDraft: boolean) {
-  setSubmitting(true);
-  try {
-    let verificationPhotoUrl: string | null = null;
-    if (!isDraft && verificationPhoto) {
-      verificationPhotoUrl = await uploadVerificationPhoto(verificationPhoto, data.employeeCode ?? "unknown");
-    }
+    setSubmitting(true);
+    try {
+      let verificationPhotoUrl: string | null = null;
+      if (!isDraft && verificationPhoto) {
+        verificationPhotoUrl = await uploadVerificationPhoto(verificationPhoto, data.employeeCode ?? "unknown");
+      }
 
-    const res = await fetch("/api/submissions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...data,
-        ...(isQC ? QC_PRODUCTIVITY_NULLS : {}),
-        category,
-        stage: isDraft ? -1 : 0,
-        abroadCapabilityNa: !showAbroad,
-        modelerSectionNa: isQC ? true : category === "GROUP_B" || category === "GROUP_C",
-        ...(verificationPhotoUrl ? { verificationPhotoUrl } : {}),
-      }),
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error ?? "Submission failed");
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...data,
+          ...(isQC ? QC_PRODUCTIVITY_NULLS : {}),
+          category,
+          stage: isDraft ? -1 : 0,
+          abroadCapabilityNa: !showAbroad,
+          modelerSectionNa: isQC ? true : category === "GROUP_B" || category === "GROUP_C",
+          ...(verificationPhotoUrl ? { verificationPhotoUrl } : {}),
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Submission failed");
+      }
+
+      if (!isDraft) router.push("/employee/success");
+      else alert("Draft saved successfully");
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Failed to save");
+    } finally {
+      setSubmitting(false);
     }
-    if (!isDraft) router.push("/employee/success");
-    else alert("Draft saved successfully");
-  } catch (e) {
-    alert(e instanceof Error ? e.message : "Failed to save");
-  } finally {
-    setSubmitting(false);
   }
-}
 
   async function onDraft() {
     const data = methods.getValues();
@@ -187,10 +190,11 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
   }
 
   async function nextStep() {
-     if (step === 1 && !verificationPhoto) {
-    alert("Please capture your verification photo before proceeding.");
-    return;
-  }
+    if (step === 1 && !verificationPhoto) {
+      alert("Please capture your verification photo before proceeding.");
+      return;
+    }
+
     const fieldsByStep: Record<number, (keyof EmployeeFormValues)[]> = isQC
       ? {
           1: ["employeeName", "employeeCode", "managerId", "basisOfAppraisal", "supportToCompany"],
@@ -208,11 +212,13 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
           7: ["currentYearPerformance"],
           10: ["productivityImprovement", "overallRating", "employeeSignatureName"],
         };
+
     const fields = fieldsByStep[step];
     if (fields) {
       const valid = await trigger(fields);
       if (!valid) return;
     }
+
     const currentIdx = visibleSteps.indexOf(step as (typeof ALL_STEPS)[number]);
     if (currentIdx < visibleSteps.length - 1) {
       setStep(visibleSteps[currentIdx + 1]);
@@ -232,6 +238,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-6">
         <FormBrandHeader compact subtitle={brandSubtitle} />
         <CameraCapture onCapture={setVerificationPhoto} />
+        
         <div className="sticky top-0 z-10 bg-white py-4 border-b shadow-sm">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-blanco-primary">Step {displayStep} of {totalSteps}</span>
@@ -244,8 +251,9 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
           <div className="space-y-6">
             <FormHeader managers={managers} />
             <div>
-              <Label>1. Basis of appraisal request *</Label> <p className="mt-1 text-sm text-gray-500">
-                  Please describe on what basis we should consider your salary appraisal request.
+              <Label>1. Basis of appraisal request *</Label>
+              <p className="mt-1 text-sm text-gray-500">
+                Please describe on what basis we should consider your salary appraisal request.
               </p>
               <Textarea className="min-h-[120px] mt-1" {...register("basisOfAppraisal")} />
               {errors.basisOfAppraisal && <p className="text-sm text-blanco-danger">{String(errors.basisOfAppraisal.message)}</p>}
@@ -253,8 +261,8 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
             <div>
               <Label>2. Support to the company *</Label>
               <p className="mt-1 text-sm text-gray-500">
-              Please describe how would you support the company to grow and generate more income as similar as your salary appraisal:
-             </p>
+                Please describe how would you support the company to grow and generate more income as similar as your salary appraisal:
+              </p>
               <Textarea className="min-h-[120px] mt-1" {...register("supportToCompany")} />
               {errors.supportToCompany && <p className="text-sm text-blanco-danger">{String(errors.supportToCompany.message)}</p>}
             </div>
@@ -264,28 +272,36 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
         {step === 2 && (
           <div className="space-y-6">
             <div>
-              <Label>3. Expectations *</Label> <p className="mt-1 text-sm text-gray-500">
-    Do you think you can expect the same amount of appraisal from year to year as your salary grows?
-    <br />
-    <br />
-    (Tell us "YES" or "NO" and describe the reason accordingly.)
-  </p>
+              <Label>3. Expectations *</Label>
+              <p className="mt-1 text-sm text-gray-500">
+                Do you think you can expect the same amount of appraisal from year to year as your salary grows?
+                <br />
+                <br />
+                (Tell us "YES" or "NO" and describe the reason accordingly.)
+              </p>
               <RadioGroup
                 value={watch("expectationsYesNo")}
                 onValueChange={(v) => setValue("expectationsYesNo", v as "YES" | "NO")}
                 className="flex gap-6 mt-2"
               >
-                <div className="flex items-center gap-2"><RadioGroupItem value="YES" id="yes" /><Label htmlFor="yes">YES</Label></div>
-                <div className="flex items-center gap-2"><RadioGroupItem value="NO" id="no" /><Label htmlFor="no">NO</Label></div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="YES" id="yes" />
+                  <Label htmlFor="yes">YES</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="NO" id="no" />
+                  <Label htmlFor="no">NO</Label>
+                </div>
               </RadioGroup>
               <Label className="mt-4 block">Describe the Reason *</Label>
               <Textarea className="mt-1" {...register("expectationsReason")} />
             </div>
             <div>
-              <Label>4. Improvement in yourself *</Label> <p className="mt-1 text-sm text-gray-500">
-    Please describe your strengths and weaknesses and explain what improvements
-    you have made in yourself compared to the previous year.
-  </p>
+              <Label>4. Improvement in yourself *</Label>
+              <p className="mt-1 text-sm text-gray-500">
+                Please describe your strengths and weaknesses and explain what improvements
+                you have made in yourself compared to the previous year.
+              </p>
               <Textarea className="min-h-[100px] mt-1" {...register("strengthsWeaknesses")} />
             </div>
             <div>
@@ -294,97 +310,113 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
             </div>
           </div>
         )}
-           {step === 3 && ( <div className="space-y-6">
+
+        {step === 3 && (
+          <div className="space-y-6">
             <div>
-        <Label>6. Achievements, Goal & Opportunities *</Label> </div>
+              <Label>6. Achievements, Goal & Opportunities *</Label>
+            </div>
 
-<p className="mt-2 text-sm text-gray-500">
-  a. If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?
-</p>
-<Textarea className="mt-2" {...register("goalChallenges")} />
+            <p className="mt-2 text-sm text-gray-500">
+              a. If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?
+            </p>
+            <Textarea className="mt-2" {...register("goalChallenges")} />
 
-<p className="mt-4 text-sm text-gray-500">
-  b. Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?
-</p>
-<Textarea className="mt-2" {...register("upcomingGoal")} />
+            <p className="mt-4 text-sm text-gray-500">
+              b. Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?
+            </p>
+            <Textarea className="mt-2" {...register("upcomingGoal")} />
 
-<p className="mt-4 text-sm text-gray-500">
-  c. What are the 3 things you would like to improve?
-</p>
-<Textarea className="mt-2" {...register("threeImprovements")} />
+            <p className="mt-4 text-sm text-gray-500">
+              c. What are the 3 things you would like to improve?
+            </p>
+            <Textarea className="mt-2" {...register("threeImprovements")} />
 
-<p className="mt-4 text-sm text-gray-500">
-  d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?
-</p>
+            <p className="mt-4 text-sm text-gray-500">
+              d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?
+            </p>
+            <RadioGroup 
+              value={watch("initiativeFrequency")} 
+              onValueChange={(v) => setValue("initiativeFrequency", v as EmployeeFormValues["initiativeFrequency"])} 
+              className="mt-2 space-y-2"
+            >
+              {(["Consistently", "Occasionally", "Rarely", "Never"] as const).map((opt) => (
+                <div key={opt} className="flex items-center gap-2">
+                  <RadioGroupItem value={opt} id={opt} />
+                  <Label htmlFor={opt}>{opt}</Label>
+                </div>
+              ))}
+            </RadioGroup>
 
-<RadioGroup value={watch("initiativeFrequency")} onValueChange={(v) => setValue("initiativeFrequency", v as EmployeeFormValues["initiativeFrequency"])} className="mt-2 space-y-2"> {(["Consistently", "Occasionally", "Rarely", "Never"] as const).map((opt) => ( <div key={opt} className="flex items-center gap-2"> <RadioGroupItem value={opt} id={opt} /><Label htmlFor={opt}>{opt}</Label> </div> ))} </RadioGroup> 
-
-{/* Keep your existing Abroad Capability section exactly as it is */}
-
-<p className="mt-4 text-sm text-gray-500">
-  e. Do you have capability of managing yourself if company gives opportunity to work in abroad:
-</p>
-
-<div
-  className="mt-2 relative"
-  style={
-    !showAbroad
-      ? {
-          filter: "blur(1.5px)",
-          opacity: 0.75,
-          pointerEvents: "none",
-          userSelect: "none",
-          position: "relative",
-        }
-      : undefined
-  }
->
-  <RadioGroup
-    value={watch("abroadCapability")}
-    onValueChange={(v) => setValue("abroadCapability", v)}
-    className="space-y-2"
-    disabled={!showAbroad}
-  >
-    {ABROAD_OPTIONS.map((opt, i) => (
-      <div key={opt} className="flex items-start gap-2">
-        <RadioGroupItem value={opt} id={`abroad-${i}`} disabled={!showAbroad} />
-        <Label htmlFor={`abroad-${i}`} className="font-normal leading-snug">{opt}</Label>
-      </div>
-    ))}
-  </RadioGroup>
-  {!showAbroad && (
-    <div
-      aria-hidden
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%) rotate(-8deg)",
-        fontSize: 28,
-        fontWeight: 800,
-        color: "#c0392b",
-        opacity: 0.55,
-        border: "2px solid #c0392b",
-        borderRadius: 6,
-        padding: "4px 16px",
-        background: "rgba(255, 255, 255, 0.3)",
-        pointerEvents: "none",
-      }}
-    >
-      N/A
-    </div>
-  )}
-</div>
-
+            <p className="mt-4 text-sm text-gray-500">
+              e. Do you have capability of managing yourself if company gives opportunity to work in abroad:
+            </p>
+            <div
+              className="mt-2 relative"
+              style={
+                !showAbroad
+                  ? {
+                      filter: "blur(1.5px)",
+                      opacity: 0.75,
+                      pointerEvents: "none",
+                      userSelect: "none",
+                      position: "relative",
+                    }
+                  : undefined
+              }
+            >
+              <RadioGroup
+                value={watch("abroadCapability")}
+                onValueChange={(v) => setValue("abroadCapability", v)}
+                className="space-y-2"
+                disabled={!showAbroad}
+              >
+                {ABROAD_OPTIONS.map((opt, i) => (
+                  <div key={opt} className="flex items-start gap-2">
+                    <RadioGroupItem value={opt} id={`abroad-${i}`} disabled={!showAbroad} />
+                    <Label htmlFor={`abroad-${i}`} className="font-normal leading-snug">{opt}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              {!showAbroad && (
+                <div
+                  aria-hidden
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%) rotate(-8deg)",
+                    fontSize: 28,
+                    fontWeight: 800,
+                    color: "#c0392b",
+                    opacity: 0.55,
+                    border: "2px solid #c0392b",
+                    borderRadius: 6,
+                    padding: "4px 16px",
+                    background: "rgba(255, 255, 255, 0.3)",
+                    pointerEvents: "none",
+                  }}
+                >
+                  N/A
+                </div>
+              )}
+            </div>
           </div>
-          )}  
+        )}
 
         {step === 4 && (
           <div className="space-y-6">
-            <div><Label>7. Provide examples of instances where you showed initiative or innovation. *</Label><Textarea className="mt-1" {...register("initiativeInnovation")} /></div>
+            <div>
+              <Label>7. Provide examples of instances where you showed initiative or innovation. *</Label>
+              <Textarea className="mt-1" {...register("initiativeInnovation")} />
+            </div>
             <div>
               <Label>8. Reflect on your commitment to professional development and continuous learning. *</Label>
-              <RadioGroup value={watch("learningCommitment")} onValueChange={(v) => setValue("learningCommitment", v as EmployeeFormValues["learningCommitment"])} className="mt-2 space-y-2">
+              <RadioGroup 
+                value={watch("learningCommitment")} 
+                onValueChange={(v) => setValue("learningCommitment", v as EmployeeFormValues["learningCommitment"])} 
+                className="mt-2 space-y-2"
+              >
                 {[
                   { v: "A", l: "A — Highly committed" },
                   { v: "B", l: "B — Moderately committed" },
@@ -392,14 +424,20 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
                   { v: "D", l: "D — Minimally committed" },
                   { v: "E", l: "E — Not at all committed" },
                 ].map(({ v, l }) => (
-                  <div key={v} className="flex items-center gap-2"><RadioGroupItem value={v} id={`lc-${v}`} /><Label htmlFor={`lc-${v}`}>{l}</Label></div>
+                  <div key={v} className="flex items-center gap-2">
+                    <RadioGroupItem value={v} id={`lc-${v}`} />
+                    <Label htmlFor={`lc-${v}`}>{l}</Label>
+                  </div>
                 ))}
               </RadioGroup>
             </div>
-            <div><Label>9. Professionalism and attitude</Label> <p className="mt-1 text-sm text-gray-500">
-    Please describe your professionalism and attitude with your team during
-office premises (including perspective vision on your career along with your team).</p>
-            <Textarea className="mt-1" {...register("professionalismAttitude")} /></div>
+            <div>
+              <Label>9. Professionalism and attitude</Label>
+              <p className="mt-1 text-sm text-gray-500">
+                Please describe your professionalism and attitude with your team during office premises (including perspective vision on your career along with your team).
+              </p>
+              <Textarea className="mt-1" {...register("professionalismAttitude")} />
+            </div>
           </div>
         )}
 
@@ -412,13 +450,11 @@ office premises (including perspective vision on your career along with your tea
 
         {step === 6 && (
           <div>
-            <h3 className="text-lg font-semibold mb-4"></h3>
+            <h3 className="text-lg font-semibold mb-4">Self Ratings (Continued)</h3>
             <SelfRatingGrid items={RATINGS_PART2} />
           </div>
         )}
 
-        {/* For non-QC categories: show currentYearPerformance at step 7, then Productivity and Modeler at 8/9.
-            For QC: keep currentYearPerformance at step 9 (QC hides steps 7 and 8). */}
         {(!isQC && step === 7) && (
           <div>
             <Label>10. Work performance and Time Management *</Label>
@@ -483,7 +519,7 @@ office premises (including perspective vision on your career along with your tea
               <Button type="button" onClick={nextStep}>Next</Button>
             ) : (
               <Button type="submit" variant="success" disabled={submitting || !verificationPhoto}>
-               Submit For Review
+                Submit For Review
               </Button>
             )}
           </div>
