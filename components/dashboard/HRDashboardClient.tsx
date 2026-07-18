@@ -27,6 +27,7 @@ export function HRDashboardClient({
   stats,
 }: HRDashboardClientProps) {
   const [submissions, setSubmissions] = useState(initialSubmissions);
+  const [isInitialMount, setIsInitialMount] = useState(true);
   const [filters, setFilters] = useState<FilterState>({
     managerId: "all",
     category: "all",
@@ -36,6 +37,12 @@ export function HRDashboardClient({
   });
 
   useEffect(() => {
+    // Skip the database fetch on first render since Next.js already provided initialSubmissions
+    if (isInitialMount) {
+      setIsInitialMount(false);
+      return;
+    }
+
     const params = new URLSearchParams();
     if (filters.managerId !== "all") params.set("managerId", filters.managerId);
     if (filters.category !== "all") params.set("category", filters.category);
