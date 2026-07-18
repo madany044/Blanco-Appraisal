@@ -47,9 +47,9 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
   async function handleComplete() {
     const res = await fetch(`/api/submissions/${s.id}/complete`, { method: "POST" });
     if (res.ok) {
-      setToast("✅ Record marked as completed and archived.");
+      setToast("✅ Record marked as completed.");
       router.refresh();
-    } else alert("Failed to archive");
+    } else alert("Failed to complete");
   }
 
   const hrDefaults: Partial<HRFormValues> = {
