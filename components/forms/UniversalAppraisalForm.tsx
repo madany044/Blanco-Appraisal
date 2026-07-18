@@ -23,6 +23,7 @@ import { OVERALL_RATINGS, ABROAD_OPTIONS, type AppraisalCategory } from "@/lib/t
 import type { Manager } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { CameraCapture } from "@/components/forms/CameraCapture";
+import { DisableCopyPaste } from "@/components/shared/DisableCopyPaste";
 import { createClient } from "@/lib/supabase/client";
 
 const RATINGS_PART1 = [
@@ -227,6 +228,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
 
   return (
     <FormProvider {...methods}>
+      <DisableCopyPaste />
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-6">
         <FormBrandHeader compact subtitle={brandSubtitle} />
         <CameraCapture onCapture={setVerificationPhoto} />
@@ -294,7 +296,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
         )}
            {step === 3 && ( <div className="space-y-6">
             <div>
-        <Label>6. Achievements, Goal & Opportunities</Label> </div>
+        <Label>6. Achievements, Goal & Opportunities *</Label> </div>
 
 <p className="mt-2 text-sm text-gray-500">
   a. If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?
@@ -379,7 +381,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
 
         {step === 4 && (
           <div className="space-y-6">
-            <div><Label>7. Provide examples of instances where you showed initiative or innovation.</Label><Textarea className="mt-1" {...register("initiativeInnovation")} /></div>
+            <div><Label>7. Provide examples of instances where you showed initiative or innovation. *</Label><Textarea className="mt-1" {...register("initiativeInnovation")} /></div>
             <div>
               <Label>8. Reflect on your commitment to professional development and continuous learning. *</Label>
               <RadioGroup value={watch("learningCommitment")} onValueChange={(v) => setValue("learningCommitment", v as EmployeeFormValues["learningCommitment"])} className="mt-2 space-y-2">
