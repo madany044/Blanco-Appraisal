@@ -54,6 +54,13 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
 
   const hrDefaults: Partial<HRFormValues> = {
     currentSalary: s.currentSalary ?? 0,
+    previousIncrementPercentage: s.previousIncrementPercentage != null ? Number(s.previousIncrementPercentage) : undefined,
+    additionalIncrements: Array.isArray((s as any).additionalIncrements)
+      ? ((s as any).additionalIncrements as Array<any>).map((item: any) => ({
+          percentage: item?.percentage == null ? undefined : Number(item.percentage),
+          salaryRise: item?.salaryRise == null ? undefined : Number(item.salaryRise),
+        }))
+      : [],
     effective_date: s.mgmtEffectiveDate?.toISOString().split("T")[0] ?? undefined,
     hrCodeOfConduct: s.hrCodeOfConduct ?? undefined,
     hrDressCode: s.hrDressCode ?? undefined,

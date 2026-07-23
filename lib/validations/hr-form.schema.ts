@@ -2,9 +2,15 @@ import { z } from "zod";
 
 const rating = z.coerce.number().min(0).max(10);
 
+const incrementEntrySchema = z.object({
+  percentage: z.coerce.number().min(0).max(100).optional(),
+  salaryRise: z.coerce.number().min(0).optional(),
+});
+
 export const hrFormSchema = z.object({
   currentSalary: z.coerce.number().min(0, "Please enter a valid salary"),
   previousIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
+  additionalIncrements: z.array(incrementEntrySchema).optional().default([]),
   effective_date: z.string().optional(),
   hrCodeOfConduct: rating,
   hrDressCode: rating,

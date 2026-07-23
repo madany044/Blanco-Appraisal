@@ -89,9 +89,19 @@ export function mapEmployeeToPrisma(
 }
 
 export function mapHRToPrisma(data: HRFormValues): Prisma.AppraisalSubmissionUpdateInput {
+  const normalizedAdditionalIncrements = (data.additionalIncrements ?? [])
+    .filter((item: { percentage?: number | null; salaryRise?: number | null }) => {
+      return item?.percentage != null || item?.salaryRise != null;
+    })
+    .map((item: { percentage?: number | null; salaryRise?: number | null }) => ({
+      percentage: item?.percentage ?? null,
+      salaryRise: item?.salaryRise ?? null,
+    }));
+
   return {
     currentSalary: data.currentSalary,
     previousIncrementPercentage: data.previousIncrementPercentage ?? null,
+    additionalIncrements: normalizedAdditionalIncrements,
     mgmtEffectiveDate: data.effective_date ? new Date(data.effective_date) : null,
     hrCodeOfConduct: data.hrCodeOfConduct,
     hrDressCode: data.hrDressCode,

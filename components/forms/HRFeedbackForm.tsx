@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useForm, FormProvider, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { hrFormSchema, type HRFormValues } from "@/lib/validations/hr-form.schema";
 import { Label } from "@/components/ui/label";
@@ -62,6 +62,10 @@ export function HRFeedbackForm({
   });
 
   const { register, handleSubmit, control, formState: { errors }, setValue } = methods;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "additionalIncrements",
+  });
 
   useEffect(() => {
     if (!defaultValues?.hrAdminSignatureName) {
@@ -123,6 +127,62 @@ export function HRFeedbackForm({
           {errors.previousIncrementPercentage && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.previousIncrementPercentage.message)}</p>
           )}
+        </div>
+        <div className="rounded-lg border p-4">
+          <div className="flex items-center justify-between gap-3">
+            <Label>Additional Increments Between Cycles</Label>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => append({ percentage: undefined, salaryRise: undefined })}
+            >
+              + Add Increment
+            </Button>
+          </div>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Add any increment percentages and salary rises that happened between appraisal cycles.
+          </p>
+          <div className="mt-4 space-y-3">
+            {fields.map((field, index) => (
+              <div key={field.id} className="grid gap-3 md:grid-cols-[1fr_1fr_auto]">
+                <div>
+                  <Label htmlFor={`additionalIncrements.${index}.percentage`}>Increment %</Label>
+                  <Input
+                    id={`additionalIncrements.${index}.percentage`}
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    placeholder="e.g. 5"
+                    className="mt-1"
+                    {...register(`additionalIncrements.${index}.percentage`, {
+                      setValueAs: (value) => (value === "" ? undefined : Number(value)),
+                    })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor={`additionalIncrements.${index}.salaryRise`}>Salary Rise (₹)</Label>
+                  <Input
+                    id={`additionalIncrements.${index}.salaryRise`}
+                    type="number"
+                    min={0}
+                    step={1}
+                    placeholder="e.g. 1500"
+                    className="mt-1"
+                    {...register(`additionalIncrements.${index}.salaryRise`, {
+                      setValueAs: (value) => (value === "" ? undefined : Number(value)),
+                    })}
+                  />
+                </div>
+                <div className="flex items-end">
+                  <Button type="button" variant="outline" size="sm" onClick={() => remove(index)}>
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="rounded-lg border p-4">
           <Label htmlFor="effective_date">Increment Effective Date</Label>

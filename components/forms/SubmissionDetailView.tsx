@@ -337,6 +337,31 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
             {s.previousIncrementPercentage != null ? `${s.previousIncrementPercentage}%` : "—"}
           </p>
         </div>
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-sm text-gray-600">Additional Increments Between Cycles</p>
+          {Array.isArray(s.additionalIncrements) && s.additionalIncrements.length > 0 ? (
+            <div className="mt-3 space-y-3">
+              {(s.additionalIncrements as Array<{ percentage?: number | null; salaryRise?: number | null }>).map((item, index) => (
+                <div key={`${item.percentage ?? "-"}-${item.salaryRise ?? "-"}-${index}`} className="grid gap-3 md:grid-cols-2">
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Increment %</p>
+                    <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">
+                      {item.percentage != null ? `${item.percentage}%` : "—"}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Salary Rise (₹)</p>
+                    <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">
+                      {item.salaryRise != null ? `₹${item.salaryRise}` : "—"}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-gray-400">—</p>
+          )}
+        </div>
         {HR_RATING_ITEMS.map((item) => (
           <div key={item.key} className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
             <p className="text-sm text-[#1e2740]">{item.label}</p>
@@ -406,6 +431,32 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
             />
           ) : null}
         </dl>
+
+        <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
+          <p className="text-sm font-semibold text-[#1e2740]">In-between Increments Recorded by HR</p>
+          {Array.isArray(s.additionalIncrements) && s.additionalIncrements.length > 0 ? (
+            <div className="mt-3 space-y-3">
+              {((s.additionalIncrements as Array<{ percentage?: number | null; salaryRise?: number | null }>)).map((item, index) => (
+                <div key={`${item.percentage ?? "-"}-${item.salaryRise ?? "-"}-${index}`} className="grid gap-3 md:grid-cols-2">
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Increment %</p>
+                    <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">
+                      {item.percentage != null ? `${item.percentage}%` : "—"}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Salary Rise (₹)</p>
+                    <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">
+                      {item.salaryRise != null ? `₹${item.salaryRise}` : "—"}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-gray-400">—</p>
+          )}
+        </div>
 
         {MGR_RECOMMENDATION_SECTIONS.map((section) => {
           const reasons = s[section.field] ?? [];
