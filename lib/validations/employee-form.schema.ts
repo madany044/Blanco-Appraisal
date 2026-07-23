@@ -5,7 +5,7 @@ const rating = z.coerce.number().min(0).max(10).optional();
 export const employeeFormSchema = z.object({
   employeeName: z.string().min(1, "Employee name is required"),
   employeeCode: z.string().min(1, "Employee code is required"),
-  managerId: z.string().uuid("Select a manager"),
+  managerId: z.union([z.string().uuid("Select a manager"), z.literal("")]).optional(),
   team: z.string().optional(),
   designation: z.string().optional(),
   prevExperienceYears: z.string().optional(),
@@ -80,7 +80,7 @@ export const employeeFormSchema = z.object({
 export const employeeDraftSchema = employeeFormSchema.partial().extend({
   employeeName: z.string().optional(),
   employeeCode: z.string().optional(),
-  managerId: z.string().uuid().optional(),
+  managerId: z.union([z.string().uuid(), z.literal("")]).optional(),
   currentSalary: z.coerce.number().optional().default(0),
 });
 

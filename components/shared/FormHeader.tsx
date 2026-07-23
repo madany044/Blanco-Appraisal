@@ -13,6 +13,17 @@ import {
 } from "@/components/ui/select";
 import type { Manager } from "@prisma/client";
 
+const TEAM_MANAGER_MAP: Record<string, string> = {
+  "team 1": "Yogesha S",
+  "team 2": "Shashikumar M S",
+  "team 3": "Naveena G S",
+  "team 4": "Kumaraswamy M P",
+  "team 5": "Pradeep Kumar B S",
+  "team 7": "Deepu M C",
+  "team qc / engineering": "Deepu M C",
+  "qc / engineering": "Deepu M C",
+};
+
 interface FormHeaderProps {
   managers: Manager[];
 }
@@ -20,6 +31,7 @@ interface FormHeaderProps {
 export function FormHeader({ managers }: FormHeaderProps) {
   const { register, control, setValue, watch, formState: { errors } } = useFormContext();
   const managerId = watch("managerId");
+  const selectedTeam = watch("team") ?? "";
   const uniqueManagers = useMemo(() => {
     const seen = new Set<string>();
     return managers.filter((manager) => {
@@ -28,11 +40,37 @@ export function FormHeader({ managers }: FormHeaderProps) {
       return true;
     });
   }, [managers]);
+  const selectedManagerName = useMemo(() => {
+    if (!managerId) return "";
+    return managers.find((manager) => manager.id === managerId)?.name ?? "";
+  }, [managerId, managers]);
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     setValue("dateOfSubmission", today);
   }, [setValue, today]);
+
+  useEffect(() => {
+    const teamKey = selectedTeam.trim().toLowerCase();
+
+    if (!teamKey) {
+      setValue("managerId", "", { shouldValidate: false });
+      return;
+    }
+
+    const mappedManagerName = TEAM_MANAGER_MAP[teamKey];
+
+    if (!mappedManagerName) {
+      setValue("managerId", "", { shouldValidate: false });
+      return;
+    }
+
+    const matchedManager = managers.find(
+      (manager) => manager.name?.toLowerCase() === mappedManagerName.toLowerCase()
+    );
+
+    setValue("managerId", matchedManager?.id ?? "", { shouldValidate: false });
+  }, [selectedTeam, managers, setValue]);
 
   return (
     <div className="rounded-lg border-2 border-blanco-primary/30 bg-slate-50 p-6 space-y-4">
@@ -83,18 +121,22 @@ export function FormHeader({ managers }: FormHeaderProps) {
         </div>
         <div>
           <Label>Manager Name *</Label>
-          <Select value={managerId ?? ""} onValueChange={(v) => setValue("managerId", v, { shouldValidate: true })}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select your Team Head" />
-            </SelectTrigger>
-            <SelectContent>
-              {uniqueManagers.map((m) => (
-                <SelectItem key={m.id} value={m.id}>
-                  {m.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Input
+            value={selectedManagerName}
+            readOnly
+            disabled
+            placeholder="Manager will be assigned automatically from your team"
+            className="bg-slate-100"
+          />
+          {!selectedManagerName && selectedTeam ? (
+            <p className="text-xs text-amber-600 mt-1">
+              No manager mapping is available for this team yet. Please contact support.
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground mt-1">
+              Manager is assigned automatically based on your selected team.
+            </p>
+          )}
           {errors.managerId && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.managerId.message)}</p>
           )}
