@@ -110,15 +110,23 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
     mode: "onBlur",
   });
 
-  const { register, handleSubmit, watch, setValue, getValues, formState: { errors }, trigger } = methods;
+  const { register, handleSubmit, watch, setValue, formState: { errors }, trigger } = methods;
   const employeeCode = watch("employeeCode");
   const employeeName = watch("employeeName");
+  const employeeSignatureName = watch("employeeSignatureName");
 
   useEffect(() => {
-    if (employeeName && !getValues("employeeSignatureName")) {
-      setValue("employeeSignatureName", employeeName.toUpperCase());
+    const trimmedName = employeeName?.trim();
+    if (!trimmedName) return;
+
+    const expectedSignature = trimmedName.toUpperCase();
+    if (employeeSignatureName?.trim() !== expectedSignature) {
+      setValue("employeeSignatureName", expectedSignature, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
     }
-  }, [employeeName, getValues, setValue]);
+  }, [employeeName, employeeSignatureName, setValue]);
 
   async function uploadVerificationPhoto(dataUrl: string, employeeCode: string): Promise<string | null> {
     try {

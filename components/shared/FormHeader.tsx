@@ -143,7 +143,24 @@ export function FormHeader({ managers }: FormHeaderProps) {
         </div>
         <div>
           <Label htmlFor="designation">Designation</Label>
-          <Input id="designation" {...register("designation")} />
+          <Controller
+            name="designation"
+            control={control}
+            render={({ field }) => (
+              <Select value={field.value ?? ""} onValueChange={(value) => field.onChange(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select designation" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Shop Drawing">Shop Drawing</SelectItem>
+                  <SelectItem value="Erection Drawing">Erection Drawing</SelectItem>
+                  <SelectItem value="Modeling">Modeling</SelectItem>
+                  <SelectItem value="Checking">Checking</SelectItem>
+                  <SelectItem value="Project Lead">Project Lead</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
         </div>
         <div>
           <Label>Date</Label>
