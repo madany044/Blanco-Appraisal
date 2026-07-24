@@ -65,6 +65,21 @@ export function ManagerRemarksForm({
   const annualCtc = currentMonthlySalary * 12;
   const maxAllowed = getMaxIncrementPct(currentMonthlySalary, slabs);
 
+  // Suggested Increment Amount - converts to percentage
+  const suggestedIncrementAmount = watch("suggestedIncrementAmount") ?? 0;
+  const calculatedSuggestedPct = useMemo(() => {
+    if (!suggestedIncrementAmount || currentMonthlySalary <= 0) return 0;
+    return (suggestedIncrementAmount / currentMonthlySalary) * 100;
+  }, [suggestedIncrementAmount, currentMonthlySalary]);
+
+  // Update mgrSuggestedIncrementPercentage when calculated percentage changes
+  useMemo(() => {
+    if (calculatedSuggestedPct > 0) {
+      setValue("mgrSuggestedIncrementPercentage", parseFloat(calculatedSuggestedPct.toFixed(2)));
+    }
+  }, [calculatedSuggestedPct, setValue]);
+
+  // Final Approved Increment Amount - converts to percentage
   const incrementAmount = watch("incrementAmount") ?? 0;
   const calculatedIncrementPct = useMemo(() => {
     if (!incrementAmount || currentMonthlySalary <= 0) return 0;
@@ -117,18 +132,37 @@ export function ManagerRemarksForm({
           </div>
         )}
 
-        <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
-          <Label>Suggested Increment Percentage (%)</Label>
-          <Input
-            type="number"
-            step="0.01"
-            className="mt-2"
-            {...register("mgrSuggestedIncrementPercentage", { valueAsNumber: true })}
-          />
-          <p className="text-sm text-muted-foreground mt-2">
-            Suggestion for the increment percentage you recommend to management.
-          </p>
-        </div>
+        {/* Suggested Increment Amount Section */}
+        {currentSalary > 0 && (
+          <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
+            <Label>Suggested Increment Amount (₹)</Label>
+            <Input
+              type="number"
+              step="1"
+              className="mt-2"
+              placeholder="Enter suggested raise amount (e.g. 3000)"
+              {...register("suggestedIncrementAmount", { valueAsNumber: true })}
+            />
+            {suggestedIncrementAmount > 0 && (
+              <div style={{
+                marginTop: 8,
+                display: "inline-flex",
+                alignItems: "center",
+                background: "#e8f0fb",
+                borderRadius: 20,
+                padding: "6px 14px",
+                fontSize: 13,
+                fontWeight: 600,
+                color: "#1a4b8c",
+              }}>
+                ≈ {calculatedSuggestedPct.toFixed(1)}% increment suggested
+              </div>
+            )}
+            <p className="text-sm text-muted-foreground mt-2">
+              Enter the suggested rupee amount. The system will calculate the percentage automatically.
+            </p>
+          </div>
+        )}
 
         {/* Final Approved Increment Section */}
         {currentSalary > 0 && (

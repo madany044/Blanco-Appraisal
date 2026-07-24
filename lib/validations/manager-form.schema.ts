@@ -15,6 +15,7 @@ export const managerFormSchema = z
     mgrSuggestedIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
     mgrFinalApprovedIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
     incrementAmount: z.coerce.number().min(0).optional(),
+    suggestedIncrementAmount: z.coerce.number().min(0).optional(),
     mgrRemarks: z.string().optional(),
     mgrSignatureName: z.string().min(1, "Signature required"),
     mgrSignatureDate: z.string().optional(),
