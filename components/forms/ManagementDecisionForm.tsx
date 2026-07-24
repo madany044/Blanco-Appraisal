@@ -21,6 +21,8 @@ interface ManagementDecisionFormProps {
   slabs: SerializedIncrementSlab[];
   employeeName: string;
   currentSalary: number;
+  mgrSuggestedIncrementPercentage?: number;
+  mgrFinalApprovedIncrementPercentage?: number;
   defaultValues?: Partial<ManagementFormValues>;
   readOnly?: boolean;
   hideSalarySection?: boolean;
@@ -32,6 +34,8 @@ export function ManagementDecisionForm({
   slabs,
   employeeName,
   currentSalary,
+  mgrSuggestedIncrementPercentage,
+  mgrFinalApprovedIncrementPercentage,
   defaultValues,
   readOnly,
   hideSalarySection,
@@ -77,6 +81,26 @@ We are happy to receive your appraisal request and the feedback from your team h
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Prefill mgmtStatementPercentage from mgrSuggestedIncrementPercentage if not already set
+  useEffect(() => {
+    const currentStatementPct = getValues("mgmtStatementPercentage");
+    // Only prefill if mgmtStatementPercentage is not already set (0 or undefined) and we have a manager suggestion
+    if ((currentStatementPct === 0 || currentStatementPct === undefined || currentStatementPct === null) && mgrSuggestedIncrementPercentage != null) {
+      setValue("mgmtStatementPercentage", mgrSuggestedIncrementPercentage, { shouldValidate: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mgrSuggestedIncrementPercentage]);
+
+  // Prefill mgmtIncrementPercentage from mgrFinalApprovedIncrementPercentage if not already set
+  useEffect(() => {
+    const currentIncrementPct = getValues("mgmtIncrementPercentage");
+    // Only prefill if mgmtIncrementPercentage is not already set (0 or undefined) and we have a manager final approved
+    if ((currentIncrementPct === 0 || currentIncrementPct === undefined || currentIncrementPct === null) && mgrFinalApprovedIncrementPercentage != null) {
+      setValue("mgmtIncrementPercentage", mgrFinalApprovedIncrementPercentage, { shouldValidate: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mgrFinalApprovedIncrementPercentage]);
 
   // When feedback text changes, parse percentage and update mgmtStatementPercentage
   const feedbackText = watch("mgmtFeedbackToEmployee");

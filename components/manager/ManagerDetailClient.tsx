@@ -9,15 +9,23 @@ import { HRFeedbackForm } from "@/components/forms/HRFeedbackForm";
 import { ManagerRemarksForm } from "@/components/forms/ManagerRemarksForm";
 import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { AppraisalSubmission, Manager } from "@prisma/client";
+import type { SerializedIncrementSlab } from "@/lib/utils";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { SuccessToast } from "@/components/shared/SuccessToast";
 
 interface ManagerDetailClientProps {
   submission: AppraisalSubmission & { manager: Manager };
   managerName: string;
+  currentSalary?: number;
+  slabs?: SerializedIncrementSlab[];
 }
 
-export function ManagerDetailClient({ submission: s, managerName }: ManagerDetailClientProps) {
+export function ManagerDetailClient({
+  submission: s,
+  managerName,
+  currentSalary = 0,
+  slabs = [],
+}: ManagerDetailClientProps) {
   const router = useRouter();
   const [toast, setToast] = useState<string | null>(null);
 
@@ -74,11 +82,19 @@ export function ManagerDetailClient({ submission: s, managerName }: ManagerDetai
           managerName={managerName}
           employeeName={s.employeeName}
           employeeCode={s.employeeCode}
+          currentSalary={currentSalary}
+          slabs={slabs}
           defaultValues={{
             mgrRecommendation: s.mgrRecommendation as ManagerFormValues["mgrRecommendation"],
             mgrStrongReasons: s.mgrStrongReasons,
             mgrConditionalReasons: s.mgrConditionalReasons,
             mgrNotRecommendedReasons: s.mgrNotRecommendedReasons,
+            mgrSuggestedIncrementPercentage: s.mgrSuggestedIncrementPercentage
+              ? Number(s.mgrSuggestedIncrementPercentage)
+              : undefined,
+            mgrFinalApprovedIncrementPercentage: s.mgrFinalApprovedIncrementPercentage
+              ? Number(s.mgrFinalApprovedIncrementPercentage)
+              : undefined,
             mgrRemarks: s.mgrRemarks ?? undefined,
             mgrSignatureName: s.mgrSignatureName ?? undefined,
           }}

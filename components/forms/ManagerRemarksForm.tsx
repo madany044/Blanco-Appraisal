@@ -5,17 +5,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { managerFormSchema, type ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import { RecommendationChecklist } from "@/components/forms/RecommendationChecklist";
 import { ManagerSubmissionView } from "@/components/forms/SubmissionDetailView";
+import { CTCSlabDisplay } from "@/components/forms/CTCSlabDisplay";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import type { AppraisalSubmission } from "@prisma/client";
+import type { SerializedIncrementSlab } from "@/lib/utils";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { getMaxIncrementPct } from "@/lib/workflow";
+import { formatSalary } from "@/lib/submission-display";
+import { useMemo } from "react";
 
 interface ManagerRemarksFormProps {
   managerName?: string;
   employeeName?: string;
   employeeCode?: string;
+  currentSalary?: number;
+  slabs?: SerializedIncrementSlab[];
   defaultValues?: Partial<ManagerFormValues>;
   readOnly?: boolean;
   submission?: AppraisalSubmission;
@@ -28,6 +35,8 @@ export function ManagerRemarksForm({
   managerName,
   employeeName,
   employeeCode,
+  currentSalary = 0,
+  slabs = [],
   defaultValues,
   readOnly,
   submission,
@@ -49,7 +58,27 @@ export function ManagerRemarksForm({
     },
   });
 
-  const { register, handleSubmit } = methods;
+  const { register, handleSubmit, watch, setValue } = methods;
+
+  // Calculate values for increment amount
+  const currentMonthlySalary = currentSalary;
+  const annualCtc = currentMonthlySalary * 12;
+  const maxAllowed = getMaxIncrementPct(currentMonthlySalary, slabs);
+
+  const incrementAmount = watch("incrementAmount") ?? 0;
+  const calculatedIncrementPct = useMemo(() => {
+    if (!incrementAmount || currentMonthlySalary <= 0) return 0;
+    return (incrementAmount / currentMonthlySalary) * 100;
+  }, [incrementAmount, currentMonthlySalary]);
+
+  const calculatedNewSalary = currentMonthlySalary + (incrementAmount || 0);
+
+  // Update mgrFinalApprovedIncrementPercentage when calculated percentage changes
+  useMemo(() => {
+    if (calculatedIncrementPct > 0) {
+      setValue("mgrFinalApprovedIncrementPercentage", parseFloat(calculatedIncrementPct.toFixed(2)));
+    }
+  }, [calculatedIncrementPct, setValue]);
 
   if (readOnly && submission) {
     return <ManagerSubmissionView submission={submission} />;
@@ -63,6 +92,31 @@ export function ManagerRemarksForm({
     <FormProvider {...methods}>
       <form className="space-y-6">
         <FormBrandHeader subtitle="Team Head Feedback" compact />
+
+        {/* Current Salary Display */}
+        {currentSalary > 0 && (
+          <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div>
+                <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+                  Current Monthly Salary
+                </p>
+                <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
+                  {formatSalary(currentSalary)}
+                </p>
+              </div>
+              <div>
+                <p style={{ fontSize: 11, color: "#6b7a99", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+                  Current Annual CTC
+                </p>
+                <p style={{ fontSize: 18, fontWeight: 700, color: "#1e2740" }}>
+                  {formatSalary(annualCtc)}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
           <Label>Suggested Increment Percentage (%)</Label>
           <Input
@@ -72,13 +126,51 @@ export function ManagerRemarksForm({
             {...register("mgrSuggestedIncrementPercentage", { valueAsNumber: true })}
           />
           <p className="text-sm text-muted-foreground mt-2">
-            suggestion for the increment percentage you recommend to management.
+            Suggestion for the increment percentage you recommend to management.
           </p>
         </div>
+
+        {/* Final Approved Increment Section */}
+        {currentSalary > 0 && (
+          <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
+            <Label>Increment Amount (₹)</Label>
+            <Input
+              type="number"
+              step="1"
+              className="mt-2"
+              placeholder="Enter raise amount (e.g. 5000)"
+              {...register("incrementAmount", { valueAsNumber: true })}
+            />
+            {incrementAmount > 0 && (
+              <div style={{
+                marginTop: 12,
+                display: "inline-flex",
+                alignItems: "center",
+                background: "#e6f5ee",
+                borderRadius: 20,
+                padding: "6px 14px",
+                fontSize: 13,
+                fontWeight: 600,
+                color: "#1a8c5a",
+              }}>
+                ✓ This equals approximately {calculatedIncrementPct.toFixed(1)}% increment — New salary: {formatSalary(calculatedNewSalary)}
+              </div>
+            )}
+            <p className="text-sm text-muted-foreground mt-2">
+              Enter the raw rupee amount for the raise. The system will calculate the percentage automatically.
+            </p>
+          </div>
+        )}
+
+        {/* CTC Slab Reference Table */}
+        {slabs.length > 0 && currentSalary > 0 && (
+          <CTCSlabDisplay slabs={slabs} highlightCtc={currentSalary} maxAllowed={maxAllowed} />
+        )}
+
         <div>
           <Label></Label>
           <p className="text-sm text-muted-foreground mb-3">
-           
+
           </p>
           <RecommendationChecklist />
         </div>

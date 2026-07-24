@@ -37,6 +37,7 @@ import {
 type SubmissionWithManager = AppraisalSubmission & { manager?: Manager };
 type AppraisalSubmissionWithSuggested = AppraisalSubmission & {
   mgrSuggestedIncrementPercentage?: Prisma.Decimal | null;
+  mgrFinalApprovedIncrementPercentage?: Prisma.Decimal | null;
 };
 
 function QuestionCard({
@@ -428,6 +429,12 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
             <InfoRow
               label="Suggested Increment Percentage"
               value={`${decimalToNumber(s.mgrSuggestedIncrementPercentage)}%`}
+            />
+          ) : null}
+          {s.mgrFinalApprovedIncrementPercentage != null ? (
+            <InfoRow
+              label="Final Approved Increment Percentage"
+              value={`${decimalToNumber(s.mgrFinalApprovedIncrementPercentage)}%`}
             />
           ) : null}
         </dl>

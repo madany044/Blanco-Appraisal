@@ -82,6 +82,8 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
           slabs={slabs}
           employeeName={s.employeeName}
           currentSalary={s.currentSalary ?? 0}
+          mgrSuggestedIncrementPercentage={s.mgrSuggestedIncrementPercentage ? Number(s.mgrSuggestedIncrementPercentage) : undefined}
+          mgrFinalApprovedIncrementPercentage={s.mgrFinalApprovedIncrementPercentage ? Number(s.mgrFinalApprovedIncrementPercentage) : undefined}
           defaultValues={mgmtDefaults}
           readOnly={s.stage !== 2}
           onSaveDraft={s.stage === 2 ? (d) => submit(d, true) : undefined}

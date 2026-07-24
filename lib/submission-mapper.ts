@@ -123,6 +123,7 @@ export function mapManagerToPrisma(data: ManagerFormValues): Prisma.AppraisalSub
     mgrConditionalReasons: data.mgrConditionalReasons,
     mgrNotRecommendedReasons: data.mgrNotRecommendedReasons,
     mgrSuggestedIncrementPercentage: data.mgrSuggestedIncrementPercentage ?? null,
+    mgrFinalApprovedIncrementPercentage: data.mgrFinalApprovedIncrementPercentage ?? null,
     mgrRemarks: data.mgrRemarks,
     mgrSignatureName: data.mgrSignatureName,
     mgrSignatureDate: data.mgrSignatureDate ? new Date(data.mgrSignatureDate) : new Date(),
