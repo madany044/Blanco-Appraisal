@@ -7,6 +7,7 @@ import {
   FileText,
   Download,
   BarChart3,
+  Camera,
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -29,6 +30,7 @@ const HR_NAV: NavItem[] = [
   { href: "/hr/submissions", label: "Submissions", icon: FileText },
   { href: "/hr/exports", label: "Exports", icon: Download },
   { href: "/hr/reports", label: "Reports", icon: BarChart3 },
+  { href: "/hr/enroll-face", label: "Enroll Face", icon: Camera },
 ];
 
 const MANAGER_NAV: NavItem[] = [

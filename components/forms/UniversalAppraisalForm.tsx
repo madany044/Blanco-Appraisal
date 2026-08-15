@@ -86,9 +86,10 @@ interface UniversalAppraisalFormProps {
   category: AppraisalCategory;
   managers: Manager[];
   brandSubtitle?: string;
+  verifiedEmployeeCode?: string;
 }
 
-export function UniversalAppraisalForm({ category, managers, brandSubtitle }: UniversalAppraisalFormProps) {
+export function UniversalAppraisalForm({ category, managers, brandSubtitle, verifiedEmployeeCode }: UniversalAppraisalFormProps) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [verificationPhoto, setVerificationPhoto] = useState<string | null>(null);
@@ -114,6 +115,13 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
   const employeeCode = watch("employeeCode");
   const employeeName = watch("employeeName");
   const employeeSignatureName = watch("employeeSignatureName");
+
+  useEffect(() => {
+    if (verifiedEmployeeCode && !employeeCode) {
+      setValue("employeeCode", verifiedEmployeeCode, { shouldValidate: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [verifiedEmployeeCode]);
 
   useEffect(() => {
     const trimmedName = employeeName?.trim();
@@ -257,7 +265,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle }: Un
 
         {step === 1 && (
           <div className="space-y-6">
-            <FormHeader managers={managers} />
+            <FormHeader managers={managers} lockedEmployeeCode={verifiedEmployeeCode} />
             <div>
               <Label>1. Basis of appraisal request *</Label>
               <p className="mt-1 text-sm text-gray-500">

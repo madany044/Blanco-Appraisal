@@ -26,9 +26,10 @@ const TEAM_MANAGER_MAP: Record<string, string> = {
 
 interface FormHeaderProps {
   managers: Manager[];
+  lockedEmployeeCode?: string;
 }
 
-export function FormHeader({ managers }: FormHeaderProps) {
+export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
   const { register, control, setValue, watch, formState: { errors } } = useFormContext();
   const managerId = watch("managerId");
   const selectedTeam = watch("team") ?? "";
@@ -85,7 +86,16 @@ export function FormHeader({ managers }: FormHeaderProps) {
         </div>
         <div>
           <Label htmlFor="employeeCode">Employee ID / Code *</Label>
-          <Input id="employeeCode" {...register("employeeCode")} />
+          <Input
+            id="employeeCode"
+            {...register("employeeCode")}
+            readOnly={!!lockedEmployeeCode}
+            disabled={!!lockedEmployeeCode}
+            className={lockedEmployeeCode ? "bg-slate-100" : undefined}
+          />
+          {lockedEmployeeCode ? (
+            <p className="text-xs text-muted-foreground mt-1">Locked after face verification.</p>
+          ) : null}
           {errors.employeeCode && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.employeeCode.message)}</p>
           )}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { UniversalAppraisalForm } from "@/components/forms/UniversalAppraisalForm";
+import { FaceLoginGate } from "@/components/employee/FaceLoginGate";
 import type { AppraisalCategory } from "@/lib/types";
 import type { Manager } from "@prisma/client";
 
@@ -15,6 +16,7 @@ interface EmployeeFormPageProps {
 export function EmployeeFormPage({ category, title }: EmployeeFormPageProps) {
   const [managers, setManagers] = useState<Manager[]>([]);
   const [loading, setLoading] = useState(true);
+  const [verifiedCode, setVerifiedCode] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/managers")
@@ -33,10 +35,18 @@ export function EmployeeFormPage({ category, title }: EmployeeFormPageProps) {
           <ArrowLeft className="h-4 w-4 mr-1" /> Change category
         </Link>
       </div>
+
       {loading ? (
         <p className="text-center text-muted-foreground">Loading form...</p>
+      ) : !verifiedCode ? (
+        <FaceLoginGate onVerified={setVerifiedCode} />
       ) : (
-        <UniversalAppraisalForm category={category} managers={managers} brandSubtitle={title} />
+        <UniversalAppraisalForm
+          category={category}
+          managers={managers}
+          brandSubtitle={title}
+          verifiedEmployeeCode={verifiedCode}
+        />
       )}
     </div>
   );
