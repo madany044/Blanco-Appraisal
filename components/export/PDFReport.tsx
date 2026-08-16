@@ -1255,88 +1255,53 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* ═══════════════════════════════════════════════
-          PAGE 6 — Self Ratings k–t (full page, even spacing)
+          PAGE 6 — Self Ratings k–t (only for QC and Group A —
+          Group B & C no longer collect this data)
       ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={s.ratingPageHead}>
-          <Text style={s.ratingPageTitle}>Self Performance Ratings </Text>
-        </View>
+      {(isQC || sub.category === "GROUP_A") && (
+        <PdfPage num={nextPage()} logoSrc={logoPath}>
+          <View style={s.ratingPageHead}>
+            <Text style={s.ratingPageTitle}>Self Performance Ratings </Text>
+          </View>
 
-        <View style={s.ratingTable}>
-          {selfRatingSecond.map((item, i) => {
-            const globalIndex = i + 10;
-            const score = sub[item.key as keyof AppraisalSubmission] as number | null;
-            const rawLabel = selfRatingLabel(item);
-            const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
-            return (
-              <RatingTableRow
-                key={item.key}
-                alpha={alphas[globalIndex]}
-                label={cleanLabel}
-                score={score}
-                index={i}
-              />
-            );
-          })}
-        </View>
-      </PdfPage>
+          <View style={s.ratingTable}>
+            {selfRatingSecond.map((item, i) => {
+              const globalIndex = i + 10;
+              const score = sub[item.key as keyof AppraisalSubmission] as number | null;
+              const rawLabel = selfRatingLabel(item);
+              const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
+              return (
+                <RatingTableRow
+                  key={item.key}
+                  alpha={alphas[globalIndex]}
+                  label={cleanLabel}
+                  score={score}
+                  index={i}
+                />
+              );
+            })}
+          </View>
+        </PdfPage>
+      )}
 
       {/* ═══════════════════════════════════════════════
           Non-QC: Productivity — Shop Drafting + E-Drafting on
-          ONE flex-filled page, Modeler also flex-filled
+          ONE flex-filled page. Modeler is a SEPARATE page shown
+          only for Group A and Group B (Group C has no Modeler
+          section at all now, so its page is skipped entirely).
       ═══════════════════════════════════════════════ */}
       {!isQC && (
-        <>
-          <PdfPage num={nextPage()} logoSrc={logoPath}>
-            <View style={s.prodPageHead}>
-              <Text style={s.prodPageTitle}>10.  Productivity and Time Management</Text>
-              <Text style={s.introPara}>{PRODUCTIVITY_INTRO}</Text>
-            </View>
+        <PdfPage num={nextPage()} logoSrc={logoPath}>
+          <View style={s.prodPageHead}>
+            <Text style={s.prodPageTitle}>10.  Productivity and Time Management</Text>
+            <Text style={s.introPara}>{PRODUCTIVITY_INTRO}</Text>
+          </View>
 
+          <View style={{ flex: 1, flexDirection: "column" }}>
             <View style={{ flex: 1, flexDirection: "column" }}>
-              <View style={{ flex: 1, flexDirection: "column" }}>
-                <Text style={s.prodSubLabel}>Shop Drafting and Checker</Text>
-                <View style={[s.prodTable, { flex: 1 }]}>
-                  {SHOP_DRAFTING_ITEMS.map((item, i) => (
-                    <ProdTableRow
-                      key={item.key}
-                      label={item.label}
-                      value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
-                      index={i}
-                      flex={1}
-                    />
-                  ))}
-                </View>
-              </View>
-
-              <View style={{ flex: 1, flexDirection: "column", marginTop: SP.md }}>
-                <Text style={s.prodSubLabel}>E-Drafting</Text>
-                <View style={[s.prodTable, { flex: 1 }]}>
-                  {E_DRAFTING_ITEMS.map((item, i) => (
-                    <ProdTableRow
-                      key={item.key}
-                      label={item.label}
-                      value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
-                      index={i}
-                      flex={1}
-                    />
-                  ))}
-                </View>
-              </View>
-            </View>
-          </PdfPage>
-
-          <PdfPage num={nextPage()} logoSrc={logoPath}>
-            <Text style={[s.prodSubLabel, { marginBottom: SP.md }]}>Modeler Productivity</Text>
-            {sub.modelerSectionNa ? (
-              <View style={{ alignItems: "center", marginTop: SP.xl }}>
-                <View style={s.naChip}>
-                  <Text style={s.naChipText}>Not Applicable — This Section Does Not Apply to This Category</Text>
-                </View>
-              </View>
-            ) : (
+              <Text style={s.prodSubLabel}>Shop Drafting and Checker</Text>
               <View style={[s.prodTable, { flex: 1 }]}>
-                {MODELER_ITEMS.map((item, i) => (
+                {SHOP_DRAFTING_ITEMS.map((item, i) => (
                   <ProdTableRow
                     key={item.key}
                     label={item.label}
@@ -1346,9 +1311,41 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
                   />
                 ))}
               </View>
-            )}
-          </PdfPage>
-        </>
+            </View>
+
+            <View style={{ flex: 1, flexDirection: "column", marginTop: SP.md }}>
+              <Text style={s.prodSubLabel}>E-Drafting</Text>
+              <View style={[s.prodTable, { flex: 1 }]}>
+                {E_DRAFTING_ITEMS.map((item, i) => (
+                  <ProdTableRow
+                    key={item.key}
+                    label={item.label}
+                    value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
+                    index={i}
+                    flex={1}
+                  />
+                ))}
+              </View>
+            </View>
+          </View>
+        </PdfPage>
+      )}
+
+      {!isQC && sub.category !== "GROUP_C" && (
+        <PdfPage num={nextPage()} logoSrc={logoPath}>
+          <Text style={[s.prodSubLabel, { marginBottom: SP.md }]}>Modeler Productivity</Text>
+          <View style={[s.prodTable, { flex: 1 }]}>
+            {MODELER_ITEMS.map((item, i) => (
+              <ProdTableRow
+                key={item.key}
+                label={item.label}
+                value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
+                index={i}
+                flex={1}
+              />
+            ))}
+          </View>
+        </PdfPage>
       )}
 
       {/* ═══════════════════════════════════════════════

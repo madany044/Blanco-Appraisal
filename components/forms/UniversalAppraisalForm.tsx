@@ -95,9 +95,17 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
   const [verificationPhoto, setVerificationPhoto] = useState<string | null>(null);
   const router = useRouter();
   
-  const showAbroad = category === "GROUP_B" || category === "GROUP_C";
   const isQC = category === "QC";
-  const visibleSteps = isQC ? ALL_STEPS.filter((s) => s !== 7 && s !== 8) : [...ALL_STEPS];
+  const showAbroad = category === "GROUP_A";
+  const showRatingsPart2 = isQC || category === "GROUP_A"; // Group B & C skip step 6 entirely
+  const hideModelerStep = category === "GROUP_C"; // Group C skips step 9 (Modeler) entirely
+
+  const visibleSteps = ALL_STEPS.filter((s) => {
+    if (isQC) return s !== 7 && s !== 8;
+    if (!showRatingsPart2 && s === 6) return false;
+    if (hideModelerStep && s === 9) return false;
+    return true;
+  });
   const displayStep = visibleSteps.indexOf(step as (typeof ALL_STEPS)[number]) + 1;
   const totalSteps = visibleSteps.length;
   const lastStep = visibleSteps[visibleSteps.length - 1];
@@ -106,7 +114,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
     resolver: zodResolver(employeeFormSchema),
     defaultValues: {
       abroadCapabilityNa: !showAbroad,
-      modelerSectionNa: category === "GROUP_B" || category === "GROUP_C" || isQC,
+      modelerSectionNa: category === "GROUP_C" || isQC,
     },
     mode: "onBlur",
   });
@@ -177,7 +185,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
           category,
           stage: isDraft ? -1 : 0,
           abroadCapabilityNa: !showAbroad,
-          modelerSectionNa: isQC ? true : category === "GROUP_B" || category === "GROUP_C",
+          modelerSectionNa: isQC ? true : category === "GROUP_C",
           ...(verificationPhotoUrl ? { verificationPhotoUrl } : {}),
         }),
       });
@@ -206,11 +214,6 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
   }
 
   async function nextStep() {
-    if (step === 1 && !verificationPhoto) {
-      alert("Please capture your verification photo before proceeding.");
-      return;
-    }
-
     const fieldsByStep: Record<number, (keyof EmployeeFormValues)[]> = isQC
       ? {
           1: ["employeeName", "employeeCode", "managerId", "basisOfAppraisal", "supportToCompany"],
@@ -253,8 +256,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
       <DisableCopyPaste />
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-6">
         <FormBrandHeader compact subtitle={brandSubtitle} />
-        <CameraCapture onCapture={setVerificationPhoto} />
-        
+
         <div className="sticky top-0 z-10 bg-white py-4 border-b shadow-sm">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-blanco-primary">Step {displayStep} of {totalSteps}</span>
@@ -518,6 +520,16 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
               <div>
                 <Label>Date</Label>
                 <Input value={new Date().toISOString().split("T")[0]} readOnly disabled className="bg-muted" />
+              </div>
+            </div>
+
+            <div>
+              <Label>Final Verification *</Label>
+              <p className="mt-1 text-sm text-gray-500">
+                Please take one last photo to verify it is really you submitting this form.
+              </p>
+              <div className="mt-2">
+                <CameraCapture onCapture={setVerificationPhoto} />
               </div>
             </div>
           </div>

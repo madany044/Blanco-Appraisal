@@ -132,10 +132,23 @@ export function ManagerRemarksForm({
           </div>
         )}
 
+        <div>
+          <Label></Label>
+          <p className="text-sm text-muted-foreground mb-3">
+
+          </p>
+          <RecommendationChecklist />
+        </div>
+
+        {/* CTC Slab Reference Table */}
+        {slabs.length > 0 && currentSalary > 0 && (
+          <CTCSlabDisplay slabs={slabs} highlightCtc={currentSalary} maxAllowed={maxAllowed} />
+        )}
+
         {/* Suggested Increment Amount Section */}
         {currentSalary > 0 && (
           <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
-            <Label>Suggested Increment Amount (₹)</Label>
+            <Label>My Suggested Increment Amount (₹)</Label>
             <Input
               type="number"
               step="1"
@@ -167,7 +180,7 @@ export function ManagerRemarksForm({
         {/* Final Approved Increment Section */}
         {currentSalary > 0 && (
           <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
-            <Label>Increment Amount (₹)</Label>
+            <Label>Final Increment Amount (₹)</Label>
             <Input
               type="number"
               step="1"
@@ -196,18 +209,6 @@ export function ManagerRemarksForm({
           </div>
         )}
 
-        {/* CTC Slab Reference Table */}
-        {slabs.length > 0 && currentSalary > 0 && (
-          <CTCSlabDisplay slabs={slabs} highlightCtc={currentSalary} maxAllowed={maxAllowed} />
-        )}
-
-        <div>
-          <Label></Label>
-          <p className="text-sm text-muted-foreground mb-3">
-
-          </p>
-          <RecommendationChecklist />
-        </div>
         <div>
           <Label>Additional Remarks (If Return Back To HR)</Label><p className="mt-1 text-sm text-gray-500">
                  Please explain the reason for returning back this employee form to HR.

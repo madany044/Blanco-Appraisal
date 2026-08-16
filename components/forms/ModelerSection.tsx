@@ -24,7 +24,7 @@ interface ModelerSectionProps {
 
 export function ModelerSection({ category }: ModelerSectionProps) {
   const { register, setValue } = useFormContext();
-  const showModeler = category === "GROUP_A" || category === "QC";
+  const showModeler = category === "GROUP_A" || category === "GROUP_B";
 
   useEffect(() => {
     if (!showModeler) {
