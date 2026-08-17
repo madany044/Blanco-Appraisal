@@ -60,11 +60,11 @@ export function FilterBar({ filters, onChange, managers }: FilterBarProps) {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Stages</SelectItem>
-          <SelectItem value="0">Pending HR</SelectItem>
-          <SelectItem value="1">With Manager</SelectItem>
+          <SelectItem value="0">HR Review Pending</SelectItem>
+          <SelectItem value="1">Pending TL Review</SelectItem>
           <SelectItem value="2">With Management</SelectItem>
-          <SelectItem value="3">Returned to HR</SelectItem>
-          <SelectItem value="4">Completed</SelectItem>
+          <SelectItem value="3">Returned to HR For Export</SelectItem>
+          <SelectItem value="4">Export Completed</SelectItem>
         </SelectContent>
       </Select>
       <Select value={filters.financialYear} onValueChange={(v) => update("financialYear", v)}>

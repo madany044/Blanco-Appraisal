@@ -71,7 +71,7 @@ export function HRDashboardClient({
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
   <StatCard title="Total Form Submissions" value={stats.total} accent="primary" />
   <StatCard title="Pending HR Review" value={stats.pendingHR} accent="danger" />
-  <StatCard title="Pending Manager Review" value={stats.withManager} accent="warning" />
+  <StatCard title="Pending TL Review" value={stats.withManager} accent="warning" />
   <StatCard title="With Management" value={stats.withManagement} accent="purple" />
   <StatCard title="Returned to HR For Export" value={stats.returnedHR} accent="success" />
   <StatCard title="Export Completed" value={stats.completed} accent="success" />
