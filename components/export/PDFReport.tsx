@@ -36,752 +36,257 @@ import {
 } from "@/lib/types";
 
 // ─── Palette ────────────────────────────────────────────────────
-const BLUE        = "#1a4f8a";
-const BLUE_DARK   = "#0f3060";
-const BLUE_LIGHT  = "#e8f0fb";
-const TEAL        = "#2a7a8c";
-const TEAL_LIGHT  = "#eef6f8";
-const INK         = "#1e2740";
-const SLATE       = "#4a5568";
-const WHITE       = "#ffffff";
-const LIGHT_GRAY  = "#f7f9fc";
-const MID_GRAY    = "#edf0f5";
-const BORDER_GRAY = "#c8d4e3";
-const TICK_GREEN  = "#1a8c5a";
-const TICK_BG     = "#e8f7ef";
-const AMBER       = "#d97706";
-const AMBER_LIGHT = "#fef3c7";
-const RED_SOFT    = "#c0392b";
-const SEAL_NAVY   = "#1c3f6e";
+const PRIMARY = "#1E293B"; 
+const ACCENT = "#2563EB";  
+const ACCENT_LIGHT = "#EFF6FF"; 
+const TEXT = "#1E293B";    
+const MUTED = "#64748B";   
+const BORDER = "#E2E8F0";  
+const BG_ALT = "#F8FAFC";  
+const SUCCESS = "#16A34A"; 
+const SUCCESS_BG = "#F0FDF4";
+const AMBER = "#D97706";   
+const AMBER_BG = "#FFFBEB";
+const RED_SOFT = "#DC2626";
 
-const SP = { xs: 3, sm: 6, md: 10, lg: 14, xl: 20, xxl: 28 };
+const SP = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24 };
 
 const s = StyleSheet.create({
   page: {
     paddingTop: 0,
-    paddingBottom: 28,
+    paddingBottom: 40,
     paddingHorizontal: 0,
     fontSize: 9.5,
     fontFamily: "Helvetica",
     lineHeight: 1.5,
-    color: INK,
-    backgroundColor: WHITE,
+    color: TEXT,
+    backgroundColor: "#FFFFFF",
   },
 
-  // ── Header — logo centered ABOVE the two text lines ─────────────
+  // ── Header & Footer ──────────────────────────────────────────────
   headerWrapper: {
-    backgroundColor: BLUE_DARK,
-    paddingTop: SP.sm,
-    paddingBottom: SP.sm,
-    paddingHorizontal: SP.xl,
+    backgroundColor: PRIMARY,
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    paddingHorizontal: SP.xl,
+    paddingVertical: SP.md,
   },
-  headerAccentBar: {
-    height: 3,
-    backgroundColor: TEAL,
-  },
-  logo: { width: 40, height: 40, objectFit: "contain", marginBottom: SP.xs },
-  headerTitle: {
-    fontSize: 13,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-    textAlign: "center",
-    letterSpacing: 0.4,
-  },
-  headerSubtitle: {
-    fontSize: 7,
-    fontFamily: "Helvetica-Bold",
-    color: TEAL_LIGHT,
-    textAlign: "center",
-    marginTop: 2,
-    textTransform: "uppercase",
-    letterSpacing: 0.8,
-  },
-
-  // ── Footer ──────────────────────────────────────────────────────
+  logo: { width: 36, height: 36, objectFit: "contain", marginRight: SP.md },
+  headerTextWrap: { flex: 1 },
+  headerTitle: { fontSize: 14, fontFamily: "Helvetica-Bold", color: "#FFFFFF", letterSpacing: 0.5 },
+  headerSubtitle: { fontSize: 7.5, color: "#94A3B8", marginTop: 2, textTransform: "uppercase", letterSpacing: 1 },
+  headerAccentBar: { height: 3, backgroundColor: ACCENT },
+  
   footerBar: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: 30,
-    backgroundColor: BLUE_DARK,
+    height: 32,
+    backgroundColor: BG_ALT,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: SP.md,
+    paddingHorizontal: SP.xl,
+    borderTopWidth: 1,
+    borderColor: BORDER,
   },
-  footerBrand: {
-    fontSize: 7,
-    fontFamily: "Helvetica",
-    color: TEAL_LIGHT,
-    textTransform: "uppercase",
-    letterSpacing: 0.6,
-  },
-  pageNumBadge: {
-    backgroundColor: WHITE,
-    paddingVertical: 4,
-    paddingHorizontal: SP.sm,
-    borderRadius: 3,
-  },
-  pageNumText: {
-    fontSize: 9,
+  footerBrand: { fontSize: 7.5, color: MUTED, textTransform: "uppercase", letterSpacing: 0.6 },
+  pageNumText: { fontSize: 8.5, fontFamily: "Helvetica-Bold", color: PRIMARY },
+
+  body: { paddingHorizontal: SP.xl, paddingTop: SP.lg, flex: 1, flexDirection: "column" },
+
+  // ── Cards & Sections ─────────────────────────────────────────────
+  sectionTitle: {
+    fontSize: 11,
     fontFamily: "Helvetica-Bold",
-    color: BLUE_DARK,
-    letterSpacing: 0.4,
+    color: PRIMARY,
+    marginBottom: SP.sm,
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    borderBottomWidth: 2,
+    borderBottomColor: ACCENT,
+    paddingBottom: 4,
   },
-
-  body: {
-    paddingHorizontal: SP.md,
-    paddingTop: SP.xs,
-    flex: 1,
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 6,
+    marginBottom: SP.md,
+    overflow: "hidden",
   },
-  fillPage: {
-    flex: 1,
-    justifyContent: "space-between",
+  cardHeader: {
+    backgroundColor: BG_ALT,
+    paddingVertical: 6,
+    paddingHorizontal: SP.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER,
+    flexDirection: "row",
+    alignItems: "center",
   },
-
-  // ── Info grid ───────────────────────────────────────────────────
+  cardHeaderText: { fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1 },
+  
+  // ── Info Grid ───────────────────────────────────────────────────
   infoGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     borderWidth: 1,
-    borderColor: BORDER_GRAY,
+    borderColor: BORDER,
+    borderRadius: 6,
     marginBottom: SP.md,
+    overflow: "hidden",
   },
   infoCell: {
-    width: "50%",
-    padding: SP.md,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-    borderRightWidth: 0.5,
-    borderRightColor: BORDER_GRAY,
-  },
-  infoCellFull: {
-    width: "100%",
-    padding: SP.md,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-  },
-  infoCellLast: { borderBottomWidth: 0 },
-  infoLabel: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: SLATE,
-    textTransform: "uppercase",
-    letterSpacing: 0.4,
-    marginBottom: 2,
-  },
-  infoValue: {
-    fontSize: 10,
-    fontFamily: "Helvetica",
-    color: INK,
-  },
-  infoValueHighlight: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-  },
-
-  // ── Question card ────────────────────────────────────────────────
-  qCard: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    marginBottom: SP.sm,
-  },
-  qCardHeader: {
-    backgroundColor: BLUE_LIGHT,
-    paddingVertical: SP.sm,
-    paddingHorizontal: SP.md,
+    width: "33.33%",
+    padding: SP.sm,
+    borderRightWidth: 1,
+    borderRightColor: BORDER,
     borderBottomWidth: 1,
-    borderBottomColor: BORDER_GRAY,
+    borderBottomColor: BORDER,
+    backgroundColor: BG_ALT,
+  },
+  infoCellFull: { width: "100%", padding: SP.sm, backgroundColor: BG_ALT },
+  infoCellLastRow: { borderBottomWidth: 0 },
+  infoCellLastCol: { borderRightWidth: 0 },
+  infoLabel: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: MUTED, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 },
+  infoValue: { fontSize: 10, color: TEXT },
+  infoValueHighlight: { fontSize: 10, fontFamily: "Helvetica-Bold", color: ACCENT },
+
+  // ── Question Card ───────────────────────────────────────────────
+  qCard: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 6,
+    marginBottom: SP.md,
+    overflow: "hidden",
+  },
+  qHeader: {
     flexDirection: "row",
     alignItems: "flex-start",
+    paddingVertical: 6,
+    paddingHorizontal: SP.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER,
+    backgroundColor: BG_ALT,
   },
-  qCardNumBadge: {
-    backgroundColor: BLUE,
-    borderRadius: 9,
-    width: 18,
-    height: 18,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: SP.sm,
-    flexShrink: 0,
-    marginTop: 1,
+  qNum: { backgroundColor: ACCENT, borderRadius: 3, paddingHorizontal: 4, paddingVertical: 2, marginRight: SP.sm, flexShrink: 0 },
+  qNumText: { fontSize: 8, fontFamily: "Helvetica-Bold", color: "#FFFFFF" },
+  qTitle: { fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1, lineHeight: 1.3 },
+  qBody: { padding: SP.sm },
+  qBodyText: { fontSize: 8.5, color: MUTED, marginBottom: SP.xs, lineHeight: 1.4 },
+  qAnswerBox: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 4,
+    padding: SP.sm,
+    minHeight: 40,
   },
-  qCardNumText: {
-    fontSize: 7,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-  },
-  qCardTitle: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-    flex: 1,
-  },
-  qCardBody: {
-    fontSize: 9,
-    fontFamily: "Helvetica",
-    color: SLATE,
-    paddingVertical: SP.sm,
-    paddingHorizontal: SP.md,
-    backgroundColor: WHITE,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-  },
-  qCardAnswer: {
-    padding: SP.md,
-    backgroundColor: LIGHT_GRAY,
-    minHeight: 44,
-  },
-  qCardAnswerText: {
-    fontSize: 10,
-    fontFamily: "Helvetica",
-    color: INK,
-    lineHeight: 1.55,
-  },
+  qAnswerText: { fontSize: 9.5, color: TEXT, lineHeight: 1.55 },
 
-  // ── Checkbox cards ───────────────────────────────────────────────
+  // ── Checkboxes ───────────────────────────────────────────────────
   checkCard: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    borderRadius: 3,
-    paddingVertical: SP.xs + 1,
+    borderColor: BORDER,
+    borderRadius: 4,
+    paddingVertical: 5,
     paddingHorizontal: SP.sm,
-    marginBottom: SP.xs,
-    backgroundColor: WHITE,
+    marginBottom: 4,
+    backgroundColor: "#FFFFFF",
   },
-  checkCardSelected: {
-    borderColor: TICK_GREEN,
-    backgroundColor: TICK_BG,
-  },
+  checkCardSelected: { borderColor: SUCCESS, backgroundColor: SUCCESS_BG },
   checkDot: {
-    width: 12,
-    height: 12,
+    width: 10, height: 10, borderRadius: 5, borderWidth: 1.5, borderColor: BORDER,
+    marginRight: SP.sm, justifyContent: "center", alignItems: "center", flexShrink: 0,
+  },
+  checkDotSelected: { borderColor: ACCENT, backgroundColor: ACCENT },
+  checkDotInner: { width: 4, height: 4, borderRadius: 2, backgroundColor: "#FFFFFF" },
+    checkCardText: { fontSize: 9, color: TEXT, flex: 1 }, // Increased from 8.5
+  checkCardTextSelected: { fontSize: 9, fontFamily: "Helvetica-Bold", color: ACCENT, flex: 1 },
+
+    // ── Tables (Fixed & Robust) ──────────────────────────────────────
+  tableWrap: {
+    borderWidth: 1,
+    borderColor: BORDER,
     borderRadius: 6,
-    borderWidth: 1.5,
-    borderColor: BORDER_GRAY,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: SP.sm,
-    flexShrink: 0,
-  },
-  checkDotSelected: {
-    borderColor: TICK_GREEN,
-    backgroundColor: TICK_GREEN,
-  },
-  checkDotInner: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: WHITE,
-  },
-  checkCardText: {
-    fontSize: 8.5,
-    fontFamily: "Helvetica",
-    color: INK,
-    flex: 1,
-  },
-  checkCardTextSelected: {
-    fontSize: 8.5,
-    fontFamily: "Helvetica-Bold",
-    color: TICK_GREEN,
-    flex: 1,
-  },
-
-  // ── 2-column checkbox grid (manager section) ─────────────────────
-  checkGrid2Col: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  checkCard2Col: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    borderRadius: 3,
-    paddingVertical: 2,
-    paddingHorizontal: 4,
-    marginBottom: 2,
-    marginRight: 2,
-    backgroundColor: WHITE,
-    width: "49%",
-  },
-  checkCard2ColSelected: {
-    borderColor: TICK_GREEN,
-    backgroundColor: TICK_BG,
-  },
-
-  // ── Self rating table (full page utilization) ────────────────────
-  ratingPageHead: {
-    marginBottom: SP.md,
-  },
-  ratingPageTitle: {
-    fontSize: 11,
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-    marginBottom: SP.xs,
-  },
-  ratingPageSubtitle: {
-    fontSize: 8,
-    color: SLATE,
-  },
-  ratingTable: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    flex: 1,
-    flexDirection: "column",
-  },
-  ratingTableRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: SP.md,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-    flex: 1,
-  },
-  ratingTableRowAlt: {
-    backgroundColor: LIGHT_GRAY,
-  },
-  ratingTableAlphaWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: BLUE_LIGHT,
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-    marginRight: SP.md,
-  },
-  ratingTableAlpha: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-  },
-  ratingTableLabel: {
-    flex: 1,
-    fontSize: 9,
-    fontFamily: "Helvetica",
-    paddingRight: SP.md,
-    lineHeight: 1.4,
-  },
-  ratingScoreBadge: {
-  width: 56,
-  height: 38,
-  backgroundColor: BLUE_LIGHT,
-  borderWidth: 1.2,
-  borderColor: BLUE,
-  borderRadius: 5,
-  alignItems: "center",
-  justifyContent: "center",
-  flexShrink: 0,
-},
-  ratingScoreBadgeHigh: {
-    backgroundColor: TICK_BG,
-    borderColor: TICK_GREEN,
-  },
-  ratingScoreBadgeMid: {
-    backgroundColor: AMBER_LIGHT,
-    borderColor: AMBER,
-  },
-  ratingScoreText: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-  },
-  ratingScoreTextHigh: { color: TICK_GREEN },
-  ratingScoreTextMid: { color: AMBER },
-  ratingScoreDenom: {
-    fontSize: 6.5,
-    fontFamily: "Helvetica",
-    color: SLATE,
-  },
-
-  // ── Productivity (flex full-page rows) ────────────────────────────
-  prodPageHead: { marginBottom: SP.sm },
-  prodPageTitle: {
-    fontSize: 10.5,
-    fontFamily: "Helvetica-Bold",
-    color: INK,
-    marginBottom: SP.xs,
-  },
-  prodSubLabel: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: TEAL,
-    textAlign: "center",
-    textTransform: "uppercase",
-    letterSpacing: 0.6,
-    paddingVertical: SP.xs + 1,
-    backgroundColor: TEAL_LIGHT,
-  },
-  prodTable: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    flexDirection: "column",
-  },
-  prodRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: SP.md,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-  },
-  prodRowAlt: { backgroundColor: LIGHT_GRAY },
-  prodLabel: {
-    flex: 1,
-    fontSize: 8.5,
-    fontFamily: "Helvetica",
-    paddingRight: SP.sm,
-  },
-  prodValue: {
-    width: 84,
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-    textAlign: "right",
-    flexShrink: 0,
-  },
-  prodValueNA: {
-    width: 84,
-    fontSize: 8.5,
-    fontFamily: "Helvetica",
-    color: SLATE,
-    textAlign: "right",
-    flexShrink: 0,
-    fontStyle: "italic",
-  },
-
-  // ── HR rating (fixed overlap, multi-line safe) ────────────────────
-  hrTable: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    marginBottom: SP.md,
-    flex: 0,
-  },
-  hrRow: {
-  flexDirection: "row",
-  alignItems: "flex-start",
-  paddingVertical: SP.sm,
-  paddingHorizontal: SP.md,
-  borderBottomWidth: 0.5,
-  borderBottomColor: BORDER_GRAY,
-  minHeight: 50,
-},
-  hrRowAlt: { backgroundColor: LIGHT_GRAY },
-  hrLabelWrap: { flex: 1, paddingRight: SP.md },
-  hrLabel: {
-  fontSize: 9.5,
-  fontFamily: "Helvetica",
-  color: INK,
-  lineHeight: 1.4,
-},
-  hrNotes: {
-  fontSize: 8.5,
-  fontFamily: "Helvetica",
-  color: SLATE,
-  fontStyle: "italic",
-  marginTop: 4,
-  lineHeight: 1.4,
-},
-  hrScoreBadge: {
-    width: 56,
-    height: 34,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-  },
-  hrScoreText: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-  },
-  hrScoreDenom: {
-    fontSize: 6.5,
-    fontFamily: "Helvetica",
-    color: WHITE,
-    opacity: 0.9,
-  },
-
-  // ── Manager section ──────────────────────────────────────────────
-  mgrSectionCard: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    marginBottom: SP.xs,
-  },
-  mgrSectionHeader: {
-    backgroundColor: INK,
-    paddingVertical: SP.xs,
-    paddingHorizontal: SP.md,
-  },
-  mgrSectionHeaderText: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-  },
-
-  // ── Increment table (compact) ────────────────────────────────────
-  tableHead: {
-    flexDirection: "row",
-    backgroundColor: BLUE_DARK,
-    paddingVertical: SP.xs,
-    paddingHorizontal: SP.md,
-  },
-  tableHeadText: {
-    fontSize: 7,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-    textTransform: "uppercase",
-    letterSpacing: 0.3,
-  },
-  tableHeadLeft: {
-    width: 160,
-    fontSize: 7,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-    textTransform: "uppercase",
-    letterSpacing: 0.3,
-  },
-  tableHeadRight: {
-    width: 100,
-    fontSize: 7,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-    textTransform: "uppercase",
-    letterSpacing: 0.3,
-    textAlign: "right",
+    overflow: "hidden",
+    // Removed flex: 1 and justifyContent to prevent gaps and page breaks
   },
   tableRow: {
     flexDirection: "row",
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-    paddingVertical: SP.sm,
+    alignItems: "center",
     paddingHorizontal: SP.md,
-  },
-  tableRowAlt: { backgroundColor: LIGHT_GRAY },
-  tableRowHighlight: {
-    backgroundColor: BLUE_LIGHT,
-    borderLeftWidth: 0,
-  },
-  tableCell: { width: 160, fontSize: 8, paddingRight: SP.md, borderRightWidth: 1, borderRightColor: BORDER_GRAY },
-  tableCellRight: { width: 100, fontSize: 8, textAlign: "right", fontFamily: "Helvetica-Bold" },
-  tableActiveBadge: {
-    backgroundColor: BLUE,
-    borderRadius: 2,
-    paddingHorizontal: 3,
-    paddingVertical: 1,
-    marginLeft: 3,
-    alignSelf: "center",
-  },
-  tableActiveBadgeText: {
-    fontSize: 6,
-    fontFamily: "Helvetica-Bold",
-    color: WHITE,
-  },
-
-  // ── Signature block ──────────────────────────────────────────────
-  sigContainer: {
-    borderWidth: 1,
-    borderColor: BORDER_GRAY,
-    marginTop: SP.xs,
-  },
-  sigHeader: {
-    backgroundColor: MID_GRAY,
-    paddingVertical: SP.xs + 1,
-    paddingHorizontal: SP.md,
-    borderBottomWidth: 0.5,
-    borderBottomColor: BORDER_GRAY,
-  },
-  sigHeaderText: {
-    fontSize: 7,
-    fontFamily: "Helvetica-Bold",
-    color: SLATE,
-    textTransform: "uppercase",
-    letterSpacing: 0.4,
-  },
-  sigBody: {
-    flexDirection: "row",
-    padding: 4,
-    gap: 4,
-  },
-  sigField: { flex: 1 },
-  sigLabel: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: SLATE,
-    marginBottom: SP.xs,
-    textTransform: "uppercase",
-    letterSpacing: 0.3,
-  },
-  sigValue: {
-    fontSize: 10,
-    fontFamily: "Helvetica",
-    color: INK,
+    paddingVertical: 9, // Increased padding for better spacing
     borderBottomWidth: 1,
-    borderBottomColor: BORDER_GRAY,
-    paddingBottom: SP.xs,
-    minHeight: 16,
+    borderBottomColor: BORDER,
+  },
+  tableRowAlt: { backgroundColor: BG_ALT },
+  tableRowLast: { borderBottomWidth: 0 },
+  
+  alphaWrap: {
+    width: 24, height: 24, borderRadius: 12, backgroundColor: ACCENT_LIGHT,
+    alignItems: "center", justifyContent: "center", marginRight: SP.sm, flexShrink: 0,
+  },
+  alphaText: { fontSize: 10, fontFamily: "Helvetica-Bold", color: ACCENT },
+  tableLabel: { flex: 1, fontSize: 10, color: TEXT, paddingRight: SP.sm, lineHeight: 1.4 }, // Increased font size
+  
+  scoreBadge: {
+    width: 52, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center",
+    flexShrink: 0, backgroundColor: ACCENT_LIGHT,
+  }, // Bigger badge
+  scoreBadgeHigh: { backgroundColor: SUCCESS_BG },
+  scoreBadgeMid: { backgroundColor: AMBER_BG },
+  scoreText: { fontSize: 11, fontFamily: "Helvetica-Bold", color: ACCENT }, // Increased font size
+  scoreTextHigh: { color: SUCCESS },
+  scoreTextMid: { color: AMBER },
+  scoreDenom: { fontSize: 7, color: MUTED }, // Increased font size
+
+  // ── 2-column checkbox grid ─────────────────────────────────────
+  checkGrid2Col: { flexDirection: "row", flexWrap: "wrap", padding: SP.xs },
+  checkCard2Col: { flexDirection: "row", alignItems: "center", paddingVertical: 4, paddingHorizontal: 4, marginBottom: 4, width: "50%" },
+
+  // ── Increment Table ────────────────────────────────────────────
+  incTableHead: { flexDirection: "row", backgroundColor: PRIMARY, paddingVertical: 6, paddingHorizontal: SP.sm },
+  incTableHeadText: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#FFFFFF", textTransform: "uppercase", letterSpacing: 0.5 },
+  incTableRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: BORDER, paddingVertical: 6, paddingHorizontal: SP.sm },
+  incTableRowAlt: { backgroundColor: BG_ALT },
+  incTableRowActive: { backgroundColor: ACCENT_LIGHT, borderLeftWidth: 3, borderLeftColor: ACCENT },
+  incTableCell: { width: "60%", fontSize: 8.5, color: TEXT },
+  incTableCellRight: { width: "40%", fontSize: 8.5, fontFamily: "Helvetica-Bold", color: ACCENT, textAlign: "right" },
+
+  // ── Signature Block ──────────────────────────────────────────────
+  sigCard: { borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden", marginTop: SP.lg },
+  sigHeader: { backgroundColor: PRIMARY, paddingVertical: 4, paddingHorizontal: SP.sm },
+  sigHeaderText: { fontSize: 8, fontFamily: "Helvetica-Bold", color: "#FFFFFF", textTransform: "uppercase", letterSpacing: 0.5 },
+  sigBody: { flexDirection: "row", padding: SP.md, gap: SP.xl },
+  sigField: { flex: 1 },
+  sigLabel: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: MUTED, textTransform: "uppercase", marginBottom: 4 },
+  sigValue: {
+    fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY,
+    borderBottomWidth: 1, borderBottomColor: PRIMARY, paddingBottom: 4, minHeight: 20,
   },
 
-  // ── Management letter (paper-style, not boxy) ─────────────────────
-  letterPage: {
-    flex: 1,
-    flexDirection: "column",
+  // ── Management Letter ─────────────────────────────────────────────
+  letterBody: { fontSize: 9.5, lineHeight: 1.6, color: TEXT, marginBottom: SP.sm, textAlign: "justify" },
+  letterHighlight: { fontFamily: "Helvetica-Bold", color: ACCENT },
+  letterSectionLabel: { fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, marginBottom: SP.sm },
+  highlightStatementYellow: {
+    backgroundColor: AMBER_BG, borderLeftWidth: 3, borderLeftColor: AMBER,
+    padding: SP.sm, marginBottom: SP.sm, borderRadius: 3,
   },
-  letterSalutation: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: INK,
-    marginBottom: SP.sm,
-  },
-  letterBody: {
-    fontSize: 10,
-    fontFamily: "Helvetica",
-    lineHeight: 1.7,
-    color: INK,
-    marginBottom: SP.md,
-    textAlign: "justify",
-  },
-  letterHighlight: {
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-  },
-  letterSectionLabel: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: INK,
-    textDecoration: "underline",
-    marginBottom: SP.sm,
-  },
-  letterClosing: {
-    fontSize: 10,
-    fontFamily: "Helvetica",
-    lineHeight: 1.7,
-    color: INK,
-    marginTop: SP.sm,
-    marginBottom: SP.lg,
-  },
-
-  // ── Seal (CSS/SVG-like stamp built from Views) ────────────────────
-  sealWrap: {
-    position: "absolute",
-    width: 100,
-    height: 100,
-    alignItems: "center",
-    justifyContent: "center",
-    transform: "rotate(-12deg)",
-  },
-  sealOuter: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 1.5,
-    borderColor: SEAL_NAVY,
-    alignItems: "center",
-    justifyContent: "center",
-    opacity: 0.75,
-  },
-  sealRing: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    borderWidth: 0.75,
-    borderColor: SEAL_NAVY,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  sealInner: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 6,
-  },
-  sealTextTop: {
-    fontSize: 5,
-    fontFamily: "Helvetica-Bold",
-    color: SEAL_NAVY,
-    textAlign: "center",
-    letterSpacing: 0.3,
-    lineHeight: 1.2,
-  },
-  sealTextMid: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: SEAL_NAVY,
-    textAlign: "center",
-    letterSpacing: 0.6,
-  },
-  sealTextBottom: {
-    fontSize: 5.2,
-    fontFamily: "Helvetica-Bold",
-    color: SEAL_NAVY,
-    textAlign: "center",
-    letterSpacing: 0.5,
-  },
-  sealDivider: {
-    width: 30,
-    height: 0.5,
-    backgroundColor: SEAL_NAVY,
-    marginVertical: 2,
-  },
+  highlightStatementYellowText: { fontSize: 9, color: TEXT, lineHeight: 1.55 },
 
   // ── Misc ─────────────────────────────────────────────────────────
-  introPara: {
-    fontSize: 8,
-    fontFamily: "Helvetica",
-    lineHeight: 1.55,
-    marginBottom: SP.sm,
-    color: SLATE,
+  subLabel: {
+    fontSize: 9, fontFamily: "Helvetica-Bold", color: ACCENT, textTransform: "uppercase",
+    letterSpacing: 0.8, marginBottom: SP.xs, paddingBottom: 4, borderBottomWidth: 1, borderBottomColor: BORDER,
   },
-  naChip: {
-    alignSelf: "flex-start",
-    backgroundColor: "#fdecea",
-    borderWidth: 1,
-    borderColor: RED_SOFT,
-    borderRadius: 3,
-    paddingVertical: SP.xs,
-    paddingHorizontal: SP.sm,
-    marginLeft: SP.md,
-    marginBottom: SP.xs,
-  },
-  naChipText: {
-    fontSize: 7,
-    fontFamily: "Helvetica-Bold",
-    color: RED_SOFT,
-    textTransform: "uppercase",
-    letterSpacing: 0.4,
-  },
-  highlightStatement: {
-    backgroundColor: BLUE_LIGHT,
-    borderLeftWidth: 3,
-    borderLeftColor: BLUE,
-    padding: SP.sm,
-    marginBottom: SP.sm,
-  },
-  highlightStatementText: {
-    fontSize: 8.5,
-    fontFamily: "Helvetica-Bold",
-    color: BLUE,
-  },
-  highlightStatementYellow: {
-    backgroundColor: "#FFFF99",
-    padding: SP.sm,
-    marginBottom: SP.md,
-    borderRadius: 3,
-  },
-  highlightStatementYellowText: {
-    fontSize: 9,
-    fontFamily: "Helvetica",
-    color: INK,
-    lineHeight: 1.65,
-  },
+  naChip: { backgroundColor: "#FEF2F2", borderWidth: 1, borderColor: RED_SOFT, borderRadius: 10, paddingHorizontal: 6, paddingVertical: 1, marginLeft: SP.sm },
+  naChipText: { fontSize: 6.5, fontFamily: "Helvetica-Bold", color: RED_SOFT, textTransform: "uppercase" },
 });
 
 // ────────────────────────────────────────────────────────────────
@@ -793,8 +298,10 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
     <View fixed>
       <View style={s.headerWrapper}>
         {logoSrc ? <Image src={logoSrc} style={s.logo} /> : null}
-        <Text style={s.headerTitle}>Team Blanco AND Team Blanka</Text>
-        <Text style={s.headerSubtitle}>Employee Progress Report Card for Salary Appraisal</Text>
+        <View style={s.headerTextWrap}>
+          <Text style={s.headerTitle}>Team Blanco AND Team Blanka</Text>
+          <Text style={s.headerSubtitle}>Employee Progress Report Card for Salary Appraisal</Text>
+        </View>
       </View>
       <View style={s.headerAccentBar} />
     </View>
@@ -804,10 +311,8 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
 function PageFooter({ num }: { num: number }) {
   return (
     <View style={s.footerBar} fixed>
-      <Text style={s.footerBrand}>Salary Appraisal Report</Text>
-      <View style={s.pageNumBadge}>
-        <Text style={s.pageNumText}>PAGE {num}</Text>
-      </View>
+      <Text style={s.footerBrand}>Confidential Salary Appraisal Report</Text>
+      <Text style={s.pageNumText}>PAGE {num}</Text>
     </View>
   );
 }
@@ -822,51 +327,37 @@ function PdfPage({ num, logoSrc, children }: { num: number; logoSrc?: string; ch
   );
 }
 
-function InfoCell({ label, value, full, last, highlight }: {
-  label: string; value: string; full?: boolean; last?: boolean; highlight?: boolean;
+function InfoCell({ label, value, full, lastRow, lastCol, highlight }: {
+  label: string; value: string; full?: boolean; lastRow?: boolean; lastCol?: boolean; highlight?: boolean;
 }) {
   return (
-    <View style={[full ? s.infoCellFull : s.infoCell, last ? s.infoCellLast : {}]}>
+    <View style={[
+      full ? s.infoCellFull : s.infoCell, 
+      lastRow ? s.infoCellLastRow : {},
+      lastCol ? s.infoCellLastCol : {}
+    ]}>
       <Text style={s.infoLabel}>{label}</Text>
       <Text style={highlight ? s.infoValueHighlight : s.infoValue}>{value || "—"}</Text>
     </View>
   );
 }
 
-function InfoSectionHeading({ title }: { title: string }) {
-  return (
-    <View style={{
-      backgroundColor: BLUE,
-      paddingVertical: SP.sm,
-      paddingHorizontal: SP.md,
-      marginBottom: SP.md,
-      flexDirection: "row",
-      alignItems: "center",
-    }}>
-      <View style={{ width: 3, backgroundColor: TEAL, marginRight: SP.sm, alignSelf: "stretch", borderRadius: 1 }} />
-      <Text style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: WHITE, textTransform: "uppercase", letterSpacing: 1, flex: 1, textAlign: "center" }}>
-        {title}
-      </Text>
-    </View>
-  );
-}
-
-function QCard({ num, heading, body, answer, minHeight = 52, flex }: {
-  num?: string | number; heading: string; body?: string; answer: string; minHeight?: number; flex?: number;
+function QCard({ num, heading, body, answer, minHeight = 40 }: {
+  num?: string | number; heading: string; body?: string; answer: string; minHeight?: number;
 }) {
   return (
-    <View style={[s.qCard, flex ? { flex } : {}]} wrap={false}>
-      <View style={s.qCardHeader}>
+    <View style={s.qCard} wrap={false}>
+      <View style={s.qHeader}>
         {num != null ? (
-          <View style={s.qCardNumBadge}>
-            <Text style={s.qCardNumText}>{num}</Text>
-          </View>
+          <View style={s.qNum}><Text style={s.qNumText}>{num}</Text></View>
         ) : null}
-        <Text style={s.qCardTitle}>{heading}</Text>
+        <Text style={s.qTitle}>{heading}</Text>
       </View>
-      {body ? <Text style={s.qCardBody}>{body}</Text> : null}
-      <View style={[s.qCardAnswer, flex ? { flex: 1, minHeight } : { minHeight }]}>
-        <Text style={s.qCardAnswerText}>{answer || " "}</Text>
+      <View style={s.qBody}>
+        {body ? <Text style={s.qBodyText}>{body}</Text> : null}
+        <View style={[s.qAnswerBox, { minHeight }]}>
+          <Text style={s.qAnswerText}>{answer || " "}</Text>
+        </View>
       </View>
     </View>
   );
@@ -885,7 +376,7 @@ function CheckCard({ checked, label }: { checked: boolean; label: string }) {
 
 function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) {
   return (
-    <View style={[s.checkCard2Col, checked ? s.checkCard2ColSelected : {}]}>
+    <View style={s.checkCard2Col}>
       <View style={[s.checkDot, checked ? s.checkDotSelected : {}, { marginRight: 4 }]}>
         {checked ? <View style={s.checkDotInner} /> : null}
       </View>
@@ -894,58 +385,56 @@ function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) 
   );
 }
 
-function RatingTableRow({ alpha, label, score, index }: {
-  alpha: string; label: string; score: number | null; index: number;
+function RatingTableRow({ alpha, label, score, index, isLast }: {
+  alpha: string; label: string; score: number | null; index: number; isLast?: boolean;
 }) {
   const isAlt = index % 2 === 1;
   const isHigh = score != null && score >= 8;
   const isMid = score != null && score >= 5 && score < 8;
   const display = score != null ? `${score}` : "—";
   return (
-    <View style={[s.ratingTableRow, isAlt ? s.ratingTableRowAlt : {}]} wrap={false}>
-      <View style={s.ratingTableAlphaWrap}>
-        <Text style={s.ratingTableAlpha}>{alpha}</Text>
+    <View style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isLast ? s.tableRowLast : {}]} wrap={false}>
+      <View style={s.alphaWrap}>
+        <Text style={s.alphaText}>{alpha}</Text>
       </View>
-      <Text style={s.ratingTableLabel}>{label}</Text>
-      <View style={[s.ratingScoreBadge, isHigh ? s.ratingScoreBadgeHigh : isMid ? s.ratingScoreBadgeMid : {}]}>
-        <Text style={[s.ratingScoreText, isHigh ? s.ratingScoreTextHigh : isMid ? s.ratingScoreTextMid : {}]}>
-          {display}
-        </Text>
-        <Text style={s.ratingScoreDenom}>out of 10</Text>
+      <Text style={s.tableLabel}>{label}</Text>
+      <View style={[s.scoreBadge, isHigh ? s.scoreBadgeHigh : isMid ? s.scoreBadgeMid : {}]}>
+        <Text style={[s.scoreText, isHigh ? s.scoreTextHigh : isMid ? s.scoreTextMid : {}]}>{display}</Text>
+        <Text style={s.scoreDenom}>/10</Text>
       </View>
     </View>
   );
 }
 
-function ProdTableRow({ label, value, index, flex }: { label: string; value: string; index: number; flex?: number }) {
+function ProdTableRow({ label, value, index, isLast }: { label: string; value: string; index: number; isLast?: boolean }) {
   const isAlt = index % 2 === 1;
   const isNA = !value || value === "—";
   return (
-    <View style={[s.prodRow, isAlt ? s.prodRowAlt : {}, flex ? { flex } : {}]} wrap={false}>
-      <Text style={s.prodLabel}>{label}</Text>
-      <Text style={isNA ? s.prodValueNA : s.prodValue}>{value || "—"}</Text>
+    <View style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isLast ? s.tableRowLast : {}]} wrap={false}>
+      <Text style={s.tableLabel}>{label}</Text>
+      <Text style={isNA ? { fontSize: 9, color: MUTED, fontFamily: "Helvetica" } : s.scoreText}>
+        {value || "—"}
+      </Text>
     </View>
   );
 }
 
-function HrTableRow({ label, score, notes, index }: {
-  label: string; score: number | null; notes?: string | null; index: number;
+function HrTableRow({ label, score, notes, index, isLast }: {
+  label: string; score: number | null; notes?: string | null; index: number; isLast?: boolean;
 }) {
   const isAlt = index % 2 === 1;
   const isHigh = score != null && score >= 8;
   const isMid = score != null && score >= 5 && score < 8;
   const display = score != null ? `${score}` : "—";
-  const badgeStyle = isHigh ? s.ratingScoreBadgeHigh : isMid ? s.ratingScoreBadgeMid : s.ratingScoreBadge;
-  const textStyle = isHigh ? s.ratingScoreTextHigh : isMid ? s.ratingScoreTextMid : s.ratingScoreText;
   return (
-    <View style={[s.hrRow, isAlt ? s.hrRowAlt : {}]} wrap={false}>
-      <View style={s.hrLabelWrap}>
-        <Text style={s.hrLabel}>{label}</Text>
-        {notes ? <Text style={s.hrNotes}>{notes}</Text> : null}
+    <View style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isLast ? s.tableRowLast : {}]} wrap={false}>
+      <View style={{ flex: 1, paddingRight: SP.sm }}>
+        <Text style={{ fontSize: 9, color: TEXT, lineHeight: 1.4 }}>{label}</Text>
+        {notes ? <Text style={{ fontSize: 8, color: MUTED, marginTop: 2 }}>{notes}</Text> : null}
       </View>
-      <View style={[s.ratingScoreBadge, badgeStyle, { backgroundColor: isHigh ? TICK_BG : undefined }]}>
-        <Text style={[s.ratingScoreText, textStyle]}>{display}</Text>
-        <Text style={s.ratingScoreDenom}>out of 10</Text>
+      <View style={[s.scoreBadge, isHigh ? s.scoreBadgeHigh : isMid ? s.scoreBadgeMid : {}]}>
+        <Text style={[s.scoreText, isHigh ? s.scoreTextHigh : isMid ? s.scoreTextMid : {}]}>{display}</Text>
+        <Text style={s.scoreDenom}>/10</Text>
       </View>
     </View>
   );
@@ -955,7 +444,7 @@ function SignatureBlock({ title, fields }: {
   title: string; fields: { label: string; value: string }[];
 }) {
   return (
-    <View style={s.sigContainer} wrap={false}>
+    <View style={s.sigCard} wrap={false}>
       <View style={s.sigHeader}>
         <Text style={s.sigHeaderText}>{title}</Text>
       </View>
@@ -975,34 +464,14 @@ function MgrSection2Col({ header, options, selected }: {
   header: string; options: readonly string[]; selected: string[];
 }) {
   return (
-    <View style={s.mgrSectionCard} wrap={false}>
-      <View style={s.mgrSectionHeader}>
-        <Text style={s.mgrSectionHeaderText}>{header}</Text>
+    <View style={s.card} wrap={false}>
+      <View style={s.cardHeader}>
+        <Text style={s.cardHeaderText}>{header}</Text>
       </View>
-      <View style={[s.checkGrid2Col, { padding: SP.xs }]}>
+      <View style={s.checkGrid2Col}>
         {options.map((opt) => (
           <CheckCard2Col key={opt} checked={selected.includes(opt)} label={opt} />
         ))}
-      </View>
-    </View>
-  );
-}
-
-function ApprovalSeal({ companyName = "Blanco Steel Detailing Services" }: { companyName?: string }) {
-  const words = companyName.toUpperCase().split(" ");
-  return (
-    <View style={s.sealWrap}>
-      <View style={s.sealOuter}>
-        <View style={s.sealRing}>
-          <View style={s.sealInner}>
-            <Text style={s.sealTextTop}>{words.slice(0, Math.ceil(words.length / 2)).join(" ")}</Text>
-            <Text style={s.sealTextTop}>{words.slice(Math.ceil(words.length / 2)).join(" ")}</Text>
-            <View style={s.sealDivider} />
-            <Text style={s.sealTextMid}>MYSURU</Text>
-            <View style={s.sealDivider} />
-            <Text style={s.sealTextBottom}>★ APPROVED ★</Text>
-          </View>
-        </View>
       </View>
     </View>
   );
@@ -1048,7 +517,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
   const selfRatingFirst = SELF_RATING_ITEMS.slice(0, 10);
   const selfRatingSecond = SELF_RATING_ITEMS.slice(10);
 
-  const logoPath = logoSrc ?? "/images/logoooo.jpg";
+  const logoPath = logoSrc ?? "/images/logooooo.jpg";
 
   const currentMonthlySalary = sub.currentSalary ?? 0;
   const sortedSlabs = [...slabs].sort((a, b) => a.ctcMin - b.ctcMin);
@@ -1057,517 +526,281 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
     return currentMonthlySalary >= slab.ctcMin && currentMonthlySalary <= max;
   }) ?? sortedSlabs[sortedSlabs.length - 1];
 
+  const showAbroadQuestion = sub.category === "GROUP_A" && !isQC;
+
   return (
     <Document>
 
-      {/* ═══════════════════════════════════════════════
-          PAGE 1 — Employee Info + Q1 + Q2
-      ═══════════════════════════════════════════════ */}
+      {/* PAGE 1 */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <InfoSectionHeading title="Employee Information" />
-
+        <Text style={s.sectionTitle}>Employee Information</Text>
         <View style={s.infoGrid}>
           <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
           <InfoCell label="Employee ID" value={pdfDisplayValue(sub.employeeCode)} />
-          <InfoCell label="Team" value={pdfDisplayValue((sub as any).team ?? (sub as any).teamDesignation ?? "")} />
-          <InfoCell label="Designation" value={pdfDisplayValue((sub as any).designation ?? "")} />
-          <InfoCell label="Previous number of years experience in this field " value={pdfDisplayValue(sub.prevExperienceYears)} />
-          <InfoCell label="Experience in This Company" value={pdfDisplayValue(sub.companyExperienceYears)} />
-          <InfoCell label="Date of Submission" value={formatDate(sub.dateOfSubmission) || "—"} full last />
+          <InfoCell label="Date of Submission" value={formatDate(sub.dateOfSubmission) || "—"} lastCol />
+          <InfoCell label="Team" value={pdfDisplayValue((sub as any).team ?? (sub as any).teamDesignation ?? "")} lastRow />
+          <InfoCell label="Designation" value={pdfDisplayValue((sub as any).designation ?? "")} lastRow />
+          <InfoCell label="Experience (Years)" value={`${pdfDisplayValue(sub.prevExperienceYears)} Prev / ${pdfDisplayValue(sub.companyExperienceYears)} Here`} lastRow lastCol />
         </View>
 
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          <QCard
-            num="1"
-            heading="Basis of Appraisal Request"
-            body="Please describe on what basis we should consider your Salary appraisal request:"
-            answer={pdfDisplayValue(sub.basisOfAppraisal)}
-            flex={1}
-          />
-          <QCard
-            num="2"
-            heading="Support to the Company"
-            body="Please describe how would you support the company to grow and generate more income as similar as your salary appraisal:"
-            answer={pdfDisplayValue(sub.supportToCompany)}
-            flex={1}
-          />
-        </View>
+        <QCard num="1" heading="Basis of Appraisal Request" body="Please describe on what basis we should consider your Salary appraisal request:" answer={pdfDisplayValue(sub.basisOfAppraisal)} minHeight={110} />
+        <QCard num="2" heading="Support to the Company" body="Please describe how would you support the company to grow and generate more income as similar as your salary appraisal:" answer={pdfDisplayValue(sub.supportToCompany)} minHeight={110} />
       </PdfPage>
 
-      {/* ═══════════════════════════════════════════════
-          PAGE 2 — Q3, Q4, Q5
-      ═══════════════════════════════════════════════ */}
+      {/* PAGE 2 */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          <QCard
-            num="3"
-            heading="Expectations"
-            body='Do you think you can expect same amount of appraisal from year to year as your salary grows? (Tell us "YES" OR "NO" and describe the reason accordingly)'
-            answer={formatExpectationsAnswer(sub) || " "}
-            flex={1}
-          />
-          <QCard
-            num="4"
-            heading="Improvement in Yourself"
-            body="Please describe your strengths & weaknesses and describe what improvement in yourself compared to the previous year:"
-            answer={pdfDisplayValue(sub.strengthsWeaknesses)}
-            flex={1}
-          />
-          <QCard
-            num="5"
-            heading="Provide examples of instances where you demonstrated strong teamwork"
-            answer={pdfDisplayValue(sub.teamworkExamples)}
-            flex={1}
-          />
-        </View>
+        <QCard num="3" heading="Expectations" body='Do you think you can expect same amount of appraisal from year to year as your salary grows? (Tell us "YES" OR "NO" and describe the reason accordingly)' answer={formatExpectationsAnswer(sub) || " "} minHeight={140} />
+        <QCard num="4" heading="Improvement in Yourself" body="Please describe your strengths & weaknesses and describe what improvement in yourself compared to the previous year:" answer={pdfDisplayValue(sub.strengthsWeaknesses)} minHeight={140} />
+        <QCard num="5" heading="Provide examples of instances where you demonstrated strong teamwork" answer={pdfDisplayValue(sub.teamworkExamples)} minHeight={140} />
       </PdfPage>
 
-      {/* ═══════════════════════════════════════════════
-          PAGE 3 — Q6 (a–e) all on one page
-      ═══════════════════════════════════════════════ */}
+      {/* PAGE 3 */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <Text style={s.sectionTitle}>6. Achievements, Goal & Opportunities</Text>
+        <QCard heading="a. Challenges faced in achieving goals and how did you overcome them?" answer={pdfDisplayValue(sub.goalChallenges) || " "} minHeight={70} />
+        <QCard heading="b. Goal for this upcoming year and explain how that will be beneficial to both of us?" answer={pdfDisplayValue(sub.upcomingGoal) || " "} minHeight={70} />
+        <QCard heading="c. What are the 3 things you would like to improve?" answer={pdfDisplayValue(sub.threeImprovements) || " "} minHeight={70} />
+        
         <View style={s.qCard} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>6. Achievements, Goal &amp; Opportunities:</Text>
-          </View>
-          <Text style={s.qCardBody}>
-            a. If achieved, what are the challenges did you face in achieving your goals, and how did you overcome them?
-          </Text>
-          <View style={[s.qCardAnswer, { minHeight: 40 }]}>
-            <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.goalChallenges) || " "}</Text>
+          <View style={s.qHeader}><Text style={s.qTitle}>d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?</Text></View>
+          <View style={s.qBody}>
+            {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (<CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} />))}
           </View>
         </View>
 
-        <View style={s.qCard} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>b. Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?</Text>
-          </View>
-          <View style={[s.qCardAnswer, { minHeight: 40 }]}>
-            <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.upcomingGoal) || " "}</Text>
-          </View>
-        </View>
-
-        <View style={s.qCard} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>c. What are the 3 things you would like to improve?</Text>
-          </View>
-          <View style={[s.qCardAnswer, { minHeight: 40 }]}>
-            <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.threeImprovements) || " "}</Text>
-          </View>
-        </View>
-
-        <View style={s.qCard} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?</Text>
-          </View>
-          <View style={{ padding: SP.sm }}>
-            {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (
-              <CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} />
-            ))}
-          </View>
-        </View>
-
-        <View style={s.qCard} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>e. Do you have capability of managing yourself if company gives opportunity to work in abroad:</Text>
-            {sub.abroadCapabilityNa ? (
-              <View style={[s.naChip, { marginLeft: SP.sm, alignSelf: "center" }]}>
-                <Text style={s.naChipText}>N/A</Text>
-              </View>
-            ) : null}
-          </View>
-          <View style={{ padding: SP.sm }}>
-            {ABROAD_OPTIONS.map((opt) => (
-              <CheckCard
-                key={opt}
-                checked={!sub.abroadCapabilityNa && sub.abroadCapability === opt}
-                label={opt}
-              />
-            ))}
-          </View>
-        </View>
-      </PdfPage>
-
-      {/* ═══════════════════════════════════════════════
-          PAGE 4 — Q7, Q8, Q9 (flex to fill full page height)
-      ═══════════════════════════════════════════════ */}
-      <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          <QCard
-            num="7"
-            heading="Provide examples of instances where you showed initiative or innovation."
-            answer={pdfDisplayValue(sub.initiativeInnovation)}
-            flex={1}
-            minHeight={70}
-          />
-
-          <View style={[s.qCard, { flex: 1 }]} wrap={false}>
-            <View style={s.qCardHeader}>
-              <View style={s.qCardNumBadge}>
-                <Text style={s.qCardNumText}>8</Text>
-              </View>
-              <Text style={s.qCardTitle}>
-                Reflect on your commitment to professional development and continuous learning.
-              </Text>
+        {showAbroadQuestion && (
+          <View style={s.qCard} wrap={false}>
+            <View style={s.qHeader}>
+              <Text style={s.qTitle}>e. Do you have capability of managing yourself if company gives opportunity to work in abroad:</Text>
+              {sub.abroadCapabilityNa ? <View style={s.naChip}><Text style={s.naChipText}>N/A</Text></View> : null}
             </View>
-            <View style={{ padding: SP.md, flex: 1, justifyContent: "center" }}>
-              {LEARNING_COMMITMENT_OPTIONS.map((o) => (
-                <CheckCard key={o.value} checked={sub.learningCommitment === o.value} label={o.label} />
-              ))}
-            </View>
+            {!sub.abroadCapabilityNa && (
+              <View style={s.qBody}>
+                {ABROAD_OPTIONS.map((opt) => (<CheckCard key={opt} checked={sub.abroadCapability === opt} label={opt} />))}
+              </View>
+            )}
           </View>
-
-          <QCard
-            num="9"
-            heading="Professionalism and Attitude"
-            body="Please describe your professionalism and attitude with your team during office premises (including perspective vision on your career along with your team)."
-            answer={pdfDisplayValue(sub.professionalismAttitude)}
-            flex={1}
-            minHeight={70}
-          />
-        </View>
+        )}
       </PdfPage>
 
-      {/* ═══════════════════════════════════════════════
-          PAGE 5 — Self Ratings a–j (full page, even spacing)
-      ═══════════════════════════════════════════════ */}
+      {/* PAGE 4 */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={s.ratingPageHead}>
-          <Text style={s.ratingPageTitle}>Self Performance Ratings</Text>
+        <QCard num="7" heading="Provide examples of instances where you showed initiative or innovation." answer={pdfDisplayValue(sub.initiativeInnovation)} minHeight={150} />
+        <View style={s.qCard} wrap={false}>
+          <View style={s.qHeader}>
+            <View style={s.qNum}><Text style={s.qNumText}>8</Text></View>
+            <Text style={s.qTitle}>Reflect on your commitment to professional development and continuous learning.</Text>
+          </View>
+          <View style={s.qBody}>
+            {LEARNING_COMMITMENT_OPTIONS.map((o) => (<CheckCard key={o.value} checked={sub.learningCommitment === o.value} label={o.label} />))}
+          </View>
         </View>
+        <QCard num="9" heading="Professionalism and Attitude" body="Please describe your professionalism and attitude with your team during office premises (including perspective vision on your career along with your team)." answer={pdfDisplayValue(sub.professionalismAttitude)} minHeight={130} />
+      </PdfPage>
 
-        <View style={s.ratingTable}>
+      {/* PAGE 5 */}
+            {/* PAGE 5 */}
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <Text style={s.sectionTitle}>Self Performance Ratings (a - j)</Text>
+        <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
           {selfRatingFirst.map((item, i) => {
             const score = sub[item.key as keyof AppraisalSubmission] as number | null;
             const rawLabel = selfRatingLabel(item);
             const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
-            return (
-              <RatingTableRow
-                key={item.key}
-                alpha={alphas[i]}
-                label={cleanLabel}
-                score={score}
-                index={i}
-              />
-            );
+            return <RatingTableRow key={item.key} alpha={alphas[i]} label={cleanLabel} score={score} index={i} isLast={i === selfRatingFirst.length - 1} />;
           })}
         </View>
       </PdfPage>
 
-      {/* ═══════════════════════════════════════════════
-          PAGE 6 — Self Ratings k–t (only for QC and Group A —
-          Group B & C no longer collect this data)
-      ═══════════════════════════════════════════════ */}
+      {/* PAGE 6 */}
       {(isQC || sub.category === "GROUP_A") && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
-          <View style={s.ratingPageHead}>
-            <Text style={s.ratingPageTitle}>Self Performance Ratings </Text>
-          </View>
-
-          <View style={s.ratingTable}>
+          <Text style={s.sectionTitle}>Self Performance Ratings (k - t)</Text>
+          <View style={s.tableWrap}>
             {selfRatingSecond.map((item, i) => {
               const globalIndex = i + 10;
               const score = sub[item.key as keyof AppraisalSubmission] as number | null;
               const rawLabel = selfRatingLabel(item);
               const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
-              return (
-                <RatingTableRow
-                  key={item.key}
-                  alpha={alphas[globalIndex]}
-                  label={cleanLabel}
-                  score={score}
-                  index={i}
-                />
-              );
+              return <RatingTableRow key={item.key} alpha={alphas[globalIndex]} label={cleanLabel} score={score} index={i} isLast={i === selfRatingSecond.length - 1} />;
             })}
           </View>
         </PdfPage>
       )}
 
-      {/* ═══════════════════════════════════════════════
-          Non-QC: Productivity — Shop Drafting + E-Drafting on
-          ONE flex-filled page. Modeler is a SEPARATE page shown
-          only for Group A and Group B (Group C has no Modeler
-          section at all now, so its page is skipped entirely).
-      ═══════════════════════════════════════════════ */}
+            {/* PAGE 7 - Productivity */}
       {!isQC && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
-          <View style={s.prodPageHead}>
-            <Text style={s.prodPageTitle}>10.  Productivity and Time Management</Text>
-            <Text style={s.introPara}>{PRODUCTIVITY_INTRO}</Text>
+          <Text style={s.sectionTitle}>10. Productivity and Time Management</Text>
+          <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}>{PRODUCTIVITY_INTRO}</Text>
+          
+          <Text style={s.subLabel}>Shop Drafting and Checker</Text>
+          <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
+            {SHOP_DRAFTING_ITEMS.map((item, i) => (
+              <ProdTableRow key={item.key} label={item.label} value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"} index={i} isLast={i === SHOP_DRAFTING_ITEMS.length - 1} />
+            ))}
           </View>
 
-          <View style={{ flex: 1, flexDirection: "column" }}>
-            <View style={{ flex: 1, flexDirection: "column" }}>
-              <Text style={s.prodSubLabel}>Shop Drafting and Checker</Text>
-              <View style={[s.prodTable, { flex: 1 }]}>
-                {SHOP_DRAFTING_ITEMS.map((item, i) => (
-                  <ProdTableRow
-                    key={item.key}
-                    label={item.label}
-                    value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
-                    index={i}
-                    flex={1}
-                  />
-                ))}
-              </View>
-            </View>
-
-            <View style={{ flex: 1, flexDirection: "column", marginTop: SP.md }}>
-              <Text style={s.prodSubLabel}>E-Drafting</Text>
-              <View style={[s.prodTable, { flex: 1 }]}>
-                {E_DRAFTING_ITEMS.map((item, i) => (
-                  <ProdTableRow
-                    key={item.key}
-                    label={item.label}
-                    value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
-                    index={i}
-                    flex={1}
-                  />
-                ))}
-              </View>
-            </View>
+          <Text style={{ ...s.subLabel, marginTop: SP.md }}>E-Drafting</Text>
+          <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
+            {E_DRAFTING_ITEMS.map((item, i) => (
+              <ProdTableRow key={item.key} label={item.label} value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"} index={i} isLast={i === E_DRAFTING_ITEMS.length - 1} />
+            ))}
           </View>
         </PdfPage>
       )}
 
+            {/* PAGE 8 - Modeler */}
       {!isQC && sub.category !== "GROUP_C" && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
-          <Text style={[s.prodSubLabel, { marginBottom: SP.md }]}>Modeler Productivity</Text>
-          <View style={[s.prodTable, { flex: 1 }]}>
+          <Text style={s.sectionTitle}>Modeler Productivity</Text>
+          <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
             {MODELER_ITEMS.map((item, i) => (
-              <ProdTableRow
-                key={item.key}
-                label={item.label}
-                value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
-                index={i}
-                flex={1}
-              />
+              <ProdTableRow key={item.key} label={item.label} value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"} index={i} isLast={i === MODELER_ITEMS.length - 1} />
             ))}
           </View>
         </PdfPage>
       )}
 
-      {/* ═══════════════════════════════════════════════
-          PAGE — Q11, Q12, Overall Rating, Employee Signature
-      ═══════════════════════════════════════════════ */}
+      {/* PAGE 9 - Q11, Q12, Overall */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          <QCard
-            num="11"
-            heading="Work Performance and Time Management"
-            body="Please describe your current year work performance and Time Management"
-            answer={pdfDisplayValue(sub.currentYearPerformance)}
-            flex={1}
-          />
-          <QCard
-            num="12"
-            heading="Please describe how you would perform and improve your productivity for this upcoming performance cycle as similar as your salary grow:"
-            answer={pdfDisplayValue(sub.productivityImprovement)}
-            flex={1}
-          />
-        </View>
+        <QCard num="11" heading="Work Performance and Time Management" body="Please describe your current year work performance and Time Management" answer={pdfDisplayValue(sub.currentYearPerformance)} minHeight={90} />
+        <QCard num="12" heading="Please describe how you would perform and improve your productivity for this upcoming performance cycle as similar as your salary grow:" answer={pdfDisplayValue(sub.productivityImprovement)} minHeight={90} />
 
-        <View style={[s.qCard, { marginBottom: SP.sm, marginTop: SP.xs }]} wrap={false}>
-          <View style={s.qCardHeader}>
-            <Text style={s.qCardTitle}>Rate Yourself — Overall Performance</Text>
+                <View style={s.qCard} wrap={false}>
+          <View style={s.qHeader}>
+            <View style={s.qNum}><Text style={s.qNumText}>13</Text></View>
+            <Text style={s.qTitle}>Rate Yourself — Overall Performance</Text>
           </View>
-          <View style={{ padding: SP.sm }}>
-            {OVERALL_RATING_OPTIONS.map((opt) => (
-              <CheckCard key={opt} checked={selectedOverall === opt} label={opt} />
-            ))}
+          <View style={s.qBody}>
+            {OVERALL_RATING_OPTIONS.map((opt) => (<CheckCard key={opt} checked={selectedOverall === opt} label={opt} />))}
           </View>
         </View>
 
-        <SignatureBlock
-          title=""
-          fields={[
-            { label: "Form Filled And Signed By", value: pdfDisplayValue(sub.employeeSignatureName) },
-            { label: "Employee Code", value: pdfDisplayValue(sub.employeeCode) },
-            { label: "Date", value: formatDate(sub.employeeSignatureDate) || formatDate(sub.dateOfSubmission) || " " },
-          ]}
-        />
+        <View style={{ flex: 1 }} />
+        <SignatureBlock title="Employee Declaration" fields={[
+          { label: "Form Filled And Signed By", value: pdfDisplayValue(sub.employeeSignatureName) },
+          { label: "Employee Code", value: pdfDisplayValue(sub.employeeCode) },
+          { label: "Date", value: formatDate(sub.employeeSignatureDate) || formatDate(sub.dateOfSubmission) || " " },
+        ]} />
       </PdfPage>
 
-      {/* ═══════════════════════════════════════════════
-    PAGE — HR and Admin Feedback
-═══════════════════════════════════════════════ */}
-<PdfPage num={nextPage()} logoSrc={logoPath}>
-  <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
-    HR &amp; Admin Feedback
-  </Text>
-
-  <View style={{ borderWidth: 1, borderColor: BORDER_GRAY, marginBottom: SP.md }}>
-    {HR_RATING_ITEMS.map((item, i) => {
-      const val = sub[item.key as keyof AppraisalSubmission] as number | null;
-      const notes =
-        item.key === "hrLeaveManagement"
-          ? (sub as any).hrLeaveManagementNotes
-          : item.key === "hrTimingManagement"
-          ? (sub as any).hrTimingManagementNotes
-          : null;
-      return <HrTableRow key={item.key} label={item.label} score={val} notes={notes} index={i} />;
-    })}
-  </View>
-
-  <View style={[s.qCard, { marginBottom: SP.lg }]}>
-    <View style={s.qCardHeader}></View>
-    <Text style={s.qCardBody}>{HR_BACKLOG_QUESTION}</Text>
-    <View style={[s.qCardAnswer, { minHeight: 48 }]}>
-      <Text style={s.qCardAnswerText}>{pdfDisplayValue(sub.hrBacklogNotes) || " "}</Text>
-    </View>
-  </View>
-
-  <SignatureBlock
-    title=""
-    fields={[
-      { label: "Rating , feedback Given By:", value: pdfDisplayValue(sub.hrAdminSignatureName) },
-      { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
-    ]}
-  />
-</PdfPage>
-
-      {/* ═══════════════════════════════════════════════
-    PAGE — Team Head Feedback (single page, 2-col checkboxes)
-═══════════════════════════════════════════════ */}
-<PdfPage num={nextPage()} logoSrc={logoPath}>
-  <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
-    Team Head Feedback
-  </Text>
-
-  <View style={[s.infoGrid, { marginBottom: SP.sm }]}>
-    <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
-    <InfoCell label="Employee ID" value={pdfDisplayValue(sub.employeeCode)} />
-  </View>
-
-  {MGR_RECOMMENDATION_SECTIONS.map((section) => {
-    const reasons = (sub[section.field as keyof AppraisalSubmission] as string[]) ?? [];
-    const options = mgrReasonOptions[section.field];
-    return (
-      <MgrSection2Col
-        key={section.level}
-        header={section.header}
-        options={options}
-        selected={reasons}
-      />
-    );
-  })}
-
-  <View style={{ marginTop: SP.lg }}>
-    <SignatureBlock
-      title=""
-      fields={[
-        { label: "Reviewed & Signed By Reporting Manager:", value: pdfDisplayValue(sub.mgrSignatureName) },
-        { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
-      ]}
-    />
-  </View>
-</PdfPage>
-
-      {/* ═══════════════════════════════════════════════
-          PAGE — Management Worksheet & Final Conclusion
-          Signature only here — Seal goes on the footer below
-      ═══════════════════════════════════════════════ */}
+            {/* PAGE 10 - HR (Strict 1 Page) */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
-        <View style={s.letterPage}>
-          <Text style={{ fontSize: 10.5, fontFamily: "Helvetica-Bold", color: BLUE, marginBottom: SP.md, textAlign: "center" }}>
-            Management Worksheet &amp; Final Conclusion
-          </Text>
+        <Text style={s.sectionTitle}>HR & Admin Feedback</Text>
+        {/* Added marginBottom to create a small gap */}
+        <View style={[s.tableWrap, { marginBottom: SP.md }]}>
+          {HR_RATING_ITEMS.map((item, i) => {
+            const val = sub[item.key as keyof AppraisalSubmission] as number | null;
+            const notes = item.key === "hrLeaveManagement" ? (sub as any).hrLeaveManagementNotes : item.key === "hrTimingManagement" ? (sub as any).hrTimingManagementNotes : null;
+            return <HrTableRow key={item.key} label={item.label} score={val} notes={notes} index={i} isLast={i === HR_RATING_ITEMS.length - 1} />;
+          })}
+        </View>
 
-
-          <Text style={s.letterBody}>
-            Dear <Text style={[s.letterHighlight, { fontSize: 12.5, fontWeight: 'bold', color: '#1a3a5c' }]}>{sub.employeeName}</Text>,
-          </Text>
-          <Text style={s.letterBody}>{MANAGEMENT_LETTER_INTRO}</Text>
-
-          <Text style={s.letterSectionLabel}>
-            Below are the criteria of increment with effect from FY 2026–27.
-          </Text>
-
-          {/* Compact slab table */}
-          <View style={{ marginBottom: SP.md, alignItems: "flex-start" }}>
-            <View style={s.tableHead}>
-              <Text style={s.tableHeadLeft}>CTC</Text>
-              <Text style={s.tableHeadRight}>% of Increment</Text>
-            </View>
-            {sortedSlabs.map((slab, i) => {
-              const isActive = matchedSlab?.id === slab.id;
-              const isAlt = i % 2 === 1;
-              return (
-                <View key={slab.id} style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isActive ? s.tableRowHighlight : {}]}>
-                  <Text style={s.tableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}</Text>
-                  <Text style={s.tableCellRight}>0% to {decimalToNumber(slab.maxPct)}%</Text>
-                </View>
-              );
-            })}
+        <View style={s.qCard} wrap={false}>
+          <View style={s.qHeader}>
+            <View style={s.qNum}><Text style={s.qNumText}>!</Text></View>
+            <Text style={s.qTitle}>Backlog & Conduct Remarks</Text>
           </View>
+          <View style={s.qBody}>
+            <Text style={s.qBodyText}>{HR_BACKLOG_QUESTION}</Text>
+            <View style={[s.qAnswerBox, { minHeight: 50 }]}><Text style={s.qAnswerText}>{pdfDisplayValue(sub.hrBacklogNotes) || " "}</Text></View>
+          </View>
+        </View>
 
-          <Text style={s.letterBody}>
-            You have been obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card. which is within the range as per the CTC slab.
-          </Text>
+        <SignatureBlock title="Authorized by HR & Admin" fields={[
+          { label: "Rating & Feedback Given By", value: pdfDisplayValue(sub.hrAdminSignatureName) },
+          { label: "Date", value: formatDate(sub.hrAdminSignatureDate) || " " },
+        ]} />
+      </PdfPage>
 
-          <Text style={s.letterBody}>
-            However, the company would like to support you as best as possible by considering that you will upgrade yourself with any and all backlogs as described by yourself in the attached report card.
-          </Text>
+                  {/* PAGE 11 - Team Lead (Strict 1 Page) */}
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <Text style={s.sectionTitle}>Team Head Feedback</Text>
 
-          <Text style={s.letterBody}>
-            Therefore, the company is pleased to offer you the best of <Text style={[s.letterHighlight, { fontSize: 12.5, fontWeight: 'bold', color: '#1a3a5c' }]}>{approvedPct}% </Text>Increment of your current Total CTC.
-          </Text>
-
-          {pdfDisplayValue(sub.mgmtFeedbackToEmployee ?? sub.mgmtFinalRemarks) ? (
-            <View style={s.highlightStatementYellow}>
-              <Text style={s.highlightStatementYellowText}>
-                {pdfDisplayValue(sub.mgmtFeedbackToEmployee ?? sub.mgmtFinalRemarks)}
-              </Text>
-            </View>
-          ) : null}
-
-          <Text style={s.letterClosing}>
-            We wish you all the success in your career and hope you deliver your best performance in the upcoming
-            performance cycle.
-          </Text>
-
-           {/* Signature row — seal sits cleanly to the right of the signature line, never touching text */}
-          <View style={{ flexDirection: "row", alignItems: "flex-start", marginTop: SP.lg }}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
-                Signature of the Approver:
-              </Text>
-              <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-                <Text
-                  style={{
-                    fontSize: 9,
-                    fontFamily: "Helvetica",
-                    color: INK,
-                    borderBottomWidth: 1,
-                    borderBottomColor: BORDER_GRAY,
-                    paddingBottom: SP.xs,
-                    width: 160,
-                    marginRight: SP.xl,
-                  }}
-                >
-                  {pdfDisplayValue(sub.mgmtApproverName) || " "}
-                </Text>
-                {/* approval seal removed per design preference */}
+        {MGR_RECOMMENDATION_SECTIONS.map((section) => {
+          const reasons = (sub[section.field as keyof AppraisalSubmission] as string[]) ?? [];
+          const options = mgrReasonOptions[section.field];
+          return (
+            <View key={section.level} style={[s.card, { marginBottom: SP.sm }]} wrap={false}>
+              {/* Tightened header padding */}
+              <View style={[s.cardHeader, { paddingVertical: 4 }]}>
+                <Text style={s.cardHeaderText}>{section.header}</Text>
+              </View>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", paddingVertical: SP.xs, paddingHorizontal: SP.sm }}>
+                {options.map((opt) => {
+                  const checked = reasons.includes(opt);
+                  return (
+                    <View key={opt} style={{
+                      width: "50%", 
+                      flexDirection: "row", 
+                      alignItems: "center", 
+                      paddingVertical: 3, // Tightened row padding
+                      paddingRight: SP.sm,
+                    }}>
+                      <View style={[s.checkDot, checked ? s.checkDotSelected : {}, { marginRight: 6 }]}>
+                        {checked ? <View style={s.checkDotInner} /> : null}
+                      </View>
+                      <Text style={checked ? s.checkCardTextSelected : s.checkCardText}>{opt}</Text>
+                    </View>
+                  );
+                })}
               </View>
             </View>
-            <View style={{ width: 140 }}>
-              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: SLATE, marginBottom: SP.sm }}>
-                Date:
-              </Text>
-              <Text
-                style={{
-                  fontSize: 9,
-                  fontFamily: "Helvetica",
-                  color: INK,
-                  borderBottomWidth: 1,
-                  borderBottomColor: BORDER_GRAY,
-                  paddingBottom: SP.xs,
-                }}
-              >
-                {formatDate(sub.mgmtApprovalDate) || " "}
-              </Text>
-            </View>
+          );
+        })}
+
+        <SignatureBlock title="Reviewed & Approved by Reporting Manager" fields={[
+          { label: "Reporting Manager", value: pdfDisplayValue(sub.mgrSignatureName) },
+          { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
+        ]} />
+      </PdfPage>
+
+      {/* PAGE 12 - Management (Strict 1 Page) */}
+      <PdfPage num={nextPage()} logoSrc={logoPath}>
+        <Text style={s.sectionTitle}>Management Worksheet & Final Conclusion</Text>
+        
+        <Text style={s.letterBody}>Dear <Text style={[s.letterHighlight, { fontSize: 11 }]}>{sub.employeeName}</Text>,</Text>
+        <Text style={s.letterBody}>{MANAGEMENT_LETTER_INTRO}</Text>
+
+        <Text style={s.letterSectionLabel}>Below are the criteria of increment with effect from FY 2026–27.</Text>
+
+        <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 4, overflow: "hidden", marginBottom: SP.md }}>
+          <View style={s.incTableHead}>
+            <Text style={s.incTableHeadText}>CTC Range (Monthly)</Text>
+            <Text style={s.incTableHeadText}>% of Increment</Text>
+          </View>
+          {sortedSlabs.map((slab, i) => {
+            const isActive = matchedSlab?.id === slab.id;
+            const isAlt = i % 2 === 1;
+            return (
+              <View key={slab.id} style={[s.incTableRow, isAlt ? s.incTableRowAlt : {}, isActive ? s.incTableRowActive : {}]}>
+                <Text style={s.incTableCell}>{formatSlabRange(slab.ctcMin, slab.ctcMax)}</Text>
+                <Text style={s.incTableCellRight}>0% to {decimalToNumber(slab.maxPct)}%</Text>
+              </View>
+            );
+          })}
+        </View>
+
+        <Text style={s.letterBody}>You have obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card, which is within the range as per the CTC slab.</Text>
+        <Text style={s.letterBody}>However, the company would like to support you as best as possible by considering that you will upgrade yourself with any and all backlogs as described by yourself in the attached report card.</Text>
+        <Text style={s.letterBody}>Therefore, the company is pleased to offer you the best of <Text style={[s.letterHighlight, { fontSize: 11 }]}>{approvedPct}% </Text>Increment of your current Total CTC.</Text>
+
+        {pdfDisplayValue(sub.mgmtFeedbackToEmployee ?? sub.mgmtFinalRemarks) ? (
+          <View style={s.highlightStatementYellow}>
+            <Text style={s.highlightStatementYellowText}>{pdfDisplayValue(sub.mgmtFeedbackToEmployee ?? sub.mgmtFinalRemarks)}</Text>
+          </View>
+        ) : null}
+
+        <Text style={s.letterBody}>We wish you all the success in your career and hope you deliver your best performance in the upcoming performance cycle.</Text>
+
+        <View style={{ flex: 1 }} />
+        
+        <View style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: SP.md }}>
+          <View style={{ width: "60%" }}>
+            <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: MUTED, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: SP.sm, textAlign: "center" }}>Final Approver Signature</Text>
+            <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, textAlign: "center", borderBottomWidth: 1, borderBottomColor: PRIMARY, paddingBottom: SP.sm, marginBottom: SP.xs }}>{pdfDisplayValue(sub.mgmtApproverName) || " "}</Text>
+            <Text style={{ fontSize: 8, color: MUTED, textAlign: "center" }}>Date: {formatDate(sub.mgmtApprovalDate) || " "}</Text>
           </View>
         </View>
       </PdfPage>

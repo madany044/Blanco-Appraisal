@@ -4,11 +4,11 @@ import { pdf } from "@react-pdf/renderer";
 import { PDFReport } from "@/components/export/PDFReport";
 import type { AppraisalSubmission } from "@prisma/client";
 import type { SerializedIncrementSlab } from "@/lib/utils";
-import { COMPANY_LOGO_PATH } from "@/lib/brand";
+const PDF_LOGO_PATH = "/images/logooooo.jpg";
 
 async function resolveLogoSrc(): Promise<string | undefined> {
   if (typeof window === "undefined") return undefined;
-  const url = `${window.location.origin}${COMPANY_LOGO_PATH}`;
+  const url = `${window.location.origin}${PDF_LOGO_PATH}`;
   try {
     const res = await fetch(url);
     if (!res.ok) return url;
