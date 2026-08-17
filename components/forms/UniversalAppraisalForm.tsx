@@ -93,6 +93,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [verificationPhoto, setVerificationPhoto] = useState<string | null>(null);
+  const [notification, setNotification] = useState<string | null>(null);
   const router = useRouter();
   
   const isQC = category === "QC";
@@ -220,6 +221,8 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
           2: ["expectationsYesNo", "expectationsReason", "strengthsWeaknesses"],
           3: ["upcomingGoal", "initiativeFrequency"],
           4: ["learningCommitment"],
+          5: ["rateTeamwork", "rateCompanyRelationship", "ratePmRelationship", "rateCoworkerComms", "rateEngineering", "rateTeamCommunication", "rateVerbalWritten", "rateEnglish", "rateSelfLearning", "rateQualityOfWork"],
+          6: ["rateDeadlines", "rateClientComms", "rateCustomerEmails", "rateRfiCreation", "rateEmailWriting", "rateIssueResolution", "rateKnowledgeSharing", "rateLeadership", "rateTeamPerformance", "rateTeamBuilding"],
           9: ["currentYearPerformance"],
           10: ["productivityImprovement", "overallRating", "employeeSignatureName"],
         }
@@ -228,6 +231,8 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
           2: ["expectationsYesNo", "expectationsReason", "strengthsWeaknesses"],
           3: ["upcomingGoal", "initiativeFrequency"],
           4: ["learningCommitment"],
+          5: ["rateTeamwork", "rateCompanyRelationship", "ratePmRelationship", "rateCoworkerComms", "rateEngineering", "rateTeamCommunication", "rateVerbalWritten", "rateEnglish", "rateSelfLearning", "rateQualityOfWork"],
+          6: ["rateDeadlines", "rateClientComms", "rateCustomerEmails", "rateRfiCreation", "rateEmailWriting", "rateIssueResolution", "rateKnowledgeSharing", "rateLeadership", "rateTeamPerformance", "rateTeamBuilding"],
           7: ["currentYearPerformance"],
           10: ["productivityImprovement", "overallRating", "employeeSignatureName"],
         };
@@ -235,12 +240,31 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
     const fields = fieldsByStep[step];
     if (fields) {
       const valid = await trigger(fields);
-      if (!valid) return;
+      if (!valid) {
+        setNotification("Please fill in all required fields before proceeding");
+        
+        // Scroll to first missing field
+        const firstErrorField = fields.find(field => errors[field]);
+        if (firstErrorField) {
+          const element = document.querySelector(`[data-field="${String(firstErrorField)}"]`) || 
+                          document.querySelector(`input[name="${String(firstErrorField)}"]`) ||
+                          document.querySelector(`textarea[name="${String(firstErrorField)}"]`) ||
+                          document.querySelector(`[role="radiogroup"][data-field="${String(firstErrorField)}"]`);
+          
+          if (element) {
+            setTimeout(() => {
+              element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+          }
+        }
+        return;
+      }
     }
 
     const currentIdx = visibleSteps.indexOf(step as (typeof ALL_STEPS)[number]);
     if (currentIdx < visibleSteps.length - 1) {
       setStep(visibleSteps[currentIdx + 1]);
+      setNotification(null);
     }
   }
 
@@ -269,19 +293,19 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
           <div className="space-y-6">
             <FormHeader managers={managers} lockedEmployeeCode={verifiedEmployeeCode} />
             <div>
-              <Label>1. Basis of appraisal request *</Label>
+              <Label>1. Basis of appraisal request <span className="text-red-500">*</span></Label>
               <p className="mt-1 text-sm text-gray-500">
                 Please describe on what basis we should consider your salary appraisal request.
               </p>
-              <Textarea className="min-h-[120px] mt-1" {...register("basisOfAppraisal")} />
+              <Textarea className="min-h-[120px] mt-1" data-field="basisOfAppraisal" {...register("basisOfAppraisal")} />
               {errors.basisOfAppraisal && <p className="text-sm text-blanco-danger">{String(errors.basisOfAppraisal.message)}</p>}
             </div>
             <div>
-              <Label>2. Support to the company *</Label>
+              <Label>2. Support to the company <span className="text-red-500">*</span></Label>
               <p className="mt-1 text-sm text-gray-500">
                 Please describe how would you support the company to grow and generate more income as similar as your salary appraisal:
               </p>
-              <Textarea className="min-h-[120px] mt-1" {...register("supportToCompany")} />
+              <Textarea className="min-h-[120px] mt-1" data-field="supportToCompany" {...register("supportToCompany")} />
               {errors.supportToCompany && <p className="text-sm text-blanco-danger">{String(errors.supportToCompany.message)}</p>}
             </div>
           </div>
@@ -290,7 +314,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
         {step === 2 && (
           <div className="space-y-6">
             <div>
-              <Label>3. Expectations *</Label>
+              <Label>3. Expectations <span className="text-red-500">*</span></Label>
               <p className="mt-1 text-sm text-gray-500">
                 Do you think you can expect the same amount of appraisal from year to year as your salary grows?
                 <br />
@@ -301,6 +325,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
                 value={watch("expectationsYesNo")}
                 onValueChange={(v) => setValue("expectationsYesNo", v as "YES" | "NO")}
                 className="flex gap-6 mt-2"
+                data-field="expectationsYesNo"
               >
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="YES" id="yes" />
@@ -311,20 +336,20 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
                   <Label htmlFor="no">NO</Label>
                 </div>
               </RadioGroup>
-              <Label className="mt-4 block">Describe the Reason *</Label>
-              <Textarea className="mt-1" {...register("expectationsReason")} />
+              <Label className="mt-4 block">Describe the Reason <span className="text-red-500">*</span></Label>
+              <Textarea className="mt-1" data-field="expectationsReason" {...register("expectationsReason")} />
             </div>
             <div>
-              <Label>4. Improvement in yourself *</Label>
+              <Label>4. Improvement in yourself <span className="text-red-500">*</span></Label>
               <p className="mt-1 text-sm text-gray-500">
                 Please describe your strengths and weaknesses and explain what improvements
                 you have made in yourself compared to the previous year.
               </p>
-              <Textarea className="min-h-[100px] mt-1" {...register("strengthsWeaknesses")} />
+              <Textarea className="min-h-[100px] mt-1" data-field="strengthsWeaknesses" {...register("strengthsWeaknesses")} />
             </div>
             <div>
-              <Label>5. Provide examples of instances where you demonstrated strong teamwork *</Label>
-              <Textarea className="min-h-[100px] mt-1" {...register("teamworkExamples")} />
+              <Label>5. Provide examples of instances where you demonstrated strong teamwork <span className="text-red-500">*</span></Label>
+              <Textarea className="min-h-[100px] mt-1" data-field="teamworkExamples" {...register("teamworkExamples")} />
             </div>
           </div>
         )}
@@ -332,7 +357,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
         {step === 3 && (
           <div className="space-y-6">
             <div>
-              <Label>6. Achievements, Goal & Opportunities *</Label>
+              <Label>6. Achievements, Goal & Opportunities <span className="text-red-500">*</span></Label>
             </div>
 
             <p className="mt-2 text-sm text-gray-500">
@@ -343,12 +368,12 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
             <p className="mt-4 text-sm text-gray-500">
               b. Please notify what is your goal for this upcoming year and explain how that will be beneficial to both of us?
             </p>
-            <Textarea className="mt-2" {...register("upcomingGoal")} />
+            <Textarea className="mt-2" data-field="upcomingGoal" {...register("upcomingGoal")} />
 
             <p className="mt-4 text-sm text-gray-500">
               c. What are the 3 things you would like to improve?
             </p>
-            <Textarea className="mt-2" {...register("threeImprovements")} />
+            <Textarea className="mt-2" data-field="threeImprovements" {...register("threeImprovements")} />
 
             <p className="mt-4 text-sm text-gray-500">
               d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?
@@ -357,6 +382,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
               value={watch("initiativeFrequency")} 
               onValueChange={(v) => setValue("initiativeFrequency", v as EmployeeFormValues["initiativeFrequency"])} 
               className="mt-2 space-y-2"
+              data-field="initiativeFrequency"
             >
               {(["Consistently", "Occasionally", "Rarely", "Never"] as const).map((opt) => (
                 <div key={opt} className="flex items-center gap-2">
@@ -425,15 +451,16 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
         {step === 4 && (
           <div className="space-y-6">
             <div>
-              <Label>7. Provide examples of instances where you showed initiative or innovation. *</Label>
-              <Textarea className="mt-1" {...register("initiativeInnovation")} />
+              <Label>7. Provide examples of instances where you showed initiative or innovation. <span className="text-red-500">*</span></Label>
+              <Textarea className="mt-1" data-field="initiativeInnovation" {...register("initiativeInnovation")} />
             </div>
             <div>
-              <Label>8. Reflect on your commitment to professional development and continuous learning. *</Label>
+              <Label>8. Reflect on your commitment to professional development and continuous learning. <span className="text-red-500">*</span></Label>
               <RadioGroup 
                 value={watch("learningCommitment")} 
                 onValueChange={(v) => setValue("learningCommitment", v as EmployeeFormValues["learningCommitment"])} 
                 className="mt-2 space-y-2"
+                data-field="learningCommitment"
               >
                 {[
                   { v: "A", l: "A — Highly committed" },
@@ -450,11 +477,11 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
               </RadioGroup>
             </div>
             <div>
-              <Label>9. Professionalism and attitude</Label>
+              <Label>9. Professionalism and attitude <span className="text-red-500">*</span></Label>
               <p className="mt-1 text-sm text-gray-500">
                 Please describe your professionalism and attitude with your team during office premises (including perspective vision on your career along with your team).
               </p>
-              <Textarea className="mt-1" {...register("professionalismAttitude")} />
+              <Textarea className="mt-1" data-field="professionalismAttitude" {...register("professionalismAttitude")} />
             </div>
           </div>
         )}
@@ -475,8 +502,8 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
 
         {(!isQC && step === 7) && (
           <div>
-            <Label>10. Work performance and Time Management *</Label>
-            <Textarea className="min-h-[150px] mt-1" {...register("currentYearPerformance")} />
+            <Label>10. Work performance and Time Management <span className="text-red-500">*</span></Label>
+            <Textarea className="min-h-[150px] mt-1" data-field="currentYearPerformance" {...register("currentYearPerformance")} />
           </div>
         )}
 
@@ -485,21 +512,21 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
 
         {isQC && step === 9 && (
           <div>
-            <Label>10. Work performance and Time Management *</Label>
-            <Textarea className="min-h-[150px] mt-1" {...register("currentYearPerformance")} />
+            <Label>10. Work performance and Time Management <span className="text-red-500">*</span></Label>
+            <Textarea className="min-h-[150px] mt-1" data-field="currentYearPerformance" {...register("currentYearPerformance")} />
           </div>
         )}
 
         {step === 10 && (
           <div className="space-y-6">
             <div>
-              <Label>11. Work performance and Time Management: *</Label>
+              <Label>11. Work performance and Time Management: <span className="text-red-500">*</span></Label>
               <p className="mt-1 text-sm text-gray-500">Please describe your current year work performance and Time Management</p>
-              <Textarea className="min-h-[120px] mt-1" {...register("productivityImprovement")} />
+              <Textarea className="min-h-[120px] mt-1" data-field="productivityImprovement" {...register("productivityImprovement")} />
             </div>
             <div>
-              <Label>Rate Yourself of Your Overall Performance: *</Label>
-              <RadioGroup value={watch("overallRating")} onValueChange={(v) => setValue("overallRating", v)} className="mt-2 space-y-3">
+              <Label>Rate Yourself of Your Overall Performance: <span className="text-red-500">*</span></Label>
+              <RadioGroup value={watch("overallRating")} onValueChange={(v) => setValue("overallRating", v)} className="mt-2 space-y-3" data-field="overallRating">
                 {OVERALL_RATINGS.map((opt, i) => (
                   <div key={opt} className="flex items-start gap-2">
                     <RadioGroupItem value={opt} id={`rating-${i}`} />
@@ -511,7 +538,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
             <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <Label>Form Filled And Signed By *</Label>
-                <Input {...register("employeeSignatureName")} />
+                <Input data-field="employeeSignatureName" {...register("employeeSignatureName")} />
               </div>
               <div>
                 <Label>Employee Code</Label>
@@ -552,6 +579,12 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
             )}
           </div>
         </div>
+
+        {notification && (
+          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-700">{notification}</p>
+          </div>
+        )}
       </form>
     </FormProvider>
   );

@@ -311,7 +311,7 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
 function PageFooter({ num }: { num: number }) {
   return (
     <View style={s.footerBar} fixed>
-      <Text style={s.footerBrand}>Confidential Salary Appraisal Report</Text>
+      <Text style={s.footerBrand}>Salary Appraisal Report</Text>
       <Text style={s.pageNumText}>PAGE {num}</Text>
     </View>
   );

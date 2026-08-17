@@ -18,7 +18,7 @@ export function SelfRatingGrid({ items }: SelfRatingGridProps) {
   return (
     <div className="space-y-6">
       {items.map((item) => (
-        <div key={item.name} className="rounded-lg border p-4">
+        <div key={item.name} className="rounded-lg border p-4" data-field={item.name}>
           <Controller
             name={item.name}
             control={control}

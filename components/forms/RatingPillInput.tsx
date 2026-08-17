@@ -20,7 +20,7 @@ export function RatingPillInput({ value, onChange, readOnly, label }: RatingPill
 
   return (
     <div className="space-y-2">
-      {label && <p className="text-sm font-medium text-[#1e2740]">{label}</p>}
+      {label && <p className="text-sm font-medium text-[#1e2740]">{label} <span className="text-red-500">*</span></p>}
       <div className="flex flex-wrap gap-1.5">
         {RATING_VALUES.map((n) => (
           <button
@@ -56,7 +56,7 @@ export function RatingPillReadOnly({
 
   return (
     <div className="space-y-2">
-      {label && <p className="text-sm font-medium text-[#1e2740]">{label}</p>}
+      {label && <p className="text-sm font-medium text-[#1e2740]">{label} <span className="text-red-500">*</span></p>}
       <div className="flex flex-wrap gap-1.5">
         {RATING_VALUES.map((n) => (
           <span

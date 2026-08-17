@@ -19,6 +19,7 @@ const TEAM_MANAGER_MAP: Record<string, string> = {
   "team 3": "Naveena G S",
   "team 4": "Kumaraswamy M P",
   "team 5": "Pradeep Kumar B S",
+  "team 6": "Deepu M C",
   "team 7": "Deepu M C",
   "team qc / engineering": "Deepu M C",
   "qc / engineering": "Deepu M C",
@@ -78,14 +79,14 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
       <h2 className="text-lg font-semibold text-blanco-primary">Employee Information</h2>
       <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <Label htmlFor="employeeName">Employee Name *</Label>
+          <Label htmlFor="employeeName">Employee Name <span className="text-red-500">*</span></Label>
           <Input id="employeeName" {...register("employeeName")} />
           {errors.employeeName && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.employeeName.message)}</p>
           )}
         </div>
         <div>
-          <Label htmlFor="employeeCode">Employee ID / Code *</Label>
+          <Label htmlFor="employeeCode">Employee ID / Code <span className="text-red-500">*</span></Label>
           <Input
             id="employeeCode"
             {...register("employeeCode")}
@@ -101,7 +102,7 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
           )}
         </div>
         <div>
-          <Label htmlFor="team">Team</Label>
+          <Label htmlFor="team">Team <span className="text-red-500">*</span> </Label>
           <Controller
             name="team"
             control={control}
@@ -130,7 +131,7 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
           )}
         </div>
         <div>
-          <Label>Manager Name *</Label>
+          <Label>Manager Name <span className="text-red-500">*</span></Label>
           <Input
             value={selectedManagerName}
             readOnly
@@ -152,7 +153,7 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
           )}
         </div>
         <div>
-          <Label htmlFor="designation">Designation</Label>
+          <Label htmlFor="designation">Designation <span className="text-red-500">*</span> </Label>
           <Controller
             name="designation"
             control={control}
@@ -177,11 +178,12 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
           <Input value={today} readOnly disabled className="bg-muted" />
         </div>
         <div>
-          <Label htmlFor="prevExperienceYears">Previous number of years experience in this field (if applicable)</Label>
+          <Label htmlFor="prevExperienceYears"> Previous number of years experience in this field <br /> (if applicable) </Label>
           <Input id="prevExperienceYears" {...register("prevExperienceYears")} />
         </div>
         <div>
-          <Label htmlFor="companyExperienceYears">Number of years experience in this company</Label>
+          <Label htmlFor="companyExperienceYears"> Number of years experience in this company <span className="text-red-500">*</span> </Label>
+
           <Input id="companyExperienceYears" {...register("companyExperienceYears")} />
         </div>
       </div>

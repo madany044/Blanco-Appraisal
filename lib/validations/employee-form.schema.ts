@@ -1,6 +1,14 @@
 import { z } from "zod";
 
-const rating = z.coerce.number().min(0).max(10).optional();
+const rating = z.union([
+  z.number().min(0).max(10),
+  z.string().transform((val) => {
+    const num = parseFloat(val);
+    if (isNaN(num)) throw new Error("Rating must be a number");
+    if (num < 0 || num > 10) throw new Error("Rating must be between 0 and 10");
+    return num;
+  })
+]).refine((val) => val >= 0 && val <= 10, "Rating is required");
 
 export const employeeFormSchema = z.object({
   employeeName: z.string().min(1, "Employee name is required"),
