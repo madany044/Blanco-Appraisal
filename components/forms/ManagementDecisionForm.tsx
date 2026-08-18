@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -16,6 +16,7 @@ import type { SerializedIncrementSlab } from "@/lib/utils";
 import { getMaxIncrementPct } from "@/lib/workflow";
 import { formatSalary } from "@/lib/submission-display";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { ConfirmSubmitModal } from "@/components/shared/ConfirmSubmitModal";
 
 interface ManagementDecisionFormProps {
   slabs: SerializedIncrementSlab[];
@@ -61,10 +62,18 @@ We are happy to receive your appraisal request and the feedback from your team h
     },
   });
 
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const { register, handleSubmit, watch, setValue, getValues } = methods;
   const incrementPct = watch("mgmtIncrementPercentage") ?? 0;
   const statementPct = watch("mgmtStatementPercentage") ?? 0;
-  const feedbackValue = watch("mgmtFeedbackToEmployee");
+  const openSubmitConfirm = onSubmit ? handleSubmit(() => setShowSubmitConfirm(true)) : undefined;
+  const confirmSubmit = onSubmit ? handleSubmit(async (data) => {
+    if (!data.mgmtFeedbackToEmployee?.trim()) {
+      data.mgmtFeedbackToEmployee = TEMPLATE;
+    }
+    await onSubmit(data);
+    setShowSubmitConfirm(false);
+  }) : undefined;
   const newMonthlySalary = useMemo(
     () => Math.round(currentMonthlySalary * (1 + incrementPct / 100)),
     [currentMonthlySalary, incrementPct]
@@ -347,7 +356,7 @@ We are happy to receive your appraisal request and the feedback from your team h
               <Button
                 type="button"
                 className="w-full"
-                onClick={() => validateAndSubmit(onSubmit)}
+                onClick={openSubmitConfirm}
               >
                Reviewed and Approved By Management
               </Button>
@@ -359,5 +368,19 @@ We are happy to receive your appraisal request and the feedback from your team h
   );
 
   if (readOnly) return content;
-  return <FormProvider {...methods}>{content}</FormProvider>;
+  return (
+    <FormProvider {...methods}>
+      {content}
+      <ConfirmSubmitModal
+        open={showSubmitConfirm}
+        title="Confirm submission"
+        description="Please confirm that this management decision is final and ready to be submitted to the next stage."
+        confirmLabel="Yes, Submit"
+        onClose={() => setShowSubmitConfirm(false)}
+        onConfirm={() => {
+          if (confirmSubmit) void confirmSubmit();
+        }}
+      />
+    </FormProvider>
+  );
 }

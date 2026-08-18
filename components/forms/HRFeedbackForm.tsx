@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, FormProvider, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { hrFormSchema, type HRFormValues } from "@/lib/validations/hr-form.schema";
@@ -12,6 +12,7 @@ import { RatingPillInput, RatingPillReadOnly } from "@/components/forms/RatingPi
 import { HRSubmissionView } from "@/components/forms/SubmissionDetailView";
 import type { AppraisalSubmission } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { ConfirmSubmitModal } from "@/components/shared/ConfirmSubmitModal";
 import { getDefaultEffectiveDate } from "@/lib/utils";
 import { formatDate } from "@/lib/utils";
 
@@ -61,11 +62,18 @@ export function HRFeedbackForm({
     },
   });
 
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const { register, handleSubmit, control, formState: { errors }, setValue } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "additionalIncrements",
   });
+
+  const openSubmitConfirm = onSubmit ? handleSubmit(() => setShowSubmitConfirm(true)) : undefined;
+  const confirmSubmit = onSubmit ? handleSubmit(async (data) => {
+    await onSubmit(data);
+    setShowSubmitConfirm(false);
+  }) : undefined;
 
   useEffect(() => {
     if (!defaultValues?.hrAdminSignatureName) {
@@ -232,12 +240,23 @@ export function HRFeedbackForm({
             <Button type="button" variant="secondary" onClick={handleSubmit(onSaveDraft)}>Save Draft</Button>
           )}
           {onSubmit && (
-            <Button type="button" variant="success" onClick={handleSubmit(onSubmit)}>
+            <Button type="button" variant="success" onClick={openSubmitConfirm}>
               Send To Reporting Manager for Review
             </Button>
           )}
         </div>
       </form>
+
+      <ConfirmSubmitModal
+        open={showSubmitConfirm}
+        title="Confirm submission"
+        description="Please confirm that you are ready to send this HR review to the reporting manager. This action cannot be undone from this screen."
+        confirmLabel="Yes, Submit"
+        onClose={() => setShowSubmitConfirm(false)}
+        onConfirm={() => {
+          if (confirmSubmit) void confirmSubmit();
+        }}
+      />
     </FormProvider>
   );
 }

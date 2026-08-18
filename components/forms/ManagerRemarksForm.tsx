@@ -13,9 +13,10 @@ import { Button } from "@/components/ui/button";
 import type { AppraisalSubmission } from "@prisma/client";
 import type { SerializedIncrementSlab } from "@/lib/utils";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { ConfirmSubmitModal } from "@/components/shared/ConfirmSubmitModal";
 import { getMaxIncrementPct } from "@/lib/workflow";
 import { formatSalary } from "@/lib/submission-display";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 interface ManagerRemarksFormProps {
   managerName?: string;
@@ -58,7 +59,14 @@ export function ManagerRemarksForm({
     },
   });
 
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const { register, handleSubmit, watch, setValue } = methods;
+
+  const openSubmitConfirm = onSubmit ? handleSubmit(() => setShowSubmitConfirm(true)) : undefined;
+  const confirmSubmit = onSubmit ? handleSubmit(async (data) => {
+    await onSubmit(data);
+    setShowSubmitConfirm(false);
+  }) : undefined;
 
   // Calculate values for increment amount
   const currentMonthlySalary = currentSalary;
@@ -229,12 +237,23 @@ export function ManagerRemarksForm({
           {onSaveDraft && <Button type="button" variant="secondary" onClick={handleSubmit(onSaveDraft)}>Save Draft</Button>}
           {onReturn && <Button type="button" variant="outline" onClick={handleSubmit(onReturn)}>Return Back to HR</Button>}
           {onSubmit && (
-            <Button type="button" variant="success" onClick={handleSubmit(onSubmit)}>
+            <Button type="button" variant="success" onClick={openSubmitConfirm}>
               Send to Management
             </Button>
           )}
         </div>
       </form>
+
+      <ConfirmSubmitModal
+        open={showSubmitConfirm}
+        title="Confirm submission"
+        description="Please confirm that you are ready to send this manager review to management. This will move the form to the next stage."
+        confirmLabel="Yes, Submit"
+        onClose={() => setShowSubmitConfirm(false)}
+        onConfirm={() => {
+          if (confirmSubmit) void confirmSubmit();
+        }}
+      />
     </FormProvider>
   );
 }

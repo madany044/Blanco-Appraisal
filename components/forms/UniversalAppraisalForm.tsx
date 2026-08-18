@@ -24,6 +24,7 @@ import type { Manager } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { FinalFaceVerification } from "@/components/forms/FinalFaceVerification";
 import { DisableCopyPaste } from "@/components/shared/DisableCopyPaste";
+import { ConfirmSubmitModal } from "@/components/shared/ConfirmSubmitModal";
 import { createClient } from "@/lib/supabase/client";
 
 const RATINGS_PART1 = [
@@ -92,6 +93,7 @@ interface UniversalAppraisalFormProps {
 export function UniversalAppraisalForm({ category, managers, brandSubtitle, verifiedEmployeeCode }: UniversalAppraisalFormProps) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [verificationPhoto, setVerificationPhoto] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
   const router = useRouter();
@@ -213,6 +215,11 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
   async function onSubmit(data: EmployeeFormValues) {
     await saveSubmission(data, false);
   }
+
+  const confirmActualSubmit = handleSubmit(async (data) => {
+    await onSubmit(data);
+    setShowSubmitConfirm(false);
+  });
 
   async function nextStep() {
     const fieldsByStep: Record<number, (keyof EmployeeFormValues)[]> = isQC
@@ -576,12 +583,28 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
             {step < lastStep ? (
               <Button type="button" onClick={nextStep}>Next</Button>
             ) : (
-              <Button type="submit" variant="success" disabled={submitting || !verificationPhoto}>
+              <Button
+                type="button"
+                variant="success"
+                disabled={submitting || !verificationPhoto}
+                onClick={handleSubmit(() => setShowSubmitConfirm(true))}
+              >
                 Submit For Review
               </Button>
             )}
           </div>
         </div>
+
+        <ConfirmSubmitModal
+          open={showSubmitConfirm}
+          title="Confirm submission"
+          description="Please confirm that you are ready to submit your appraisal form for review. Once submitted, it will move to the next stage."
+          confirmLabel="Yes, Submit"
+          onClose={() => setShowSubmitConfirm(false)}
+          onConfirm={() => {
+            void confirmActualSubmit();
+          }}
+        />
 
         {notification && (
           <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
