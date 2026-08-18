@@ -197,7 +197,7 @@ export function EnrollFaceClient() {
   return (
     <div className="mx-auto max-w-md space-y-5 rounded-xl border bg-white p-6 shadow-sm">
       <div>
-        <h2 className="text-lg font-semibold text-slate-800">Face Enrollment</h2>
+        <h2 className="text-lg font-semibold text-slate-800">Enroll for New Employees</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Capture a clear, front-facing live photo to enroll this employee for face verification.
         </p>

@@ -10,7 +10,14 @@ const incrementEntrySchema = z.object({
 export const hrFormSchema = z.object({
   currentSalary: z.coerce.number().min(0, "Please enter a valid salary"),
   previousIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
-  additionalIncrements: z.array(incrementEntrySchema).optional().default([]),
+  additionalIncrements: z
+  .array(
+    z.object({
+      salaryRise: z.number().optional(),
+      date: z.string().optional(),
+    })
+  )
+  .optional(),
   effective_date: z.string().optional(),
   hrCodeOfConduct: rating,
   hrDressCode: rating,

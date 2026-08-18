@@ -18,7 +18,7 @@ export function formatDate(date: Date | string | null | undefined): string {
 export function formatStage(stage: number): string {
   const labels: Record<number, string> = {
     [-1]: "Draft",
-    0: "Submitted",
+    0: "Submitted By Employee",
     1: "With Manager",
     2: "With Management",
     3: "Ready To Export",

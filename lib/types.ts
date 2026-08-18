@@ -64,11 +64,11 @@ export const NOT_RECOMMENDED_REASONS = [
 ] as const;
 
 export const STAGE_LABELS = [
-  "Submitted",
+  "Submitted By Employee",
   "HR Reviewed",
   "Manager Reviewed",
   "Management Reviewed & Approved",
-  "Completed",
+  "Exported to PDF",
 ] as const;
 
 export type IncrementSlabRow = SerializedIncrementSlab;

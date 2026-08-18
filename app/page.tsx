@@ -33,7 +33,7 @@ const ROLE_CARDS = [
   },
   {
     icon: "",
-    title: "DC",
+    title: "Enroll New Employees",
     href: "/login?role=dc",
     variant: "outline" as const,
     buttonLabel: "Login",

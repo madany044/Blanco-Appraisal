@@ -113,14 +113,13 @@ export function HRFeedbackForm({
           )}
         </div>
         <div className="rounded-lg border p-4">
-          <Label htmlFor="previousIncrementPercentage">Previous Increment Percentage (%)</Label>
+          <Label htmlFor="previousIncrementPercentage">Previous Increment Amount (₹)</Label>
           <Input
             id="previousIncrementPercentage"
             type="number"
             min={0}
-            max={100}
-            step={0.1}
-            placeholder="Enter previous increment percentage"
+            step={1}
+            placeholder="Enter previous increment amount"
             className="mt-1"
             {...register("previousIncrementPercentage", { valueAsNumber: true })}
           />
@@ -130,12 +129,12 @@ export function HRFeedbackForm({
         </div>
         <div className="rounded-lg border p-4">
           <div className="flex items-center justify-between gap-3">
-            <Label>Additional Increments Between Cycles</Label>
+            <Label>Additional Increments Details In Between Cycles</Label>
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => append({ percentage: undefined, salaryRise: undefined })}
+             onClick={() => append({ date: "", salaryRise: undefined })}
             >
               + Add Increment
             </Button>
@@ -146,21 +145,6 @@ export function HRFeedbackForm({
           <div className="mt-4 space-y-3">
             {fields.map((field, index) => (
               <div key={field.id} className="grid gap-3 md:grid-cols-[1fr_1fr_auto]">
-                <div>
-                  <Label htmlFor={`additionalIncrements.${index}.percentage`}>Increment %</Label>
-                  <Input
-                    id={`additionalIncrements.${index}.percentage`}
-                    type="number"
-                    min={0}
-                    max={100}
-                    step={0.1}
-                    placeholder="e.g. 5"
-                    className="mt-1"
-                    {...register(`additionalIncrements.${index}.percentage`, {
-                      setValueAs: (value) => (value === "" ? undefined : Number(value)),
-                    })}
-                  />
-                </div>
                 <div>
                   <Label htmlFor={`additionalIncrements.${index}.salaryRise`}>Salary Rise (₹)</Label>
                   <Input
@@ -175,6 +159,15 @@ export function HRFeedbackForm({
                     })}
                   />
                 </div>
+                <div>
+        <Label htmlFor={`additionalIncrements.${index}.date`}>Date</Label>
+        <Input
+          id={`additionalIncrements.${index}.date`}
+          type="date"
+          className="mt-1"
+          {...register(`additionalIncrements.${index}.date`)}
+        />
+      </div>
                 <div className="flex items-end">
                   <Button type="button" variant="outline" size="sm" onClick={() => remove(index)}>
                     Remove
