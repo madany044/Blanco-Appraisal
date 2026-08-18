@@ -10,6 +10,8 @@ const rating = z.union([
   })
 ]).refine((val) => val >= 0 && val <= 10, "Rating is required");
 
+const optionalRating = rating.optional();
+
 export const employeeFormSchema = z.object({
   employeeName: z.string().min(1, "Employee name is required"),
   employeeCode: z.string().min(1, "Employee code is required"),
@@ -44,16 +46,16 @@ export const employeeFormSchema = z.object({
   rateEnglish: rating,
   rateSelfLearning: rating,
   rateQualityOfWork: rating,
-  rateDeadlines: rating,
-  rateClientComms: rating,
-  rateCustomerEmails: rating,
-  rateRfiCreation: rating,
-  rateEmailWriting: rating,
-  rateIssueResolution: rating,
-  rateKnowledgeSharing: rating,
-  rateLeadership: rating,
-  rateTeamPerformance: rating,
-  rateTeamBuilding: rating,
+  rateDeadlines: optionalRating,
+  rateClientComms: optionalRating,
+  rateCustomerEmails: optionalRating,
+  rateRfiCreation: optionalRating,
+  rateEmailWriting: optionalRating,
+  rateIssueResolution: optionalRating,
+  rateKnowledgeSharing: optionalRating,
+  rateLeadership: optionalRating,
+  rateTeamPerformance: optionalRating,
+  rateTeamBuilding: optionalRating,
   prodSimpleBeam: z.string().optional(),
   prodMediumBeam: z.string().optional(),
   prodComplexBeam: z.string().optional(),
