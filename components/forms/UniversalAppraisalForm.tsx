@@ -22,7 +22,7 @@ import {
 import { OVERALL_RATINGS, ABROAD_OPTIONS, type AppraisalCategory } from "@/lib/types";
 import type { Manager } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
-import { CameraCapture } from "@/components/forms/CameraCapture";
+import { FinalFaceVerification } from "@/components/forms/FinalFaceVerification";
 import { DisableCopyPaste } from "@/components/shared/DisableCopyPaste";
 import { createClient } from "@/lib/supabase/client";
 
@@ -553,10 +553,13 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
             <div>
               <Label>Final Verification *</Label>
               <p className="mt-1 text-sm text-gray-500">
-                Please take one last photo to verify it is really you submitting this form.
+                Please verify your face one more time before submitting this form.
               </p>
               <div className="mt-2">
-                <CameraCapture onCapture={setVerificationPhoto} />
+                <FinalFaceVerification
+                  employeeCode={verifiedEmployeeCode ?? employeeCode ?? ""}
+                  onVerified={setVerificationPhoto}
+                />
               </div>
             </div>
           </div>
