@@ -1,32 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import { createClient, type WebSocketLikeConstructor } from "@supabase/supabase-js";
+import { randomBytes } from "crypto";
 import WebSocket from "ws";
+import { USERS, MANAGERS } from "./users";
 
 const prisma = new PrismaClient();
 
-const DEFAULT_PASSWORD = "Blanco@2026";
-
-const USERS = [
-  { email: "hr.blanco@gmail.com", role: "hr", name: "HR Admin" },
-  { email: "sud.blanco@gmail.com", role: "management", name: "Management" },
-  { email: "sudeep.blanco@gmail.com", role: "manager", name: "Sudeep M C" },
-  { email: "yog.blanco@gmail.com", role: "manager", name: "Yogesha S" },
-  { email: "gsn.blanco@gmail.com", role: "manager", name: "Naveena G S" },
-  { email: "bsp.blanco@gmail.com", role: "manager", name: "Pradeep Kumar B S" },
-  { email: "sms.blanco@gmail.com", role: "manager", name: "Shashikumar M S" },
-  { email: "mpk.blanco@gmail.com", role: "manager", name: "Kumaraswamy M P" },
-  { email: "dc.blanco@gmail.com", role: "dc", name: "Data Collector" },
-] as const;
-
-const MANAGERS = [
-  { name: "Sudeep M C", email: "sudeep.blanco@gmail.com" },
-  { name: "Yogesha S", email: "yog.blanco@gmail.com" },
-  { name: "Naveena G S", email: "gsn.blanco@gmail.com" },
-  { name: "Pradeep Kumar B S", email: "bsp.blanco@gmail.com" },
-  { name: "Shashikumar M S", email: "sms.blanco@gmail.com" },
-  { name: "Kumaraswamy M P", email: "mpk.blanco@gmail.com" },
-  { name: "Deepu M C", email: "deepu.blanco@gmail.com" },
-] as const;
+// New accounts are created with a long random password that nobody is ever
+// told. Real access is granted by sending each person a one-time
+// "set your password" link — see scripts/generate-invite-links.ts.
+// Existing accounts are NEVER touched here, so anyone who has already set
+// their own password keeps it.
+function randomPassword() {
+  return randomBytes(24).toString("base64url");
+}
 
 const SLABS = [
   { ctcMin: 0, ctcMax: 19999, maxPct: 35.0 },
@@ -54,27 +41,34 @@ async function main() {
   });
 
   const userIdByEmail = new Map<string, string>();
+  const newlyCreated: string[] = [];
 
   for (const user of USERS) {
     const { data: existing } = await supabase.auth.admin.listUsers();
     const found = existing?.users?.find((u) => u.email === user.email);
 
     if (found) {
+      // Only refresh role/name metadata. Password is never touched here.
       await supabase.auth.admin.updateUserById(found.id, {
-        user_metadata: { user_role: user.role, full_name: user.name },
+        user_metadata: {
+          ...found.user_metadata,
+          user_role: user.role,
+          full_name: user.name,
+        },
       });
       userIdByEmail.set(user.email, found.id);
       console.log(`Updated user: ${user.email}`);
     } else {
       const { data, error } = await supabase.auth.admin.createUser({
         email: user.email,
-        password: DEFAULT_PASSWORD,
+        password: randomPassword(),
         email_confirm: true,
-        user_metadata: { user_role: user.role, full_name: user.name },
+        user_metadata: { user_role: user.role, full_name: user.name, password_set: false },
       });
       if (error) throw error;
       if (data.user) {
         userIdByEmail.set(user.email, data.user.id);
+        newlyCreated.push(user.email);
         console.log(`Created user: ${user.email}`);
       }
     }
@@ -105,6 +99,14 @@ async function main() {
     });
   }
   console.log("Seeded managers");
+
+  if (newlyCreated.length > 0) {
+    console.log(
+      `\n${newlyCreated.length} new account(s) created with no usable password.\n` +
+        "Run `npm run auth:invite-links` to generate their one-time set-password links, " +
+        "then send those links yourself via email/WhatsApp.\n"
+    );
+  }
 }
 
 main()

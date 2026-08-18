@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,25 +18,27 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
+  const linkExpired = searchParams.get("error") === "link-expired";
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const supabase = createClient();
-    const { data, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
+    const result = await res.json();
 
-    if (authError) {
-      setError(authError.message);
+    if (!res.ok) {
+      setError(result.error ?? "Unable to sign in.");
       setLoading(false);
       return;
     }
 
-    const role = data.user?.user_metadata?.user_role as string;
+    const role = result.role as string;
     const paths: Record<string, string> = {
       hr: "/hr",
       manager: "/manager",
@@ -62,6 +63,13 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
+            {linkExpired && !error && (
+              <Alert variant="destructive">
+                <AlertDescription>
+                  That link has expired or was already used. Ask an admin to send you a new one.
+                </AlertDescription>
+              </Alert>
+            )}
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>

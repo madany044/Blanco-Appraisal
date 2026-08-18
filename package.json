@@ -11,6 +11,7 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
+    "auth:invite-links": "tsx scripts/generate-invite-links.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
