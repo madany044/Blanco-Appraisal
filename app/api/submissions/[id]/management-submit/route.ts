@@ -47,12 +47,12 @@ export async function POST(
     if (draft) {
       const updated = await prisma.appraisalSubmission.update({
         where: { id: params.id },
-        data: mgmtData,
+        data: { ...mgmtData, mgmtDraftSavedAt: new Date() },
       });
       return NextResponse.json(updated);
     }
 
-    const updated = await transitionStage(params.id, 2, 3, mgmtData);
+    const updated = await transitionStage(params.id, 2, 3, { ...mgmtData, mgmtDraftSavedAt: null });
     return NextResponse.json(updated);
   } catch (error) {
     console.error(error);

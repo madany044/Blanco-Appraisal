@@ -62,6 +62,13 @@ model AppraisalSubmission {
   managementFilledAt   DateTime?         @map("management_filled_at") @db.Timestamptz(6)
   completedAt          DateTime?         @map("completed_at") @db.Timestamptz(6)
 
+  // Set whenever that role clicks "Save Draft" while their stage form is
+  // still open (not yet finally submitted). Powers each role's "Saved
+  // Drafts" sidebar page. Never touched by anything else in the workflow.
+  hrDraftSavedAt       DateTime?         @map("hr_draft_saved_at") @db.Timestamptz(6)
+  managerDraftSavedAt  DateTime?         @map("manager_draft_saved_at") @db.Timestamptz(6)
+  mgmtDraftSavedAt     DateTime?         @map("mgmt_draft_saved_at") @db.Timestamptz(6)
+
   employeeName         String            @map("employee_name")
   employeeCode         String            @map("employee_code")
   managerId            String            @map("manager_id") @db.Uuid

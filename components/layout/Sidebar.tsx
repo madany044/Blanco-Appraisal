@@ -9,6 +9,7 @@ import {
   BarChart3,
   Camera,
   LogOut,
+  Save,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -28,6 +29,7 @@ interface SidebarProps {
 const HR_NAV: NavItem[] = [
   { href: "/hr", label: "Dashboard", icon: LayoutDashboard },
   { href: "/hr/submissions", label: "Submissions", icon: FileText },
+  { href: "/hr/drafts", label: "Saved Drafts", icon: Save },
   { href: "/hr/exports", label: "Exports", icon: Download },
   { href: "/hr/reports", label: "Reports", icon: BarChart3 },
   { href: "/hr/enroll-face", label: "Enroll Face", icon: Camera },
@@ -36,6 +38,7 @@ const HR_NAV: NavItem[] = [
 const MANAGER_NAV: NavItem[] = [
   { href: "/manager", label: "Dashboard", icon: LayoutDashboard },
   { href: "/manager/ctc", label: "CTC Review", icon: FileText },
+  { href: "/manager/drafts", label: "Saved Drafts", icon: Save },
   { href: "/manager/exports", label: "Exports", icon: Download },
   { href: "/manager/enroll-face", label: "Enroll Face", icon: Camera },
 ];
@@ -46,6 +49,7 @@ const DC_NAV: NavItem[] = [
 
 const MGMT_NAV: NavItem[] = [
   { href: "/management", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/management/drafts", label: "Saved Drafts", icon: Save },
   { href: "/management/exports", label: "Exports", icon: Download },
 ];
 
