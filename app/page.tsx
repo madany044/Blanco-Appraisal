@@ -13,13 +13,13 @@ const ROLE_CARDS = [
     buttonLabel: "Continue as Employee",
   },
   {
-    title: "HR & Administration",
+    title: "HR & Admin",
     href: "/login?role=hr",
     variant: "outline" as const,
     buttonLabel: "Login",
   },
   {
-    title: "Reporting Manager",
+    title: "Manager",
     href: "/login?role=manager",
     variant: "outline" as const,
     buttonLabel: "Login",
@@ -28,6 +28,13 @@ const ROLE_CARDS = [
     icon: "",
     title: "Management",
     href: "/login?role=management",
+    variant: "outline" as const,
+    buttonLabel: "Login",
+  },
+  {
+    icon: "",
+    title: "DC",
+    href: "/login?role=dc",
     variant: "outline" as const,
     buttonLabel: "Login",
   },
@@ -56,7 +63,7 @@ export default function HomePage() {
           Select your role to continue
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 max-w-7xl mx-auto">
           {ROLE_CARDS.map((card) => (
             <Card key={card.title} className="hover:shadow-xl transition-shadow">
               <CardHeader>

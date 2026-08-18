@@ -4,13 +4,30 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Camera, RotateCcw, CheckCircle2 } from "lucide-react";
 import { loadFaceModels, getFaceDescriptor } from "@/lib/face-api-loader";
 import { createClient } from "@/lib/supabase/client";
 
+const ENROLLED_BY_OPTIONS = [
+  "Enroller 1",
+  "Enroller 2",
+  "Enroller 3",
+  "Enroller 4",
+  "Enroller 5",
+  "Enroller 6",
+];
+
 export function EnrollFaceClient() {
   const [employeeCode, setEmployeeCode] = useState("");
   const [employeeName, setEmployeeName] = useState("");
+  const [enrolledBy, setEnrolledBy] = useState("");
   const [status, setStatus] = useState<"idle" | "starting" | "live" | "captured" | "saving" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
   const [ready, setReady] = useState(false);
@@ -47,8 +64,8 @@ export function EnrollFaceClient() {
   }, []);
 
   async function startCamera() {
-    if (!employeeCode || !employeeName) {
-      setMessage("Please enter Employee Code and Name first.");
+    if (!employeeCode || !employeeName || !enrolledBy) {
+      setMessage("Please enter Employee Code, Name, and select Enrolled By first.");
       return;
     }
     setStatus("starting");
@@ -152,6 +169,7 @@ export function EnrollFaceClient() {
           employeeName,
           referencePhotoUrl: urlData.publicUrl,
           faceDescriptor: Array.from(descriptor),
+          enrolledBy,
         }),
       });
       if (!saveRes.ok) throw new Error("Failed to save profile");
@@ -164,37 +182,58 @@ export function EnrollFaceClient() {
     }
   }
 
+  function resetForm() {
+    setEmployeeCode("");
+    setEmployeeName("");
+    setEnrolledBy("");
+    setPhoto(null);
+    setStatus("idle");
+    setReady(false);
+    setMessage("");
+  }
+
+  const lockFields = status === "live" || status === "captured" || status === "saving";
+
   return (
-    <div className="max-w-md space-y-4 rounded-lg border bg-white p-6">
+    <div className="mx-auto max-w-md space-y-5 rounded-xl border bg-white p-6 shadow-sm">
       <div>
-        <Label>Employee Code</Label>
-        <Input
-          value={employeeCode}
-          onChange={(e) => setEmployeeCode(e.target.value)}
-          disabled={status === "live" || status === "captured" || status === "saving"}
-        />
+        <h2 className="text-lg font-semibold text-slate-800">Face Enrollment</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Capture a clear, front-facing live photo to enroll this employee for face verification.
+        </p>
       </div>
-      <div>
-        <Label>Employee Name</Label>
-        <Input
-          value={employeeName}
-          onChange={(e) => setEmployeeName(e.target.value)}
-          disabled={status === "live" || status === "captured" || status === "saving"}
-        />
+
+      <div className="space-y-4">
+        <div>
+          <Label>Employee Code</Label>
+          <Input value={employeeCode} onChange={(e) => setEmployeeCode(e.target.value)} disabled={lockFields} />
+        </div>
+        <div>
+          <Label>Employee Name</Label>
+          <Input value={employeeName} onChange={(e) => setEmployeeName(e.target.value)} disabled={lockFields} />
+        </div>
+        <div>
+          <Label>Enrolled By</Label>
+          <Select value={enrolledBy} onValueChange={setEnrolledBy} disabled={lockFields}>
+            <SelectTrigger className="mt-1">
+              <SelectValue placeholder="Select who is enrolling this employee" />
+            </SelectTrigger>
+            <SelectContent>
+              {ENROLLED_BY_OPTIONS.map((name) => (
+                <SelectItem key={name} value={name}>{name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div>
         <Label>Reference Photo</Label>
 
         {status === "idle" || status === "starting" || status === "error" ? (
-          <Button
-  type="button"
-  className="mt-2 ml-8 gap-1.5 px-3 py-1.5 text-sm"
-  onClick={startCamera}
-  disabled={status === "starting"}
->
-  <Camera className="h-3.5 w-3.5" /> {status === "starting" ? "Starting camera…" : "Enable Camera"}
-</Button>
+          <Button type="button" className="mt-2 w-full gap-2" onClick={startCamera} disabled={status === "starting"}>
+            <Camera className="h-4 w-4" /> {status === "starting" ? "Starting camera…" : "Enable Camera"}
+          </Button>
         ) : null}
 
         <div style={{ display: status === "live" ? "block" : "none" }} className="mt-2 space-y-2">
@@ -203,17 +242,17 @@ export function EnrollFaceClient() {
             autoPlay
             muted
             playsInline
-            className="w-full max-w-xs rounded-md border bg-black"
+            className="w-full rounded-md border bg-black"
             style={{ minHeight: 240 }}
           />
-          <Button type="button" onClick={capture} disabled={!ready} className="gap-2">
+          <Button type="button" onClick={capture} disabled={!ready} className="w-full gap-2">
             <Camera className="h-4 w-4" /> {ready ? "Capture Photo" : "Preparing camera…"}
           </Button>
         </div>
 
         {status === "captured" && photo && (
           <div className="mt-2 space-y-2">
-            <img src={photo} alt="Captured reference" className="w-full max-w-xs rounded-md border" />
+            <img src={photo} alt="Captured reference" className="w-full rounded-md border" />
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1 text-sm text-green-700">
                 <CheckCircle2 className="h-4 w-4" /> Photo captured
@@ -228,12 +267,18 @@ export function EnrollFaceClient() {
         <canvas ref={canvasRef} className="hidden" />
       </div>
 
-      <Button onClick={handleEnroll} disabled={!photo || status === "saving" || status === "done"}>
-        {status === "saving" ? "Enrolling…" : "Enroll Face"}
-      </Button>
+      {status === "done" ? (
+        <Button type="button" variant="secondary" className="w-full" onClick={resetForm}>
+          Enroll Another Employee
+        </Button>
+      ) : (
+        <Button className="w-full" onClick={handleEnroll} disabled={!photo || status === "saving"}>
+          {status === "saving" ? "Enrolling…" : "Enroll Face"}
+        </Button>
+      )}
 
       {message && (
-        <p className={status === "error" ? "text-red-600 text-sm" : "text-green-700 text-sm"}>{message}</p>
+        <p className={status === "error" ? "text-sm text-red-600" : "text-sm text-green-700"}>{message}</p>
       )}
     </div>
   );

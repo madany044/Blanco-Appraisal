@@ -42,6 +42,7 @@ export default function LoginPage() {
       hr: "/hr",
       manager: "/manager",
       management: "/management",
+      dc: "/dc",
     };
 
     router.push(redirect && redirect.startsWith("/") ? redirect : paths[role] ?? "/login");

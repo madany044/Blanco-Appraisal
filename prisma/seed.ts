@@ -15,6 +15,7 @@ const USERS = [
   { email: "bsp.blanco@gmail.com", role: "manager", name: "Pradeep Kumar B S" },
   { email: "sms.blanco@gmail.com", role: "manager", name: "Shashikumar M S" },
   { email: "mpk.blanco@gmail.com", role: "manager", name: "Kumaraswamy M P" },
+  { email: "dc.blanco@gmail.com", role: "dc", name: "Data Collector" },
 ] as const;
 
 const MANAGERS = [

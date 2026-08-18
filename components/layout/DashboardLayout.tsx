@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 
 interface DashboardLayoutProps {
-  role: "hr" | "manager" | "management";
+  role: "hr" | "manager" | "management" | "dc";
   userEmail: string;
   title: string;
   children: React.ReactNode;

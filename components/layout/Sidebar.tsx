@@ -21,7 +21,7 @@ interface NavItem {
 }
 
 interface SidebarProps {
-  role: "hr" | "manager" | "management";
+  role: "hr" | "manager" | "management" | "dc";
   userEmail: string;
 }
 
@@ -37,6 +37,11 @@ const MANAGER_NAV: NavItem[] = [
   { href: "/manager", label: "Dashboard", icon: LayoutDashboard },
   { href: "/manager/ctc", label: "CTC Review", icon: FileText },
   { href: "/manager/exports", label: "Exports", icon: Download },
+  { href: "/manager/enroll-face", label: "Enroll Face", icon: Camera },
+];
+
+const DC_NAV: NavItem[] = [
+  { href: "/dc", label: "Enroll Face", icon: Camera },
 ];
 
 const MGMT_NAV: NavItem[] = [
@@ -47,7 +52,11 @@ const MGMT_NAV: NavItem[] = [
 export function Sidebar({ role, userEmail }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const nav = role === "hr" ? HR_NAV : role === "manager" ? MANAGER_NAV : MGMT_NAV;
+  const nav =
+  role === "hr" ? HR_NAV :
+  role === "manager" ? MANAGER_NAV :
+  role === "dc" ? DC_NAV :
+  MGMT_NAV;
 
   async function handleLogout() {
     const supabase = createClient();

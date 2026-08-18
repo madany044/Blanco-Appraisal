@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 
-export type UserRole = "hr" | "manager" | "management";
+export type UserRole = "hr" | "manager" | "management" | "dc";
 
 export interface AuthUser {
   id: string;
@@ -17,7 +17,7 @@ export async function getAuthUser(): Promise<AuthUser | null> {
   if (!user?.email) return null;
 
   const role = user.user_metadata?.user_role as UserRole | undefined;
-  if (!role || !["hr", "manager", "management"].includes(role)) return null;
+  if (!role || !["hr", "manager", "management", "dc"].includes(role)) return null;
 
   return {
     id: user.id,
@@ -34,6 +34,8 @@ export function roleDashboard(role: UserRole): string {
       return "/manager";
     case "management":
       return "/management";
+    case "dc":
+      return "/dc";
     default:
       return "/login";
   }

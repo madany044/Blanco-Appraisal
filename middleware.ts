@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_PREFIXES = ["/hr", "/manager", "/management"];
+const PROTECTED_PREFIXES = ["/hr", "/manager", "/management", "/dc"];
 
 function roleDashboard(role: string): string {
   switch (role) {
@@ -11,6 +11,8 @@ function roleDashboard(role: string): string {
       return "/manager";
     case "management":
       return "/management";
+    case "dc":
+      return "/dc";
     default:
       return "/login";
   }
@@ -75,6 +77,9 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith("/management") && role !== "management") {
       return NextResponse.redirect(new URL(roleDashboard(role ?? "management"), request.url));
     }
+    if (pathname.startsWith("/dc") && role !== "dc") {
+      return NextResponse.redirect(new URL(roleDashboard(role ?? "dc"), request.url));
+    }
   }
 
   return response;
@@ -85,6 +90,7 @@ export const config = {
     "/hr/:path*",
     "/manager/:path*",
     "/management/:path*",
+    "/dc/:path*",
     "/login",
   ],
 };
