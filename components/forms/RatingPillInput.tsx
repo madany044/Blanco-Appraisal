@@ -9,18 +9,19 @@ interface RatingPillInputProps {
   onChange: (value: number) => void;
   readOnly?: boolean;
   label?: string;
+  required?: boolean;
 }
 
-export function RatingPillInput({ value, onChange, readOnly, label }: RatingPillInputProps) {
+export function RatingPillInput({ value, onChange, readOnly, label, required = true }: RatingPillInputProps) {
   const selected = value ?? null;
 
   if (readOnly) {
-    return <RatingPillReadOnly value={selected} label={label} />;
+    return <RatingPillReadOnly value={selected} label={label} required={required} />;
   }
 
   return (
     <div className="space-y-2">
-      {label && <p className="text-sm font-medium text-[#1e2740]">{label} <span className="text-red-500">*</span></p>}
+      {label && <p className="text-sm font-medium text-[#1e2740]">{label}{required && <span className="text-red-500"> *</span>}</p>}
       <div className="flex flex-wrap gap-1.5">
         {RATING_VALUES.map((n) => (
           <button
@@ -48,15 +49,17 @@ export function RatingPillInput({ value, onChange, readOnly, label }: RatingPill
 export function RatingPillReadOnly({
   value,
   label,
+  required = true,
 }: {
   value: number | null | undefined;
   label?: string;
+  required?: boolean;
 }) {
   const selected = value ?? null;
 
   return (
     <div className="space-y-2">
-      {label && <p className="text-sm font-medium text-[#1e2740]">{label} <span className="text-red-500">*</span></p>}
+      {label && <p className="text-sm font-medium text-[#1e2740]">{label}{required && <span className="text-red-500"> *</span>}</p>}
       <div className="flex flex-wrap gap-1.5">
         {RATING_VALUES.map((n) => (
           <span

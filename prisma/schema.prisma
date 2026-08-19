@@ -79,7 +79,7 @@ model AppraisalSubmission {
   prevExperienceYears    String? @map("prev_experience_years")
   companyExperienceYears String? @map("company_experience_years")
   currentSalary          Int?    @map("current_salary")
-  previousIncrementPercentage Decimal? @map("previous_increment_percentage") @db.Decimal(5, 2)
+  previousIncrementPercentage Decimal? @map("previous_increment_percentage") @db.Decimal(10, 2)
   additionalIncrements   Json?   @map("additional_increments")
 
   basisOfAppraisal       String? @map("basis_of_appraisal")

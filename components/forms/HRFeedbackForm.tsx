@@ -106,14 +106,14 @@ export function HRFeedbackForm({
       <form className="space-y-6">
         <FormBrandHeader subtitle="HR and Admin Feedback" compact />
         <div className="rounded-lg border p-4">
-          <Label htmlFor="currentSalary">Employee Current CTC (₹) *</Label>
+          <Label htmlFor="currentSalary">Employee Current CTC (₹)</Label>
           <Input
             id="currentSalary"
             type="number"
             min={0}
             placeholder="Enter employee's current monthly salary"
             className="mt-1"
-            {...register("currentSalary", { valueAsNumber: true })}
+            {...register("currentSalary", { setValueAs: (value) => value === "" ? undefined : Number(value) })}
           />
           
           {errors.currentSalary && (
@@ -129,7 +129,7 @@ export function HRFeedbackForm({
             step={1}
             placeholder="Enter previous increment amount"
             className="mt-1"
-            {...register("previousIncrementPercentage", { valueAsNumber: true })}
+            {...register("previousIncrementPercentage", { setValueAs: (value) => value === "" ? undefined : Number(value) })}
           />
           {errors.previousIncrementPercentage && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.previousIncrementPercentage.message)}</p>
@@ -207,6 +207,7 @@ export function HRFeedbackForm({
                   label={`${item.label} /10`}
                   value={field.value}
                   onChange={field.onChange}
+                  required={false}
                 />
               )}
             />

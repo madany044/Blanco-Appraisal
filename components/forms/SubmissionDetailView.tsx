@@ -333,9 +333,9 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
           </p>
         </div>
         <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
-          <p className="text-sm text-gray-600">Previous Increment Percentage (%)</p>
+          <p className="text-sm text-gray-600">Previous Increment Amount (₹)</p>
           <p className="mt-1 text-[15px] font-semibold text-[#1e2740]">
-            {s.previousIncrementPercentage != null ? `${s.previousIncrementPercentage}%` : "—"}
+            {s.previousIncrementPercentage != null ? formatSalary(s.previousIncrementPercentage) : "—"}
           </p>
         </div>
         <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">

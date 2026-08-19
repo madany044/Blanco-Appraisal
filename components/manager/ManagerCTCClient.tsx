@@ -72,7 +72,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
             ) : (
               filtered.map((s) => {
                 const current = s.currentSalary ?? 0;
-                const hrPrevPct = decimalToNumber(s.previousIncrementPercentage) ?? 0;
+                const hrPreviousAmount = decimalToNumber(s.previousIncrementPercentage) ?? 0;
                 const suggestedPct = decimalToNumber(s.mgrSuggestedIncrementPercentage);
                 const mgrPct = decimalToNumber(s.mgmtIncrementPercentage);
                 const projected = Math.round(current * (1 + mgrPct / 100));
@@ -80,7 +80,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
                   <TableRow key={s.id}>
                     <TableCell className="font-medium">{s.employeeName}</TableCell>
                     <TableCell>{formatSalary(current)}</TableCell>
-                    <TableCell>{hrPrevPct ? `${hrPrevPct}%` : "—"}</TableCell>
+                    <TableCell>{hrPreviousAmount ? formatSalary(hrPreviousAmount) : "—"}</TableCell>
                     <TableCell>{suggestedPct ? `${suggestedPct}%` : "—"}</TableCell>
                     <TableCell>{mgrPct ? `${mgrPct}%` : "—"}</TableCell>
                     <TableCell>{projected ? formatSalary(projected) : "—"}</TableCell>

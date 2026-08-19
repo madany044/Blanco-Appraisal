@@ -235,7 +235,7 @@ We are happy to receive your appraisal request and the feedback from your team h
             <>
               <div style={{ marginBottom: 16, display: "grid", gap: 16 }}>
                 <div>
-                  <Label htmlFor="mgmtStatementPercentage">Obtained Increment Percentage (Based on Report card)</Label>
+                  <Label htmlFor="mgmtStatementPercentage">The Maximum Obtained Increment (Based on Report card)</Label>
                   <Input
                     id="mgmtStatementPercentage"
                     type="number"
@@ -245,7 +245,7 @@ We are happy to receive your appraisal request and the feedback from your team h
                   />
                 </div>
                 <div>
-                  <Label htmlFor="mgmtIncrementPercentage">Final Company Approved Increment Percentage</Label>
+                  <Label htmlFor="mgmtIncrementPercentage">Final Approved Increment By The Management</Label>
                   <Input
                     id="mgmtIncrementPercentage"
                     type="number"

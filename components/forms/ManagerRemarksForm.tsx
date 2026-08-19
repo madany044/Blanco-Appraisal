@@ -156,7 +156,7 @@ export function ManagerRemarksForm({
         {/* Suggested Increment Amount Section */}
         {currentSalary > 0 && (
           <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
-            <Label>Can Obtained This Much Increment Amount Based On Form  (₹)</Label>
+            <Label>The Maximum Obtained Increment Based On Your Report Card (₹)</Label>
             <Input
               type="number"
               step="1"
@@ -188,7 +188,7 @@ export function ManagerRemarksForm({
         {/* Final Approved Increment Section */}
         {currentSalary > 0 && (
           <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
-            <Label>Final Increment Amount Suggested By PM (₹)</Label>
+            <Label>Final Approved Increment Amount Suggested By PM (₹)</Label>
             <Input
               type="number"
               step="1"
