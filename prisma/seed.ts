@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { createClient, type WebSocketLikeConstructor } from "@supabase/supabase-js";
+import { createClient, type User, type WebSocketLikeConstructor } from "@supabase/supabase-js";
 import { randomBytes } from "crypto";
 import WebSocket from "ws";
 import { USERS, MANAGERS } from "./users";
@@ -40,7 +40,7 @@ async function main() {
     realtime: { transport: WebSocket as WebSocketLikeConstructor },
   });
 
-  const authUsers: NonNullable<Awaited<ReturnType<typeof supabase.auth.admin.listUsers>>["data"]>["users"] = [];
+  const authUsers: User[] = [];
   let page = 1;
   while (true) {
     const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 });
