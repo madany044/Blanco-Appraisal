@@ -4,12 +4,12 @@ import { prisma } from "@/lib/prisma";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { employeeCode, employeeName, referencePhotoUrl, faceDescriptor } = body;
+    const { employeeCode, employeeName, referencePhotoUrl, faceDescriptor, enrolledBy } = body;
 
     const profile = await prisma.employeeProfile.upsert({
       where: { employeeCode },
-      update: { employeeName, referencePhotoUrl, faceDescriptor },
-      create: { employeeCode, employeeName, referencePhotoUrl, faceDescriptor },
+      update: { employeeName, referencePhotoUrl, faceDescriptor, enrolledBy },
+      create: { employeeCode, employeeName, referencePhotoUrl, faceDescriptor, enrolledBy },
     });
 
     return NextResponse.json(profile, { status: 201 });

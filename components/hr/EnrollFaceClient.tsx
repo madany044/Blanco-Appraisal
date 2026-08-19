@@ -24,10 +24,10 @@ const ENROLLED_BY_OPTIONS = [
   "Enroller 6",
 ];
 
-export function EnrollFaceClient() {
+export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: string } = {}) {
   const [employeeCode, setEmployeeCode] = useState("");
   const [employeeName, setEmployeeName] = useState("");
-  const [enrolledBy, setEnrolledBy] = useState("");
+  const [enrolledBy, setEnrolledBy] = useState(lockedEnrolledBy ?? "");
   const [status, setStatus] = useState<"idle" | "starting" | "live" | "captured" | "saving" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
   const [ready, setReady] = useState(false);
@@ -185,7 +185,7 @@ export function EnrollFaceClient() {
   function resetForm() {
     setEmployeeCode("");
     setEmployeeName("");
-    setEnrolledBy("");
+    setEnrolledBy(lockedEnrolledBy ?? "");
     setPhoto(null);
     setStatus("idle");
     setReady(false);
@@ -214,16 +214,22 @@ export function EnrollFaceClient() {
         </div>
         <div>
           <Label>Enrolled By</Label>
-          <Select value={enrolledBy} onValueChange={setEnrolledBy} disabled={lockFields}>
-            <SelectTrigger className="mt-1">
-              <SelectValue placeholder="Select who is enrolling this employee" />
-            </SelectTrigger>
-            <SelectContent>
-              {ENROLLED_BY_OPTIONS.map((name) => (
-                <SelectItem key={name} value={name}>{name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {lockedEnrolledBy ? (
+            <div className="mt-1 flex h-10 items-center rounded-md border bg-slate-50 px-3 text-sm text-slate-700">
+              {lockedEnrolledBy}
+            </div>
+          ) : (
+            <Select value={enrolledBy} onValueChange={setEnrolledBy} disabled={lockFields}>
+              <SelectTrigger className="mt-1">
+                <SelectValue placeholder="Select who is enrolling this employee" />
+              </SelectTrigger>
+              <SelectContent>
+                {ENROLLED_BY_OPTIONS.map((name) => (
+                  <SelectItem key={name} value={name}>{name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </div>
 

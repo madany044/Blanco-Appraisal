@@ -45,6 +45,7 @@ const MANAGER_NAV: NavItem[] = [
 
 const DC_NAV: NavItem[] = [
   { href: "/dc", label: "Enroll Face", icon: Camera },
+  { href: "/dc/enrolled", label: "Enrolled Employees", icon: FileText },
 ];
 
 const MGMT_NAV: NavItem[] = [

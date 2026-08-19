@@ -229,6 +229,7 @@ model EmployeeProfile {
   employeeName      String   @map("employee_name")
   referencePhotoUrl String   @map("reference_photo_url")
   faceDescriptor    Json     @map("face_descriptor")
+  enrolledBy        String?  @map("enrolled_by")
   createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@map("employee_profiles")

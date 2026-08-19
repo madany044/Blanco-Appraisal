@@ -40,12 +40,22 @@ async function main() {
     realtime: { transport: WebSocket as WebSocketLikeConstructor },
   });
 
+  const authUsers: NonNullable<Awaited<ReturnType<typeof supabase.auth.admin.listUsers>>["data"]>["users"] = [];
+  let page = 1;
+  while (true) {
+    const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 });
+    if (error) throw error;
+    authUsers.push(...data.users);
+    if (data.users.length < 1000) break;
+    page += 1;
+  }
+
   const userIdByEmail = new Map<string, string>();
   const newlyCreated: string[] = [];
 
   for (const user of USERS) {
-    const { data: existing } = await supabase.auth.admin.listUsers();
-    const found = existing?.users?.find((u) => u.email === user.email);
+    const normalizedEmail = user.email.trim().toLowerCase();
+    const found = authUsers.find((u) => u.email?.trim().toLowerCase() === normalizedEmail);
 
     if (found) {
       // Only refresh role/name metadata. Password is never touched here.
