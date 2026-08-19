@@ -258,15 +258,14 @@ const s = StyleSheet.create({
   checkGrid2Col: { flexDirection: "row", flexWrap: "wrap", padding: SP.xs },
   checkCard2Col: { flexDirection: "row", alignItems: "center", paddingVertical: 4, paddingHorizontal: 4, marginBottom: 4, width: "50%" },
 
-  // ── Increment Table ────────────────────────────────────────────
-  incTableHead: { flexDirection: "row", backgroundColor: PRIMARY, paddingVertical: 6, paddingHorizontal: SP.sm },
-  incTableHeadText: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#FFFFFF", textTransform: "uppercase", letterSpacing: 0.5 },
-  incTableRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: BORDER, paddingVertical: 6, paddingHorizontal: SP.sm },
-  incTableRowAlt: { backgroundColor: BG_ALT },
-  incTableRowActive: { backgroundColor: "#FFF176", borderLeftWidth: 3, borderLeftColor: "#F59E0B" },
-  incTableCell: { width: "60%", fontSize: 9.5, color: TEXT },
-  incTableCellRight: { width: "40%", fontSize: 9.5, fontFamily: "Helvetica-Bold", color: ACCENT, textAlign: "right" },
-
+ // ── Increment Table ────────────────────────────────────────────
+incTableHead: { flexDirection: "row", backgroundColor: PRIMARY, paddingVertical: 4, paddingHorizontal: SP.sm },
+incTableHeadText: { fontSize: 7, fontFamily: "Helvetica-Bold", color: "#FFFFFF", textTransform: "uppercase", letterSpacing: 0.5 },
+incTableRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: BORDER, paddingVertical: 3.5, paddingHorizontal: SP.sm },
+incTableRowAlt: { backgroundColor: BG_ALT },
+incTableRowActive: { backgroundColor: "#FFF176", borderLeftWidth: 3, borderLeftColor: "#F59E0B" },
+incTableCell: { width: "60%", fontSize: 9.5, color: TEXT },
+incTableCellRight: { width: "40%", fontSize: 9.5, fontFamily: "Helvetica-Bold", color: ACCENT, textAlign: "right" },
   // ── Signature Block ──────────────────────────────────────────────
   sigCard: { borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden", marginTop: SP.lg },
   sigHeader: { backgroundColor: PRIMARY, paddingVertical: 4, paddingHorizontal: SP.sm },
@@ -859,7 +858,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <Text style={s.letterBody}>We wish you all the success in your career and hope you deliver your best performance in the upcoming performance cycle.</Text>
 
-        <Text style={[s.letterBody, { fontWeight: 'bold' }]}>* Your compensation is subject to change at any time based on your performance and/or HR/PM decisions.</Text>
+        <Text style={[s.letterBody, { fontWeight: 'bold' }]}>** Your compensation is subject to change at any time based on your performance and/or HR/PM decisions.</Text>
         <View style={{ flex: 1 }} />
         
         <View style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: SP.md }}>
