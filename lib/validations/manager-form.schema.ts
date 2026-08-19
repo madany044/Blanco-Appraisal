@@ -25,6 +25,7 @@ export const managerFormSchema = z
     incrementAmount: z.coerce.number().min(0).optional(),
     suggestedIncrementAmount: z.coerce.number().min(0).optional(),
     mgrRemarks: z.string().optional(),
+    mgrFeedback: z.string().optional(),
     mgrSignatureName: z.string().min(1, "Signature required"),
     mgrSignatureDate: z.string().optional(),
     ...managerSelfRatingFields,

@@ -228,6 +228,15 @@ export function ManagerRemarksForm({
           </div>
         )}
 
+        <div className="rounded-lg border-2 border-[#a83232] bg-[#fff1f1] p-4 mb-4">
+          <Label className="text-[#a83232]">Manager Feedback</Label>
+          <Textarea
+            className="mt-2 bg-white"
+            placeholder="Type your feedback for this employee..."
+            {...register("mgrFeedback")}
+          />
+        </div>
+
         <div>
           <Label>Additional Remarks (If Return Back To HR)</Label>
           <p className="mt-1 text-sm text-gray-500">

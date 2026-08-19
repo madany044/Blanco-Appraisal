@@ -130,6 +130,7 @@ export function mapManagerToPrisma(data: ManagerFormValues): Prisma.AppraisalSub
     mgrSuggestedIncrementPercentage: data.mgrSuggestedIncrementPercentage ?? null,
     mgrFinalApprovedIncrementPercentage: data.mgrFinalApprovedIncrementPercentage ?? null,
     mgrRemarks: data.mgrRemarks,
+    mgrFeedback: data.mgrFeedback,
     mgrSignatureName: data.mgrSignatureName,
     mgrSignatureDate: data.mgrSignatureDate ? new Date(data.mgrSignatureDate) : new Date(),
     ...selfRatingFields,

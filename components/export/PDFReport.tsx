@@ -125,7 +125,7 @@ const s = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  cardHeaderText: { fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1 },
+  cardHeaderText: { fontSize: 11, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1 },
   
   // ── Info Grid ───────────────────────────────────────────────────
   infoGrid: {
@@ -150,8 +150,8 @@ const s = StyleSheet.create({
   infoCellLastRow: { borderBottomWidth: 0 },
   infoCellLastCol: { borderRightWidth: 0 },
   infoLabel: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: MUTED, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 },
-  infoValue: { fontSize: 10, color: TEXT },
-  infoValueHighlight: { fontSize: 10, fontFamily: "Helvetica-Bold", color: ACCENT },
+  infoValue: { fontSize: 11, color: TEXT },
+  infoValueHighlight: { fontSize: 11, fontFamily: "Helvetica-Bold", color: ACCENT },
 
   // ── Question Card ───────────────────────────────────────────────
   qCard: {
@@ -173,9 +173,9 @@ const s = StyleSheet.create({
   },
   qNum: { backgroundColor: ACCENT, borderRadius: 3, paddingHorizontal: 4, paddingVertical: 2, marginRight: SP.sm, flexShrink: 0 },
   qNumText: { fontSize: 8, fontFamily: "Helvetica-Bold", color: "#FFFFFF" },
-  qTitle: { fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1, lineHeight: 1.3 },
+  qTitle: { fontSize: 11, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1, lineHeight: 1.3 },
   qBody: { padding: SP.sm },
-  qBodyText: { fontSize: 8.5, color: MUTED, marginBottom: SP.xs, lineHeight: 1.4 },
+  qBodyText: { fontSize: 9.5, color: MUTED, marginBottom: SP.xs, lineHeight: 1.4 },
   qAnswerBox: {
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
@@ -184,7 +184,7 @@ const s = StyleSheet.create({
     padding: SP.sm,
     minHeight: 40,
   },
-  qAnswerText: { fontSize: 9.5, color: TEXT, lineHeight: 1.55 },
+  qAnswerText: { fontSize: 10.5, color: TEXT, lineHeight: 1.55 },
 
   // ── Checkboxes ───────────────────────────────────────────────────
   checkCard: {
@@ -232,7 +232,7 @@ const s = StyleSheet.create({
     alignItems: "center", justifyContent: "center", marginRight: SP.sm, flexShrink: 0,
   },
   alphaText: { fontSize: 10, fontFamily: "Helvetica-Bold", color: ACCENT },
-  tableLabel: { flex: 1, fontSize: 10, color: TEXT, paddingRight: SP.sm, lineHeight: 1.4 }, // Increased font size
+  tableLabel: { flex: 1, fontSize: 11, color: TEXT, paddingRight: SP.sm, lineHeight: 1.4 }, // Increased font size
   
   scoreBadge: {
     width: 52, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center",
@@ -263,9 +263,9 @@ const s = StyleSheet.create({
   incTableHeadText: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#FFFFFF", textTransform: "uppercase", letterSpacing: 0.5 },
   incTableRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: BORDER, paddingVertical: 6, paddingHorizontal: SP.sm },
   incTableRowAlt: { backgroundColor: BG_ALT },
-  incTableRowActive: { backgroundColor: ACCENT_LIGHT, borderLeftWidth: 3, borderLeftColor: ACCENT },
-  incTableCell: { width: "60%", fontSize: 8.5, color: TEXT },
-  incTableCellRight: { width: "40%", fontSize: 8.5, fontFamily: "Helvetica-Bold", color: ACCENT, textAlign: "right" },
+  incTableRowActive: { backgroundColor: "#FFF176", borderLeftWidth: 3, borderLeftColor: "#F59E0B" },
+  incTableCell: { width: "60%", fontSize: 9.5, color: TEXT },
+  incTableCellRight: { width: "40%", fontSize: 9.5, fontFamily: "Helvetica-Bold", color: ACCENT, textAlign: "right" },
 
   // ── Signature Block ──────────────────────────────────────────────
   sigCard: { borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden", marginTop: SP.lg },
@@ -280,14 +280,14 @@ const s = StyleSheet.create({
   },
 
   // ── Management Letter ─────────────────────────────────────────────
-  letterBody: { fontSize: 9.5, lineHeight: 1.6, color: TEXT, marginBottom: SP.sm, textAlign: "justify" },
+  letterBody: { fontSize: 10.5, lineHeight: 1.6, color: TEXT, marginBottom: SP.sm, textAlign: "justify" },
   letterHighlight: { fontFamily: "Helvetica-Bold", color: ACCENT },
   letterSectionLabel: { fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, marginBottom: SP.sm },
   highlightStatementYellow: {
     backgroundColor: AMBER_BG, borderLeftWidth: 3, borderLeftColor: AMBER,
     padding: SP.sm, marginBottom: SP.sm, borderRadius: 3,
   },
-  highlightStatementYellowText: { fontSize: 9, color: TEXT, lineHeight: 1.55 },
+  highlightStatementYellowText: { fontSize: 10, color: TEXT, lineHeight: 1.55 },
 
   // ── Misc ─────────────────────────────────────────────────────────
   subLabel: {
@@ -402,7 +402,7 @@ function RatingTableRow({ alpha, label, score, mgrScore, index, isLast }: {
   const isMid = score != null && score >= 5 && score < 8;
   const display = score != null ? `${score}` : "—";
   return (
-    <View style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isLast ? s.tableRowLast : {}]} wrap={false}>
+    <View style={[s.tableRow, { paddingVertical: 12 }, isAlt ? s.tableRowAlt : {}, isLast ? s.tableRowLast : {}]} wrap={false}>
       <View style={s.alphaWrap}>
         <Text style={s.alphaText}>{alpha}</Text>
       </View>
@@ -417,6 +417,23 @@ function RatingTableRow({ alpha, label, score, mgrScore, index, isLast }: {
           <Text style={s.mgrScoreDenom}>/10</Text>
         </View>
       )}
+    </View>
+  );
+}
+
+function RatingTableHeader() {
+  return (
+    <View style={{
+      flexDirection: "row", alignItems: "center", paddingHorizontal: SP.sm, paddingVertical: 5,
+      backgroundColor: BG_ALT, borderBottomWidth: 1, borderBottomColor: BORDER,
+    }}>
+      <View style={{ flex: 1 }} />
+      <Text style={{ width: 52, textAlign: "center", fontSize: 7.5, fontFamily: "Helvetica-Bold", color: MUTED, textTransform: "uppercase" }}>
+        Employee
+      </Text>
+      <Text style={{ width: 52, textAlign: "center", fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#a83232", textTransform: "uppercase", marginLeft: 6 }}>
+        Manager
+      </Text>
     </View>
   );
 }
@@ -555,7 +572,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           <InfoCell label="Date of Submission" value={formatDate(sub.dateOfSubmission) || "—"} lastCol />
           <InfoCell label="Team" value={pdfDisplayValue((sub as any).team ?? (sub as any).teamDesignation ?? "")} lastRow />
           <InfoCell label="Designation" value={pdfDisplayValue((sub as any).designation ?? "")} lastRow />
-          <InfoCell label="Experience (Years)" value={`${pdfDisplayValue(sub.prevExperienceYears)} Prev / ${pdfDisplayValue(sub.companyExperienceYears)} Here`} lastRow lastCol />
+          <InfoCell label="Experience (Years)" value={`${pdfDisplayValue(sub.prevExperienceYears)} Prev / ${pdfDisplayValue(sub.companyExperienceYears)} At Blanco`} lastRow lastCol />
         </View>
 
         <QCard num="1" heading="Basis of Appraisal Request" body="Please describe on what basis we should consider your Salary appraisal request:" answer={pdfDisplayValue(sub.basisOfAppraisal)} minHeight={110} />
@@ -619,6 +636,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <Text style={s.sectionTitle}>Self Performance Ratings (a - j)</Text>
         <Text style={{ fontSize: 8, color: MUTED, marginBottom: SP.xs }}>Blue = Employee&apos;s self-rating · Red = Manager&apos;s rating</Text>
         <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
+          <RatingTableHeader />
           {selfRatingFirst.map((item, i) => {
             const score = sub[item.key as keyof AppraisalSubmission] as number | null;
             const mgrScore = sub[item.mgrKey as keyof AppraisalSubmission] as number | null;
@@ -718,12 +736,22 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <View style={s.qCard} wrap={false}>
           <View style={s.qHeader}>
-            <View style={s.qNum}><Text style={s.qNumText}>!</Text></View>
+            <View style={s.qNum}><Text style={s.qNumText}>1</Text></View>
             <Text style={s.qTitle}>Backlog & Conduct Remarks</Text>
           </View>
           <View style={s.qBody}>
             <Text style={s.qBodyText}>{HR_BACKLOG_QUESTION}</Text>
-            <View style={[s.qAnswerBox, { minHeight: 50 }]}><Text style={s.qAnswerText}>{pdfDisplayValue(sub.hrBacklogNotes) || " "}</Text></View>
+            <View
+              style={[
+                s.qAnswerBox,
+                { minHeight: 50 },
+                sub.hrBacklogNotes ? { backgroundColor: "#ffb3b3", borderColor: "#a83232", borderWidth: 1 } : {},
+              ]}
+            >
+              <Text style={[s.qAnswerText, sub.hrBacklogNotes ? { color: "#7a1f1f", fontFamily: "Helvetica-Bold" } : {}]}>
+                {pdfDisplayValue(sub.hrBacklogNotes) || " "}
+              </Text>
+            </View>
           </View>
         </View>
 
@@ -769,6 +797,24 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           );
         })}
 
+        {sub.mgrFeedback ? (
+          <View style={{
+            backgroundColor: "#ffb3b3",
+            borderWidth: 1,
+            borderColor: "#a83232",
+            borderRadius: 4,
+            padding: SP.sm,
+            marginBottom: SP.sm,
+          }} wrap={false}>
+            <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: "#7a1f1f", marginBottom: 3, textTransform: "uppercase" }}>
+              Manager Feedback
+            </Text>
+            <Text style={{ fontSize: 9.5, fontFamily: "Helvetica-Bold", color: "#7a1f1f", lineHeight: 1.4 }}>
+              {sub.mgrFeedback}
+            </Text>
+          </View>
+        ) : null}
+
         <SignatureBlock title="Reviewed & Approved by Reporting Manager" fields={[
           { label: "Reporting Manager", value: pdfDisplayValue(sub.mgrSignatureName) },
           { label: "Date", value: formatDate(sub.mgrSignatureDate) || " " },
@@ -813,6 +859,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <Text style={s.letterBody}>We wish you all the success in your career and hope you deliver your best performance in the upcoming performance cycle.</Text>
 
+        <Text style={[s.letterBody, { fontWeight: 'bold' }]}>* Your compensation is subject to change at any time based on your performance and/or HR/PM decisions.</Text>
         <View style={{ flex: 1 }} />
         
         <View style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: SP.md }}>

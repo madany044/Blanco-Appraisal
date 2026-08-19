@@ -538,6 +538,13 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
           </div>
         )}
 
+        {s.mgrFeedback ? (
+          <div className="mb-4 rounded-lg border-2 border-[#a83232] bg-[#fff1f1] p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#a83232]">Manager Feedback</p>
+            <p className="mt-2 whitespace-pre-wrap text-[15px] font-semibold text-[#a83232]">{s.mgrFeedback}</p>
+          </div>
+        ) : null}
+
         <dl className="grid gap-x-6 md:grid-cols-2">
           <InfoRow label="Reviewed & Signed By Reporting Manager:" value={displayValue(s.mgrSignatureName)} />
           <InfoRow label="Date" value={formatDate(s.mgrSignatureDate) || "—"} />

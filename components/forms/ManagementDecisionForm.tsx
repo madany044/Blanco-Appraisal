@@ -78,8 +78,16 @@ We are happy to receive your appraisal request and the feedback from your team h
     () => Math.round(currentMonthlySalary * (1 + incrementPct / 100)),
     [currentMonthlySalary, incrementPct]
   );
+  const statementIncrementAmount = useMemo(
+    () => currentMonthlySalary * (statementPct / 100),
+    [currentMonthlySalary, statementPct]
+  );
+  const approvedIncrementAmount = useMemo(
+    () => currentMonthlySalary * (incrementPct / 100),
+    [currentMonthlySalary, incrementPct]
+  );
 
-  const TEMPLATE = `This revised compensation also takes into account your commitment to overall professional growth, which includes but is not limited to: improving work efficiency, knowledge sharing, team supervision, task management, communication skills, self-learning capabilities, leadership qualities, motivating colleagues, team-building activities, and enhancing engineering expertise — all beyond individual performance. As a responsible employee, we value your dedication and contribution to the organization.`;
+  const TEMPLATE = `This revised compensation also takes into account your commitment to overall professional growth And any remarks as listed in the Hr and PM review comments.`;
   const generatedFeedback = TEMPLATE.replace('___%', `${statementPct}%`);
 
   // Prefill editable statement on mount if not provided
@@ -243,6 +251,9 @@ We are happy to receive your appraisal request and the feedback from your team h
                     className="mt-1"
                     {...register("mgmtStatementPercentage", { valueAsNumber: true })}
                   />
+                  <p style={{ color: "#1a8c5a", fontSize: 12, marginTop: 8 }}>
+                    Increment amount: {formatSalary(statementIncrementAmount)} per month
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="mgmtIncrementPercentage">Final Approved Increment By The Management</Label>
@@ -253,6 +264,9 @@ We are happy to receive your appraisal request and the feedback from your team h
                     className="mt-1"
                     {...register("mgmtIncrementPercentage", { valueAsNumber: true })}
                   />
+                  <p style={{ color: "#1a8c5a", fontSize: 12, marginTop: 8 }}>
+                    Increment amount: {formatSalary(approvedIncrementAmount)} per month
+                  </p>
                   <p style={{ color: '#6b7a99', fontSize: 12, marginTop: 8 }}>
                     Slab guidance maximum: {maxAllowed}%. Management can approve a different increment.
                   </p>
