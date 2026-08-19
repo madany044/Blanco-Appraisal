@@ -57,7 +57,7 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
     previousIncrementPercentage: s.previousIncrementPercentage != null ? Number(s.previousIncrementPercentage) : undefined,
     additionalIncrements: Array.isArray((s as any).additionalIncrements)
       ? ((s as any).additionalIncrements as Array<any>).map((item: any) => ({
-          percentage: item?.percentage == null ? undefined : Number(item.percentage),
+          date: item?.date ?? undefined,
           salaryRise: item?.salaryRise == null ? undefined : Number(item.salaryRise),
         }))
       : [],

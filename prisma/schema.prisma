@@ -79,7 +79,7 @@ model AppraisalSubmission {
   prevExperienceYears    String? @map("prev_experience_years")
   companyExperienceYears String? @map("company_experience_years")
   currentSalary          Int?    @map("current_salary")
-  previousIncrementPercentage Decimal? @map("previous_increment_percentage") @db.Decimal(10, 2)
+  previousIncrementPercentage Decimal? @map("previous_increment_percentage") @db.Decimal(12, 2)
   additionalIncrements   Json?   @map("additional_increments")
 
   basisOfAppraisal       String? @map("basis_of_appraisal")
@@ -121,6 +121,29 @@ model AppraisalSubmission {
   rateLeadership            Int? @map("rate_leadership")
   rateTeamPerformance       Int? @map("rate_team_performance")
   rateTeamBuilding          Int? @map("rate_team_building")
+
+  // Manager's own rating on each of the same self-rating items above.
+  // Optional — manager can skip these and only use mgrRemarks if they prefer.
+  mgrRateTeamwork              Int? @map("mgr_rate_teamwork")
+  mgrRateCompanyRelationship   Int? @map("mgr_rate_company_relationship")
+  mgrRatePmRelationship        Int? @map("mgr_rate_pm_relationship")
+  mgrRateCoworkerComms         Int? @map("mgr_rate_coworker_comms")
+  mgrRateEngineering           Int? @map("mgr_rate_engineering")
+  mgrRateTeamCommunication     Int? @map("mgr_rate_team_communication")
+  mgrRateVerbalWritten         Int? @map("mgr_rate_verbal_written")
+  mgrRateEnglish               Int? @map("mgr_rate_english")
+  mgrRateSelfLearning          Int? @map("mgr_rate_self_learning")
+  mgrRateQualityOfWork         Int? @map("mgr_rate_quality_of_work")
+  mgrRateDeadlines             Int? @map("mgr_rate_deadlines")
+  mgrRateClientComms           Int? @map("mgr_rate_client_comms")
+  mgrRateCustomerEmails        Int? @map("mgr_rate_customer_emails")
+  mgrRateRfiCreation           Int? @map("mgr_rate_rfi_creation")
+  mgrRateEmailWriting          Int? @map("mgr_rate_email_writing")
+  mgrRateIssueResolution       Int? @map("mgr_rate_issue_resolution")
+  mgrRateKnowledgeSharing      Int? @map("mgr_rate_knowledge_sharing")
+  mgrRateLeadership            Int? @map("mgr_rate_leadership")
+  mgrRateTeamPerformance       Int? @map("mgr_rate_team_performance")
+  mgrRateTeamBuilding          Int? @map("mgr_rate_team_building")
 
   prodSimpleBeam         String? @map("prod_simple_beam")
   prodMediumBeam         String? @map("prod_medium_beam")

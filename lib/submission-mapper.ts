@@ -3,6 +3,7 @@ import type { EmployeeFormValues } from "@/lib/validations/employee-form.schema"
 import type { HRFormValues } from "@/lib/validations/hr-form.schema";
 import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { ManagementFormValues } from "@/lib/validations/management-form.schema";
+import { SELF_RATING_ITEMS } from "@/lib/form-questions";
 
 export function mapEmployeeToPrisma(
   data: Partial<EmployeeFormValues> & { category: string; stage: number }
@@ -90,11 +91,11 @@ export function mapEmployeeToPrisma(
 
 export function mapHRToPrisma(data: HRFormValues): Prisma.AppraisalSubmissionUpdateInput {
   const normalizedAdditionalIncrements = (data.additionalIncrements ?? [])
-    .filter((item: { percentage?: number | null; salaryRise?: number | null }) => {
-      return item?.percentage != null || item?.salaryRise != null;
+    .filter((item: { date?: string | null; salaryRise?: number | null }) => {
+      return !!item?.date || item?.salaryRise != null;
     })
-    .map((item: { percentage?: number | null; salaryRise?: number | null }) => ({
-      percentage: item?.percentage ?? null,
+    .map((item: { date?: string | null; salaryRise?: number | null }) => ({
+      date: item?.date || null,
       salaryRise: item?.salaryRise ?? null,
     }));
 
@@ -117,6 +118,10 @@ export function mapHRToPrisma(data: HRFormValues): Prisma.AppraisalSubmissionUpd
 }
 
 export function mapManagerToPrisma(data: ManagerFormValues): Prisma.AppraisalSubmissionUpdateInput {
+  const selfRatingFields = Object.fromEntries(
+    SELF_RATING_ITEMS.map((item) => [item.mgrKey, data[item.mgrKey] ?? null])
+  );
+
   return {
     mgrRecommendation: data.mgrRecommendation,
     mgrStrongReasons: data.mgrStrongReasons,
@@ -127,6 +132,7 @@ export function mapManagerToPrisma(data: ManagerFormValues): Prisma.AppraisalSub
     mgrRemarks: data.mgrRemarks,
     mgrSignatureName: data.mgrSignatureName,
     mgrSignatureDate: data.mgrSignatureDate ? new Date(data.mgrSignatureDate) : new Date(),
+    ...selfRatingFields,
   };
 }
 

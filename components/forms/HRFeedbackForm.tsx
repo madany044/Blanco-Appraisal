@@ -142,7 +142,7 @@ export function HRFeedbackForm({
               type="button"
               variant="outline"
               size="sm"
-             onClick={() => append({ date: "", salaryRise: undefined })}
+              onClick={() => append({ date: "", salaryRise: undefined })}
             >
               + Add Increment
             </Button>
@@ -168,14 +168,14 @@ export function HRFeedbackForm({
                   />
                 </div>
                 <div>
-        <Label htmlFor={`additionalIncrements.${index}.date`}>Date</Label>
-        <Input
-          id={`additionalIncrements.${index}.date`}
-          type="date"
-          className="mt-1"
-          {...register(`additionalIncrements.${index}.date`)}
-        />
-      </div>
+                  <Label htmlFor={`additionalIncrements.${index}.date`}>Date</Label>
+                  <Input
+                    id={`additionalIncrements.${index}.date`}
+                    type="date"
+                    className="mt-1"
+                    {...register(`additionalIncrements.${index}.date`)}
+                  />
+                </div>
                 <div className="flex items-end">
                   <Button type="button" variant="outline" size="sm" onClick={() => remove(index)}>
                     Remove

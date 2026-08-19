@@ -245,6 +245,15 @@ const s = StyleSheet.create({
   scoreTextMid: { color: AMBER },
   scoreDenom: { fontSize: 7, color: MUTED }, // Increased font size
 
+  // Manager's own rating on the same self-rating item, shown in red beside
+  // the employee's score.
+  mgrScoreBadge: {
+    width: 52, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center",
+    flexShrink: 0, backgroundColor: "#fbe4e4", marginLeft: 6,
+  },
+  mgrScoreText: { fontSize: 11, fontFamily: "Helvetica-Bold", color: "#a83232" },
+  mgrScoreDenom: { fontSize: 7, color: "#a83232" },
+
   // ── 2-column checkbox grid ─────────────────────────────────────
   checkGrid2Col: { flexDirection: "row", flexWrap: "wrap", padding: SP.xs },
   checkCard2Col: { flexDirection: "row", alignItems: "center", paddingVertical: 4, paddingHorizontal: 4, marginBottom: 4, width: "50%" },
@@ -385,8 +394,8 @@ function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) 
   );
 }
 
-function RatingTableRow({ alpha, label, score, index, isLast }: {
-  alpha: string; label: string; score: number | null; index: number; isLast?: boolean;
+function RatingTableRow({ alpha, label, score, mgrScore, index, isLast }: {
+  alpha: string; label: string; score: number | null; mgrScore?: number | null; index: number; isLast?: boolean;
 }) {
   const isAlt = index % 2 === 1;
   const isHigh = score != null && score >= 8;
@@ -402,6 +411,12 @@ function RatingTableRow({ alpha, label, score, index, isLast }: {
         <Text style={[s.scoreText, isHigh ? s.scoreTextHigh : isMid ? s.scoreTextMid : {}]}>{display}</Text>
         <Text style={s.scoreDenom}>/10</Text>
       </View>
+      {mgrScore != null && (
+        <View style={s.mgrScoreBadge}>
+          <Text style={s.mgrScoreText}>{mgrScore}</Text>
+          <Text style={s.mgrScoreDenom}>/10</Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -602,12 +617,14 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             {/* PAGE 5 */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <Text style={s.sectionTitle}>Self Performance Ratings (a - j)</Text>
+        <Text style={{ fontSize: 8, color: MUTED, marginBottom: SP.xs }}>Blue = Employee&apos;s self-rating · Red = Manager&apos;s rating</Text>
         <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
           {selfRatingFirst.map((item, i) => {
             const score = sub[item.key as keyof AppraisalSubmission] as number | null;
+            const mgrScore = sub[item.mgrKey as keyof AppraisalSubmission] as number | null;
             const rawLabel = selfRatingLabel(item);
             const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
-            return <RatingTableRow key={item.key} alpha={alphas[i]} label={cleanLabel} score={score} index={i} isLast={i === selfRatingFirst.length - 1} />;
+            return <RatingTableRow key={item.key} alpha={alphas[i]} label={cleanLabel} score={score} mgrScore={mgrScore} index={i} isLast={i === selfRatingFirst.length - 1} />;
           })}
         </View>
       </PdfPage>
@@ -616,13 +633,15 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       {(isQC || sub.category === "GROUP_A") && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
           <Text style={s.sectionTitle}>Self Performance Ratings (k - t)</Text>
+          <Text style={{ fontSize: 8, color: MUTED, marginBottom: SP.xs }}>Blue = Employee&apos;s self-rating · Red = Manager&apos;s rating</Text>
           <View style={s.tableWrap}>
             {selfRatingSecond.map((item, i) => {
               const globalIndex = i + 10;
               const score = sub[item.key as keyof AppraisalSubmission] as number | null;
+              const mgrScore = sub[item.mgrKey as keyof AppraisalSubmission] as number | null;
               const rawLabel = selfRatingLabel(item);
               const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
-              return <RatingTableRow key={item.key} alpha={alphas[globalIndex]} label={cleanLabel} score={score} index={i} isLast={i === selfRatingSecond.length - 1} />;
+              return <RatingTableRow key={item.key} alpha={alphas[globalIndex]} label={cleanLabel} score={score} mgrScore={mgrScore} index={i} isLast={i === selfRatingSecond.length - 1} />;
             })}
           </View>
         </PdfPage>

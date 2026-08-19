@@ -4,6 +4,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { managerFormSchema, type ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import { RecommendationChecklist } from "@/components/forms/RecommendationChecklist";
+import { SelfRatingCompareList } from "@/components/forms/SelfRatingCompareRow";
 import { ManagerSubmissionView } from "@/components/forms/SubmissionDetailView";
 import { CTCSlabDisplay } from "@/components/forms/CTCSlabDisplay";
 import { Label } from "@/components/ui/label";
@@ -140,11 +141,21 @@ export function ManagerRemarksForm({
           </div>
         )}
 
+        {/* Employee Self-Ratings Comparison (New Feature) */}
+        {submission && (
+          <div>
+            <h3 className="mb-1 text-sm font-bold text-[#1a4b8c]">Employee&apos;s Self-Ratings — Your Review</h3>
+            <p className="mb-3 text-sm text-muted-foreground">
+              For each item, the employee&apos;s own rating is shown on the left. Add your rating on the
+              right where you&apos;d like to weigh in — leave any blank to skip.
+            </p>
+            <SelfRatingCompareList submission={submission} />
+          </div>
+        )}
+
         <div>
           <Label></Label>
-          <p className="text-sm text-muted-foreground mb-3">
-
-          </p>
+          <p className="text-sm text-muted-foreground mb-3"></p>
           <RecommendationChecklist />
         </div>
 
@@ -156,7 +167,7 @@ export function ManagerRemarksForm({
         {/* Suggested Increment Amount Section */}
         {currentSalary > 0 && (
           <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
-            <Label>The Maximum Obtained Increment Based On Your Report Card (₹)</Label>
+            <Label>The Maximum Obtained Increment Based On Your Report Card(₹)</Label>
             <Input
               type="number"
               step="1"
@@ -188,7 +199,7 @@ export function ManagerRemarksForm({
         {/* Final Approved Increment Section */}
         {currentSalary > 0 && (
           <div className="rounded-lg border border-slate-200 bg-white p-4 mb-4">
-            <Label>Final Approved Increment Amount Suggested By PM (₹)</Label>
+            <Label>Final Approved Increment Amount By PM (₹)</Label>
             <Input
               type="number"
               step="1"
@@ -218,9 +229,10 @@ export function ManagerRemarksForm({
         )}
 
         <div>
-          <Label>Additional Remarks (If Return Back To HR)</Label><p className="mt-1 text-sm text-gray-500">
-                 Please explain the reason for returning back this employee form to HR.
-              </p>
+          <Label>Additional Remarks (If Return Back To HR)</Label>
+          <p className="mt-1 text-sm text-gray-500">
+            Please explain the reason for returning back this employee form to HR.
+          </p>
           <Textarea className="mt-1" {...register("mgrRemarks")} />
         </div>
         <div className="grid gap-4 md:grid-cols-2">
@@ -244,6 +256,7 @@ export function ManagerRemarksForm({
         </div>
       </form>
 
+      {/* Confirmation Modal */}
       <ConfirmSubmitModal
         open={showSubmitConfirm}
         title="Confirm submission"

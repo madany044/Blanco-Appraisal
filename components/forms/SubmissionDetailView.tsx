@@ -335,19 +335,19 @@ export function HRSubmissionView({ submission: s }: { submission: AppraisalSubmi
         <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
           <p className="text-sm text-gray-600">Previous Increment Amount (₹)</p>
           <p className="mt-1 text-[15px] font-semibold text-[#1e2740]">
-            {s.previousIncrementPercentage != null ? formatSalary(s.previousIncrementPercentage) : "—"}
+            {s.previousIncrementPercentage != null ? formatSalary(decimalToNumber(s.previousIncrementPercentage)) : "—"}
           </p>
         </div>
         <div className="mb-4 rounded-lg border border-slate-200 bg-white p-4">
           <p className="text-sm text-gray-600">Additional Increments Between Cycles</p>
           {Array.isArray(s.additionalIncrements) && s.additionalIncrements.length > 0 ? (
             <div className="mt-3 space-y-3">
-              {(s.additionalIncrements as Array<{ percentage?: number | null; salaryRise?: number | null }>).map((item, index) => (
-                <div key={`${item.percentage ?? "-"}-${item.salaryRise ?? "-"}-${index}`} className="grid gap-3 md:grid-cols-2">
+              {(s.additionalIncrements as Array<{ date?: string | null; salaryRise?: number | null }>).map((item, index) => (
+                <div key={`${item.date ?? "-"}-${item.salaryRise ?? "-"}-${index}`} className="grid gap-3 md:grid-cols-2">
                   <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Increment %</p>
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Date</p>
                     <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">
-                      {item.percentage != null ? `${item.percentage}%` : "—"}
+                      {item.date ? formatDate(item.date) : "—"}
                     </p>
                   </div>
                   <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
@@ -410,6 +410,10 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
     mgrNotRecommendedReasons: NOT_RECOMMENDED_REASONS,
   };
 
+  const hasSelfRatingReview = SELF_RATING_ITEMS.some(
+    (item) => s[item.mgrKey as keyof AppraisalSubmission] != null
+  );
+
   return (
     <div className="overflow-hidden rounded-lg">
       <SectionHeader title="SECTION 3 — TEAM HEAD FEEDBACK" color="#c97c10" />
@@ -443,12 +447,12 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
           <p className="text-sm font-semibold text-[#1e2740]">In-between Increments Recorded by HR</p>
           {Array.isArray(s.additionalIncrements) && s.additionalIncrements.length > 0 ? (
             <div className="mt-3 space-y-3">
-              {((s.additionalIncrements as Array<{ percentage?: number | null; salaryRise?: number | null }>)).map((item, index) => (
-                <div key={`${item.percentage ?? "-"}-${item.salaryRise ?? "-"}-${index}`} className="grid gap-3 md:grid-cols-2">
+              {((s.additionalIncrements as Array<{ date?: string | null; salaryRise?: number | null }>)).map((item, index) => (
+                <div key={`${item.date ?? "-"}-${item.salaryRise ?? "-"}-${index}`} className="grid gap-3 md:grid-cols-2">
                   <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Increment %</p>
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Date</p>
                     <p className="mt-1 text-[14px] font-semibold text-[#1e2740]">
-                      {item.percentage != null ? `${item.percentage}%` : "—"}
+                      {item.date ? formatDate(item.date) : "—"}
                     </p>
                   </div>
                   <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
@@ -495,6 +499,44 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
             <p className="mt-2 whitespace-pre-wrap text-[15px] font-semibold text-[#1e2740]">{s.mgrRemarks}</p>
           </div>
         ) : null}
+
+        {hasSelfRatingReview && (
+          <div className="mb-4">
+            <p className="mb-3 text-sm font-semibold text-[#1e2740]">Self-Rating Review: Employee vs Manager</p>
+            <div className="space-y-2">
+              {SELF_RATING_ITEMS.map((item) => {
+                const employeeScore = s[item.key as keyof AppraisalSubmission] as number | null;
+                const mgrScore = s[item.mgrKey as keyof AppraisalSubmission] as number | null;
+                const rawLabel = selfRatingLabel(item);
+                const cleanLabel = rawLabel.replace(/^[a-t]\.\s*/i, "");
+                return (
+                  <div
+                    key={item.mgrKey}
+                    className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white px-4 py-3"
+                  >
+                    <span className="flex-1 text-sm text-[#1e2740]">{cleanLabel}</span>
+                    <div className="flex shrink-0 items-center gap-3">
+                      <div className="flex items-center gap-1">
+                        <span className="text-[11px] text-gray-400">Employee</span>
+                        <RatingBadge value={employeeScore} />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[11px] text-[#a83232]">Manager</span>
+                        {mgrScore == null ? (
+                          <span className="text-sm text-gray-400">—</span>
+                        ) : (
+                          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#a83232] text-sm font-bold text-white">
+                            {mgrScore}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         <dl className="grid gap-x-6 md:grid-cols-2">
           <InfoRow label="Reviewed & Signed By Reporting Manager:" value={displayValue(s.mgrSignatureName)} />

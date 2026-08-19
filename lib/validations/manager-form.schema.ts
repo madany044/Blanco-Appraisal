@@ -1,10 +1,18 @@
 import { z } from "zod";
+import { SELF_RATING_ITEMS } from "@/lib/form-questions";
 
 const recommendationLevel = z.enum([
   "STRONGLY_RECOMMEND",
   "CONDITIONALLY_RECOMMEND",
   "NOT_RECOMMENDED",
 ]);
+
+// One optional 0-10 rating field per self-rating item, keyed by mgrKey
+// (e.g. mgrRateTeamwork) — the manager's own take on the employee's
+// self-ratings. All optional: manager can leave any/all of these blank.
+const managerSelfRatingFields = Object.fromEntries(
+  SELF_RATING_ITEMS.map((item) => [item.mgrKey, z.coerce.number().min(0).max(10).optional()])
+) as Record<(typeof SELF_RATING_ITEMS)[number]["mgrKey"], z.ZodOptional<z.ZodNumber>>;
 
 export const managerFormSchema = z
   .object({
@@ -19,6 +27,7 @@ export const managerFormSchema = z
     mgrRemarks: z.string().optional(),
     mgrSignatureName: z.string().min(1, "Signature required"),
     mgrSignatureDate: z.string().optional(),
+    ...managerSelfRatingFields,
   })
   .superRefine((data, ctx) => {
     if (data.mgrRecommendation.length === 0) {

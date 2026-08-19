@@ -1,23 +1,16 @@
 import { z } from "zod";
 
-const rating = z.coerce.number().min(0).max(10).optional();
+const rating = z.coerce.number().min(0).max(10);
 
 const incrementEntrySchema = z.object({
-  percentage: z.coerce.number().min(0).max(100).optional(),
+  date: z.string().optional(),
   salaryRise: z.coerce.number().min(0).optional(),
 });
 
 export const hrFormSchema = z.object({
-  currentSalary: z.coerce.number().min(0, "Please enter a valid salary").optional(),
+  currentSalary: z.coerce.number().min(0, "Please enter a valid salary"),
   previousIncrementPercentage: z.coerce.number().min(0).optional(),
-  additionalIncrements: z
-  .array(
-    z.object({
-      salaryRise: z.number().optional(),
-      date: z.string().optional(),
-    })
-  )
-  .optional(),
+  additionalIncrements: z.array(incrementEntrySchema).optional().default([]),
   effective_date: z.string().optional(),
   hrCodeOfConduct: rating,
   hrDressCode: rating,
@@ -27,7 +20,7 @@ export const hrFormSchema = z.object({
   hrTimingManagement: rating,
   hrTimingManagementNotes: z.string().max(200).optional(),
   hrBacklogNotes: z.string().optional(),
-  hrAdminSignatureName: z.string().optional(),
+  hrAdminSignatureName: z.string().min(1, "Signature required"),
   hrAdminSignatureDate: z.string().optional(),
 });
 

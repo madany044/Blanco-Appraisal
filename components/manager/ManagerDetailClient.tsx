@@ -11,6 +11,7 @@ import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { AppraisalSubmission, Manager } from "@prisma/client";
 import type { SerializedIncrementSlab } from "@/lib/utils";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
+import { SELF_RATING_ITEMS } from "@/lib/form-questions";
 import { SuccessToast } from "@/components/shared/SuccessToast";
 
 interface ManagerDetailClientProps {
@@ -97,9 +98,15 @@ export function ManagerDetailClient({
               : undefined,
             mgrRemarks: s.mgrRemarks ?? undefined,
             mgrSignatureName: s.mgrSignatureName ?? undefined,
+            ...Object.fromEntries(
+              SELF_RATING_ITEMS.map((item) => [
+                item.mgrKey,
+                (s[item.mgrKey as keyof typeof s] as number | null) ?? undefined,
+              ])
+            ),
           }}
           readOnly={s.stage !== 1}
-          submission={s.stage !== 1 ? s : undefined}
+          submission={s}
           onSaveDraft={s.stage === 1 ? (d) => submit(d, true) : undefined}
           onSubmit={s.stage === 1 ? (d) => submit(d, false) : undefined}
           onReturn={s.stage === 1 ? returnToHR : undefined}
