@@ -34,14 +34,6 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
   const { register, control, setValue, watch, formState: { errors } } = useFormContext();
   const managerId = watch("managerId");
   const selectedTeam = watch("team") ?? "";
-  const uniqueManagers = useMemo(() => {
-    const seen = new Set<string>();
-    return managers.filter((manager) => {
-      if (seen.has(manager.name)) return false;
-      seen.add(manager.name);
-      return true;
-    });
-  }, [managers]);
   const selectedManagerName = useMemo(() => {
     if (!managerId) return "";
     return managers.find((manager) => manager.id === managerId)?.name ?? "";

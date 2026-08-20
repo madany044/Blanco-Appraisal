@@ -6,7 +6,11 @@ import type { ManagementFormValues } from "@/lib/validations/management-form.sch
 import { SELF_RATING_ITEMS } from "@/lib/form-questions";
 
 export function mapEmployeeToPrisma(
-  data: Partial<EmployeeFormValues> & { category: string; stage: number }
+  data: Partial<EmployeeFormValues> & {
+    category: string;
+    stage: number;
+    verificationPhotoUrl?: string | null;
+  }
 ): Prisma.AppraisalSubmissionCreateInput {
   return {
     financialYear: "2026-27",
@@ -14,7 +18,7 @@ export function mapEmployeeToPrisma(
     stage: data.stage,
     employeeName: data.employeeName ?? "",
     employeeCode: data.employeeCode ?? "",
-    verificationPhotoUrl: (data as any).verificationPhotoUrl ?? null,
+    verificationPhotoUrl: data.verificationPhotoUrl ?? null,
     manager: { connect: { id: data.managerId! } },
     team: data.team,
     designation: data.designation,
