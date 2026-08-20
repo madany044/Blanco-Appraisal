@@ -54,11 +54,10 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
               <TableHead>Employee</TableHead>
               <TableHead>Current CTC</TableHead>
               <TableHead>Previous Increment</TableHead>
-              <TableHead>Suggested Increment</TableHead>
-              <TableHead>Manager Increment</TableHead>
+              <TableHead>Obtained Increment Based On Report Card</TableHead>
+              <TableHead>Approved Increment By The Management</TableHead>
               <TableHead>Projected CTC</TableHead>
               <TableHead>Stage</TableHead>
-              <TableHead>Photo</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -85,7 +84,7 @@ export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientPro
                     <TableCell>{mgrPct ? `${mgrPct}%` : "—"}</TableCell>
                     <TableCell>{projected ? formatSalary(projected) : "—"}</TableCell>
                     <TableCell><StageBadge stage={s.stage} /></TableCell>
-                    <TableCell><VerificationPhotoButton photoUrl={s.verificationPhotoUrl} /></TableCell>
+                    
                     <TableCell>
                       <Button size="sm" variant="outline" asChild>
                         <a href={`/manager/${s.id}`}>View</a>

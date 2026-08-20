@@ -39,8 +39,7 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
         router.push("/hr/success");
         return;
       }
-      setToast("✅ HR review saved as draft.");
-      router.refresh();
+      router.push("/hr/drafts/success");
     } else alert("Failed to submit");
   }
 

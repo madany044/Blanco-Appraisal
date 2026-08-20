@@ -14,7 +14,6 @@ import type { AppraisalSubmission } from "@prisma/client";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { ConfirmSubmitModal } from "@/components/shared/ConfirmSubmitModal";
 import { getDefaultEffectiveDate } from "@/lib/utils";
-import { formatDate } from "@/lib/utils";
 
 const HR_RATINGS = [
   { name: "hrCodeOfConduct" as const, label: "Rate this Employee - Adhere to Company Code of Conduct" },
@@ -63,7 +62,7 @@ export function HRFeedbackForm({
   });
 
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
-  const { register, handleSubmit, control, formState: { errors }, setValue } = methods;
+  const { register, handleSubmit, getValues, control, formState: { errors }, setValue } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "additionalIncrements",
@@ -238,7 +237,7 @@ export function HRFeedbackForm({
         </div>
         <div className="flex gap-3">
           {onSaveDraft && (
-            <Button type="button" variant="secondary" onClick={handleSubmit(onSaveDraft)}>Save Draft</Button>
+            <Button type="button" variant="secondary" onClick={() => onSaveDraft?.(getValues())}>Save Draft</Button>
           )}
           {onSubmit && (
             <Button type="button" variant="success" onClick={openSubmitConfirm}>

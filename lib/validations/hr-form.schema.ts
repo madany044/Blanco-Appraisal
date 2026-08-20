@@ -24,4 +24,6 @@ export const hrFormSchema = z.object({
   hrAdminSignatureDate: z.string().optional(),
 });
 
+export const hrDraftSchema = hrFormSchema.partial();
+
 export type HRFormValues = z.infer<typeof hrFormSchema>;

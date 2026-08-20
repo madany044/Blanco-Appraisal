@@ -283,10 +283,20 @@ incTableCellRight: { width: "40%", fontSize: 9.5, fontFamily: "Helvetica-Bold", 
   letterHighlight: { fontFamily: "Helvetica-Bold", color: ACCENT },
   letterSectionLabel: { fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, marginBottom: SP.sm },
   highlightStatementYellow: {
-    backgroundColor: AMBER_BG, borderLeftWidth: 3, borderLeftColor: AMBER,
-    padding: SP.sm, marginBottom: SP.sm, borderRadius: 3,
+    backgroundColor: "#FEF08A", // Brighter, vivid yellow background
+    borderLeftWidth: 3,
+    borderLeftColor: AMBER,
+    padding: SP.sm,
+    marginBottom: SP.sm,
+    borderRadius: 3,
   },
-  highlightStatementYellowText: { fontSize: 10, color: TEXT, lineHeight: 1.55 },
+  highlightStatementYellowText: {
+    fontSize: 10,
+    color: "#1E293B", // Pure black for sharp contrast against bright yellow
+    lineHeight: 1.55,
+    fontFamily: "Helvetica-Bold", // Use standard bold font for React-PDF
+    fontWeight: "bold", // Keep for standard React Native web/mobile
+  },
 
   // ── Misc ─────────────────────────────────────────────────────────
   subLabel: {
@@ -305,6 +315,7 @@ function PageHeader({ logoSrc }: { logoSrc?: string }) {
   return (
     <View fixed>
       <View style={s.headerWrapper}>
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         {logoSrc ? <Image src={logoSrc} style={s.logo} /> : null}
         <View style={s.headerTextWrap}>
           <Text style={s.headerTitle}>Team Blanco AND Team Blanka</Text>
@@ -378,17 +389,6 @@ function CheckCard({ checked, label }: { checked: boolean; label: string }) {
         {checked ? <View style={s.checkDotInner} /> : null}
       </View>
       <Text style={checked ? s.checkCardTextSelected : s.checkCardText}>{label}</Text>
-    </View>
-  );
-}
-
-function CheckCard2Col({ checked, label }: { checked: boolean; label: string }) {
-  return (
-    <View style={s.checkCard2Col}>
-      <View style={[s.checkDot, checked ? s.checkDotSelected : {}, { marginRight: 4 }]}>
-        {checked ? <View style={s.checkDotInner} /> : null}
-      </View>
-      <Text style={[checked ? s.checkCardTextSelected : s.checkCardText, { fontSize: 7.5 }]}>{label}</Text>
     </View>
   );
 }
@@ -491,23 +491,6 @@ function SignatureBlock({ title, fields }: {
   );
 }
 
-function MgrSection2Col({ header, options, selected }: {
-  header: string; options: readonly string[]; selected: string[];
-}) {
-  return (
-    <View style={s.card} wrap={false}>
-      <View style={s.cardHeader}>
-        <Text style={s.cardHeaderText}>{header}</Text>
-      </View>
-      <View style={s.checkGrid2Col}>
-        {options.map((opt) => (
-          <CheckCard2Col key={opt} checked={selected.includes(opt)} label={opt} />
-        ))}
-      </View>
-    </View>
-  );
-}
-
 function formatSlabRange(min: number, max: number | null): string {
   if (max == null) return `${min.toLocaleString("en-IN")} and above`;
   if (min === 0) return `Less than ${(max + 1).toLocaleString("en-IN")}`;
@@ -526,13 +509,8 @@ interface PDFReportProps {
 
 export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportProps) {
   const isQC = sub.category === "QC";
-  const annualCtc = (sub.currentSalary ?? 0) * 12;
   const statementPct = decimalToNumber(sub.mgmtStatementPercentage);
   const approvedPct = decimalToNumber(sub.mgmtIncrementPercentage);
-  const newMonthlySalary =
-    sub.mgmtNewSalary != null
-      ? Math.round(decimalToNumber(sub.mgmtNewSalary))
-      : Math.round((sub.currentSalary ?? 0) * (1 + approvedPct / 100));
   const selectedOverall = normalizeOverallRating(sub.overallRating);
 
   const mgrReasonOptions: Record<string, readonly string[]> = {
@@ -569,8 +547,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           <InfoCell label="Employee Name" value={pdfDisplayValue(sub.employeeName)} highlight />
           <InfoCell label="Employee ID" value={pdfDisplayValue(sub.employeeCode)} />
           <InfoCell label="Date of Submission" value={formatDate(sub.dateOfSubmission) || "—"} lastCol />
-          <InfoCell label="Team" value={pdfDisplayValue((sub as any).team ?? (sub as any).teamDesignation ?? "")} lastRow />
-          <InfoCell label="Designation" value={pdfDisplayValue((sub as any).designation ?? "")} lastRow />
+          <InfoCell label="Team" value={pdfDisplayValue(sub.team)} lastRow />
+          <InfoCell label="Designation" value={pdfDisplayValue(sub.designation)} lastRow />
           <InfoCell label="Experience (Years)" value={`${pdfDisplayValue(sub.prevExperienceYears)} Prev / ${pdfDisplayValue(sub.companyExperienceYears)} At Blanco`} lastRow lastCol />
         </View>
 
@@ -728,7 +706,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <View style={[s.tableWrap, { marginBottom: SP.md }]}>
           {HR_RATING_ITEMS.map((item, i) => {
             const val = sub[item.key as keyof AppraisalSubmission] as number | null;
-            const notes = item.key === "hrLeaveManagement" ? (sub as any).hrLeaveManagementNotes : item.key === "hrTimingManagement" ? (sub as any).hrTimingManagementNotes : null;
+            const notes = item.key === "hrLeaveManagement" ? sub.hrLeaveManagementNotes : item.key === "hrTimingManagement" ? sub.hrTimingManagementNotes : null;
             return <HrTableRow key={item.key} label={item.label} score={val} notes={notes} index={i} isLast={i === HR_RATING_ITEMS.length - 1} />;
           })}
         </View>
@@ -846,7 +824,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           })}
         </View>
 
-        <Text style={s.letterBody}>You have obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card, which is within the range as per the CTC slab.</Text>
+        <Text style={s.letterBody}>You have obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card v/s the maximum of <Text style={s.letterHighlight}>{matchedSlab ? `0-${decimalToNumber(matchedSlab.maxPct)}%` : "—"}</Text>.</Text>
         <Text style={s.letterBody}>However, the company would like to support you as best as possible by considering that you will upgrade yourself with any and all backlogs as described by yourself in the attached report card.</Text>
         <Text style={s.letterBody}>Therefore, the company is pleased to offer you the best of <Text style={[s.letterHighlight, { fontSize: 11 }]}>{approvedPct}% </Text>Increment of your current Total CTC.</Text>
 

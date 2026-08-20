@@ -46,6 +46,8 @@ export async function GET(request: NextRequest) {
     where.managerId = manager.id;
   } else if (user.role === "management") {
     where.stage = { gte: 2 };
+  } else if (user.role === "hr") {
+    where.hrDraftSavedAt = null;
   }
 
   if (managerId && managerId !== "all") {

@@ -3,7 +3,7 @@ import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { transitionStage } from "@/lib/workflow";
 import { mapHRToPrisma } from "@/lib/submission-mapper";
-import { hrFormSchema } from "@/lib/validations/hr-form.schema";
+import { hrDraftSchema, hrFormSchema } from "@/lib/validations/hr-form.schema";
 
 export async function POST(
   request: NextRequest,
@@ -17,7 +17,7 @@ export async function POST(
   try {
     const body = await request.json();
     const { draft } = body;
-    const parsed = hrFormSchema.safeParse(body);
+    const parsed = (draft ? hrDraftSchema : hrFormSchema).safeParse(body);
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
