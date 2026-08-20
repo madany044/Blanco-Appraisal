@@ -93,7 +93,7 @@ export function mapEmployeeToPrisma(
   };
 }
 
-export function mapHRToPrisma(data: HRFormValues): Prisma.AppraisalSubmissionUpdateInput {
+export function mapHRToPrisma(data: Partial<HRFormValues>): Prisma.AppraisalSubmissionUpdateInput {
   const normalizedAdditionalIncrements = (data.additionalIncrements ?? [])
     .filter((item: { date?: string | null; salaryRise?: number | null }) => {
       return !!item?.date || item?.salaryRise != null;
