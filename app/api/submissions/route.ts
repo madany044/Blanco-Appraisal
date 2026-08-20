@@ -7,7 +7,7 @@ import type { Prisma } from "@prisma/client";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { category, stage, managerId } = body;
+    const { category, managerId } = body;
 
     if (!category || !managerId) {
       return NextResponse.json({ error: "Category and manager are required" }, { status: 400 });
