@@ -35,8 +35,6 @@ interface ManagerRemarksFormProps {
 
 export function ManagerRemarksForm({
   managerName,
-  employeeName,
-  employeeCode,
   currentSalary = 0,
   slabs = [],
   defaultValues,

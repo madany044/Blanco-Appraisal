@@ -126,6 +126,7 @@ const s = StyleSheet.create({
     alignItems: "center",
   },
   cardHeaderText: { fontSize: 11, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1 },
+  cardHeaderMarker: { fontSize: 11, fontFamily: "Helvetica-Bold", color: ACCENT },
   
   // ── Info Grid ───────────────────────────────────────────────────
   infoGrid: {
@@ -749,7 +750,11 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
             <View key={section.level} style={[s.card, { marginBottom: SP.sm }]} wrap={false}>
               {/* Tightened header padding */}
               <View style={[s.cardHeader, { paddingVertical: 4 }]}>
-                <Text style={s.cardHeaderText}>{section.header}</Text>
+                <Text style={s.cardHeaderText}>
+                  {section.header.split("[√]")[0]}
+                  <Text style={s.cardHeaderMarker}>[o]</Text>
+                  {section.header.split("[√]")[1]}
+                </Text>
               </View>
               <View style={{ flexDirection: "row", flexWrap: "wrap", paddingVertical: SP.xs, paddingHorizontal: SP.sm }}>
                 {options.map((opt) => {

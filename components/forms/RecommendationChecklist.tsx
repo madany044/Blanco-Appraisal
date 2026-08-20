@@ -25,7 +25,7 @@ const GROUPS = [
   },
   {
     level: "NOT_RECOMMENDED" as const,
-    title: "I May OR May Not recommend this employee for appraisal because of the below reason marked with [ √]",
+    title: "I May OR May Not recommend this employee for appraisal because of the reason marked with [ √]",
     field: "mgrNotRecommendedReasons" as const,
     options: NOT_RECOMMENDED_REASONS,
   },
