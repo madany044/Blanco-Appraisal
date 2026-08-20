@@ -50,8 +50,6 @@ export function FaceLoginGate({ onVerified }: { onVerified: (employeeCode: strin
         setMessage("No enrolled profile found for this Employee Code. Contact HR.");
         return;
       }
-      const profile = await res.json();
-
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
       streamRef.current = stream;
 
