@@ -11,12 +11,11 @@ import { ManagementDecisionForm } from "@/components/forms/ManagementDecisionFor
 import { Button } from "@/components/ui/button";
 import type { HRFormValues } from "@/lib/validations/hr-form.schema";
 import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
-import type { AppraisalSubmission, Manager } from "@prisma/client";
+import type { AppraisalSubmission, Manager, Prisma } from "@prisma/client";
 import { decimalToNumber, type SerializedIncrementSlab } from "@/lib/utils";
 import { downloadPDF } from "@/components/export/PDFDownload";
 import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { SuccessToast } from "@/components/shared/SuccessToast";
-import { exportSubmissionExcel } from "@/components/export/ExcelExport";
 import { VerificationPhotoButton } from "@/components/shared/VerificationPhotoButton";
 
 interface SubmissionDetailClientProps {
@@ -54,11 +53,16 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
   const hrDefaults: Partial<HRFormValues> = {
     currentSalary: s.currentSalary ?? 0,
     previousIncrementPercentage: s.previousIncrementPercentage != null ? Number(s.previousIncrementPercentage) : undefined,
-    additionalIncrements: Array.isArray((s as any).additionalIncrements)
-      ? ((s as any).additionalIncrements as Array<any>).map((item: any) => ({
-          date: item?.date ?? undefined,
-          salaryRise: item?.salaryRise == null ? undefined : Number(item.salaryRise),
-        }))
+    additionalIncrements: Array.isArray(s.additionalIncrements)
+      ? s.additionalIncrements
+          .filter(
+            (item): item is Prisma.JsonObject =>
+              typeof item === "object" && item !== null && !Array.isArray(item)
+          )
+          .map((item) => ({
+            date: typeof item.date === "string" ? item.date : undefined,
+            salaryRise: typeof item.salaryRise === "number" ? item.salaryRise : undefined,
+          }))
       : [],
     effective_date: s.mgmtEffectiveDate?.toISOString().split("T")[0] ?? undefined,
     hrCodeOfConduct: s.hrCodeOfConduct ?? undefined,

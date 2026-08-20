@@ -19,7 +19,7 @@ export default async function ManagerCTCPage() {
 
   return (
     <DashboardLayout role="manager" userEmail={user.email} title="Manager CTC Review">
-      <ManagerCTCClient submissions={submissions} managerId={manager.id} />
+      <ManagerCTCClient submissions={submissions} />
     </DashboardLayout>
   );
 }

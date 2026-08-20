@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { exportSubmissionsExcel } from "@/components/export/ExcelExport";
 import { downloadPDF } from "@/components/export/PDFDownload";
 import type { AppraisalSubmission } from "@prisma/client";
 import { StageBadge } from "@/components/shared/StageBadge";

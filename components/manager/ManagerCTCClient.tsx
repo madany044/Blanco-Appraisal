@@ -8,7 +8,6 @@ import { formatSalary } from "@/lib/submission-display";
 import { decimalToNumber } from "@/lib/utils";
 import type { AppraisalSubmission, Prisma } from "@prisma/client";
 import { StageBadge } from "@/components/shared/StageBadge";
-import { VerificationPhotoButton } from "@/components/shared/VerificationPhotoButton";
 
 type AppraisalSubmissionWithSuggested = AppraisalSubmission & {
   mgrSuggestedIncrementPercentage?: Prisma.Decimal | null;
@@ -16,10 +15,9 @@ type AppraisalSubmissionWithSuggested = AppraisalSubmission & {
 
 interface ManagerCTCClientProps {
   submissions: AppraisalSubmissionWithSuggested[];
-  managerId: string;
 }
 
-export function ManagerCTCClient({ submissions, managerId }: ManagerCTCClientProps) {
+export function ManagerCTCClient({ submissions }: ManagerCTCClientProps) {
   const [search, setSearch] = useState("");
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
