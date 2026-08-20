@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { FilterBar, type FilterState } from "@/components/dashboard/FilterBar";
 import { SubmissionsTable } from "@/components/dashboard/SubmissionsTable";
@@ -27,7 +27,7 @@ export function HRDashboardClient({
   stats,
 }: HRDashboardClientProps) {
   const [submissions, setSubmissions] = useState(initialSubmissions);
-  const [isInitialMount, setIsInitialMount] = useState(true);
+  const isInitialMount = useRef(true);
   const [filters, setFilters] = useState<FilterState>({
     managerId: "all",
     category: "all",
@@ -38,8 +38,8 @@ export function HRDashboardClient({
 
   useEffect(() => {
     // Skip the database fetch on first render since Next.js already provided initialSubmissions
-    if (isInitialMount) {
-      setIsInitialMount(false);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
       return;
     }
 
