@@ -326,7 +326,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
                 Do you think you can expect the same amount of appraisal from year to year as your salary grows?
                 <br />
                 <br />
-                (Tell us "YES" or "NO" and describe the reason accordingly.)
+                (Tell us &quot;YES&quot; or &quot;NO&quot; and describe the reason accordingly.)
               </p>
               <RadioGroup
                 value={watch("expectationsYesNo")}

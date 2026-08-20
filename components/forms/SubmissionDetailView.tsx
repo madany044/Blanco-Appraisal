@@ -1,6 +1,6 @@
 "use client";
 
-import type { AppraisalSubmission, Manager, Prisma } from "@prisma/client";
+import type { AppraisalSubmission, Manager } from "@prisma/client";
 import { RatingPillReadOnly } from "@/components/forms/RatingPillInput";
 import {
   EMPLOYEE_QUESTIONS,
@@ -35,10 +35,6 @@ import {
 } from "@/lib/types";
 
 type SubmissionWithManager = AppraisalSubmission & { manager?: Manager };
-type AppraisalSubmissionWithSuggested = AppraisalSubmission & {
-  mgrSuggestedIncrementPercentage?: Prisma.Decimal | null;
-  mgrFinalApprovedIncrementPercentage?: Prisma.Decimal | null;
-};
 
 function QuestionCard({
   label,
