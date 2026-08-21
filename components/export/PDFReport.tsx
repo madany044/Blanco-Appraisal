@@ -36,16 +36,16 @@ import {
 } from "@/lib/types";
 
 // ─── Palette ────────────────────────────────────────────────────
-const PRIMARY = "#1E293B"; 
-const ACCENT = "#2563EB";  
-const ACCENT_LIGHT = "#EFF6FF"; 
-const TEXT = "#1E293B";    
-const MUTED = "#64748B";   
-const BORDER = "#E2E8F0";  
-const BG_ALT = "#F8FAFC";  
-const SUCCESS = "#16A34A"; 
+const PRIMARY = "#1E293B";
+const ACCENT = "#2563EB";
+const ACCENT_LIGHT = "#EFF6FF";
+const TEXT = "#1E293B";
+const MUTED = "#64748B";
+const BORDER = "#E2E8F0";
+const BG_ALT = "#F8FAFC";
+const SUCCESS = "#16A34A";
 const SUCCESS_BG = "#F0FDF4";
-const AMBER = "#D97706";   
+const AMBER = "#D97706";
 const AMBER_BG = "#FFFBEB";
 const RED_SOFT = "#DC2626";
 
@@ -76,7 +76,7 @@ const s = StyleSheet.create({
   headerTitle: { fontSize: 14, fontFamily: "Helvetica-Bold", color: "#FFFFFF", letterSpacing: 0.5 },
   headerSubtitle: { fontSize: 7.5, color: "#94A3B8", marginTop: 2, textTransform: "uppercase", letterSpacing: 1 },
   headerAccentBar: { height: 3, backgroundColor: ACCENT },
-  
+
   footerBar: {
     position: "absolute",
     bottom: 0,
@@ -127,7 +127,7 @@ const s = StyleSheet.create({
   },
   cardHeaderText: { fontSize: 11, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1 },
   cardHeaderMarker: { fontSize: 11, fontFamily: "Helvetica-Bold", color: ACCENT },
-  
+
   // ── Info Grid ───────────────────────────────────────────────────
   infoGrid: {
     flexDirection: "row",
@@ -206,10 +206,10 @@ const s = StyleSheet.create({
   },
   checkDotSelected: { borderColor: ACCENT, backgroundColor: ACCENT },
   checkDotInner: { width: 4, height: 4, borderRadius: 2, backgroundColor: "#FFFFFF" },
-    checkCardText: { fontSize: 9, color: TEXT, flex: 1 }, // Increased from 8.5
+  checkCardText: { fontSize: 9, color: TEXT, flex: 1 }, // Increased from 8.5
   checkCardTextSelected: { fontSize: 9, fontFamily: "Helvetica-Bold", color: ACCENT, flex: 1 },
 
-    // ── Tables (Fixed & Robust) ──────────────────────────────────────
+  // ── Tables (Fixed & Robust) ──────────────────────────────────────
   tableWrap: {
     borderWidth: 1,
     borderColor: BORDER,
@@ -227,14 +227,14 @@ const s = StyleSheet.create({
   },
   tableRowAlt: { backgroundColor: BG_ALT },
   tableRowLast: { borderBottomWidth: 0 },
-  
+
   alphaWrap: {
     width: 24, height: 24, borderRadius: 12, backgroundColor: ACCENT_LIGHT,
     alignItems: "center", justifyContent: "center", marginRight: SP.sm, flexShrink: 0,
   },
   alphaText: { fontSize: 10, fontFamily: "Helvetica-Bold", color: ACCENT },
   tableLabel: { flex: 1, fontSize: 11, color: TEXT, paddingRight: SP.sm, lineHeight: 1.4 }, // Increased font size
-  
+
   scoreBadge: {
     width: 52, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center",
     flexShrink: 0, backgroundColor: ACCENT_LIGHT,
@@ -259,14 +259,14 @@ const s = StyleSheet.create({
   checkGrid2Col: { flexDirection: "row", flexWrap: "wrap", padding: SP.xs },
   checkCard2Col: { flexDirection: "row", alignItems: "center", paddingVertical: 4, paddingHorizontal: 4, marginBottom: 4, width: "50%" },
 
- // ── Increment Table ────────────────────────────────────────────
-incTableHead: { flexDirection: "row", backgroundColor: PRIMARY, paddingVertical: 4, paddingHorizontal: SP.sm },
-incTableHeadText: { fontSize: 7, fontFamily: "Helvetica-Bold", color: "#FFFFFF", textTransform: "uppercase", letterSpacing: 0.5 },
-incTableRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: BORDER, paddingVertical: 3.5, paddingHorizontal: SP.sm },
-incTableRowAlt: { backgroundColor: BG_ALT },
-incTableRowActive: { backgroundColor: "#FFF176", borderLeftWidth: 3, borderLeftColor: "#F59E0B" },
-incTableCell: { width: "60%", fontSize: 9.5, color: TEXT },
-incTableCellRight: { width: "40%", fontSize: 9.5, fontFamily: "Helvetica-Bold", color: ACCENT, textAlign: "right" },
+  // ── Increment Table ────────────────────────────────────────────
+  incTableHead: { flexDirection: "row", backgroundColor: PRIMARY, paddingVertical: 4, paddingHorizontal: SP.sm },
+  incTableHeadText: { fontSize: 7, fontFamily: "Helvetica-Bold", color: "#FFFFFF", textTransform: "uppercase", letterSpacing: 0.5 },
+  incTableRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: BORDER, paddingVertical: 3.5, paddingHorizontal: SP.sm },
+  incTableRowAlt: { backgroundColor: BG_ALT },
+  incTableRowActive: { backgroundColor: "#FFF176", borderLeftWidth: 3, borderLeftColor: "#F59E0B" },
+  incTableCell: { width: "60%", fontSize: 9.5, color: TEXT },
+  incTableCellRight: { width: "40%", fontSize: 9.5, fontFamily: "Helvetica-Bold", color: ACCENT, textAlign: "right" },
   // ── Signature Block ──────────────────────────────────────────────
   sigCard: { borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden", marginTop: SP.lg },
   sigHeader: { backgroundColor: PRIMARY, paddingVertical: 4, paddingHorizontal: SP.sm },
@@ -352,7 +352,7 @@ function InfoCell({ label, value, full, lastRow, lastCol, highlight }: {
 }) {
   return (
     <View style={[
-      full ? s.infoCellFull : s.infoCell, 
+      full ? s.infoCellFull : s.infoCell,
       lastRow ? s.infoCellLastRow : {},
       lastCol ? s.infoCellLastCol : {}
     ]}>
@@ -570,7 +570,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <QCard heading="a. Challenges faced in achieving goals and how did you overcome them?" answer={pdfDisplayValue(sub.goalChallenges) || " "} minHeight={70} />
         <QCard heading="b. Goal for this upcoming year and explain how that will be beneficial to both of us?" answer={pdfDisplayValue(sub.upcomingGoal) || " "} minHeight={70} />
         <QCard heading="c. What are the 3 things you would like to improve?" answer={pdfDisplayValue(sub.threeImprovements) || " "} minHeight={70} />
-        
+
         <View style={s.qCard} wrap={false}>
           <View style={s.qHeader}><Text style={s.qTitle}>d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?</Text></View>
           <View style={s.qBody}>
@@ -609,7 +609,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       </PdfPage>
 
       {/* PAGE 5 */}
-            {/* PAGE 5 */}
+      {/* PAGE 5 */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <Text style={s.sectionTitle}>Self Performance Ratings (a - j)</Text>
         <Text style={{ fontSize: 8, color: MUTED, marginBottom: SP.xs }}>Blue = Employee&apos;s self-rating · Red = Manager&apos;s rating</Text>
@@ -643,12 +643,12 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </PdfPage>
       )}
 
-            {/* PAGE 7 - Productivity */}
+      {/* PAGE 7 - Productivity */}
       {!isQC && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
           <Text style={s.sectionTitle}>10. Productivity and Time Management</Text>
           <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}>{PRODUCTIVITY_INTRO}</Text>
-          
+
           <Text style={s.subLabel}>Shop Drafting and Checker</Text>
           <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
             {SHOP_DRAFTING_ITEMS.map((item, i) => (
@@ -665,7 +665,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         </PdfPage>
       )}
 
-            {/* PAGE 8 - Modeler */}
+      {/* PAGE 8 - Modeler */}
       {!isQC && sub.category !== "GROUP_C" && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
           <Text style={s.sectionTitle}>Modeler Productivity</Text>
@@ -682,7 +682,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         <QCard num="11" heading="Work Performance and Time Management" body="Please describe your current year work performance and Time Management" answer={pdfDisplayValue(sub.currentYearPerformance)} minHeight={90} />
         <QCard num="12" heading="Please describe how you would perform and improve your productivity for this upcoming performance cycle as similar as your salary grow:" answer={pdfDisplayValue(sub.productivityImprovement)} minHeight={90} />
 
-                <View style={s.qCard} wrap={false}>
+        <View style={s.qCard} wrap={false}>
           <View style={s.qHeader}>
             <View style={s.qNum}><Text style={s.qNumText}>13</Text></View>
             <Text style={s.qTitle}>Rate Yourself — Overall Performance</Text>
@@ -700,7 +700,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         ]} />
       </PdfPage>
 
-            {/* PAGE 10 - HR (Strict 1 Page) */}
+      {/* PAGE 10 - HR (Strict 1 Page) */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <Text style={s.sectionTitle}>HR & Admin Feedback</Text>
         {/* Added marginBottom to create a small gap */}
@@ -739,7 +739,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
         ]} />
       </PdfPage>
 
-                  {/* PAGE 11 - Team Lead (Strict 1 Page) */}
+      {/* PAGE 11 - Team Lead (Strict 1 Page) */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <Text style={s.sectionTitle}>Team Head Feedback</Text>
 
@@ -761,9 +761,9 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
                   const checked = reasons.includes(opt);
                   return (
                     <View key={opt} style={{
-                      width: "50%", 
-                      flexDirection: "row", 
-                      alignItems: "center", 
+                      width: "50%",
+                      flexDirection: "row",
+                      alignItems: "center",
                       paddingVertical: 3, // Tightened row padding
                       paddingRight: SP.sm,
                     }}>
@@ -806,7 +806,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       {/* PAGE 12 - Management (Strict 1 Page) */}
       <PdfPage num={nextPage()} logoSrc={logoPath}>
         <Text style={s.sectionTitle}>Management Worksheet & Final Conclusion</Text>
-        
+
         <Text style={s.letterBody}>Dear <Text style={[s.letterHighlight, { fontSize: 11 }]}>{sub.employeeName}</Text>,</Text>
         <Text style={s.letterBody}>{MANAGEMENT_LETTER_INTRO}</Text>
 
@@ -829,7 +829,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           })}
         </View>
 
-        <Text style={s.letterBody}>You have obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card v/s the maximum of <Text style={s.letterHighlight}>{matchedSlab ? `0-${decimalToNumber(matchedSlab.maxPct)}%` : "—"}</Text>.</Text>
+        <Text style={s.letterBody}>You have obtained <Text style={s.letterHighlight}>{statementPct}%</Text> of Increment based on your report card v/s the maximum increment criteria of <Text style={s.letterHighlight}>{matchedSlab ? `0-${decimalToNumber(matchedSlab.maxPct)}%` : "—"}</Text>.</Text>
         <Text style={s.letterBody}>However, the company would like to support you as best as possible by considering that you will upgrade yourself with any and all backlogs as described by yourself in the attached report card.</Text>
         <Text style={s.letterBody}>Therefore, the company is pleased to offer you the best of <Text style={[s.letterHighlight, { fontSize: 11 }]}>{approvedPct}% </Text>Increment of your current Total CTC.</Text>
 
@@ -843,7 +843,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <Text style={[s.letterBody, { fontWeight: 'bold' }]}>** Your compensation is subject to change at any time based on your performance and/or HR/PM decisions.</Text>
         <View style={{ flex: 1 }} />
-        
+
         <View style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: SP.md }}>
           <View style={{ width: "60%" }}>
             <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: MUTED, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: SP.sm, textAlign: "center" }}>Final Approver Signature</Text>
