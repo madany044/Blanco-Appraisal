@@ -160,6 +160,11 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
                   <SelectItem value="Modeling">Modeling</SelectItem>
                   <SelectItem value="Checking">Checking</SelectItem>
                   <SelectItem value="Project Lead">Project Lead</SelectItem>
+                  <SelectItem value="Project Engineer">Project Engineer</SelectItem>
+                  <SelectItem value="Junior Project Engineer">Junior Project Engineer</SelectItem>
+                  <SelectItem value="Senior Project Engineer">Senior Project Engineer</SelectItem>
+                  <SelectItem value="Executive Design Engineer">Executive Design Engineer</SelectItem>
+                  <SelectItem value="Senior Executive Design Engineer">Senior Executive Design Engineer</SelectItem>
                 </SelectContent>
               </Select>
             )}
