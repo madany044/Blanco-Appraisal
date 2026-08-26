@@ -427,13 +427,13 @@ export function ManagerSubmissionView({ submission: s }: { submission: Appraisal
         <dl className="mb-4 rounded-lg border border-slate-200 bg-[#f8f9fc] p-4 grid gap-4 gap-x-6 sm:grid-cols-2 md:grid-cols-2">
           {s.mgrSuggestedIncrementPercentage != null ? (
             <InfoRow
-              label="Suggested Increment Percentage"
+              label="Maximum Obtained Increment Based On Report Card"
               value={`${decimalToNumber(s.mgrSuggestedIncrementPercentage)}%`}
             />
           ) : null}
           {s.mgrFinalApprovedIncrementPercentage != null ? (
             <InfoRow
-              label="Final Approved Increment Percentage"
+              label="Final Approved Increment By PM"
               value={`${decimalToNumber(s.mgrFinalApprovedIncrementPercentage)}%`}
             />
           ) : null}
