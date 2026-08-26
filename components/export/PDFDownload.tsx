@@ -8,19 +8,18 @@ const PDF_LOGO_PATH = "/images/logooooo.jpg";
 
 async function resolveLogoSrc(): Promise<string | undefined> {
   if (typeof window === "undefined") return undefined;
-  const url = `${window.location.origin}${PDF_LOGO_PATH}`;
   try {
-    const res = await fetch(url);
-    if (!res.ok) return url;
+    const res = await fetch(PDF_LOGO_PATH);
+    if (!res.ok) return undefined;
     const blob = await res.blob();
     return await new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
+      reader.onload = () => resolve(reader.result as string);
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     });
   } catch {
-    return url;
+    return undefined;
   }
 }
 

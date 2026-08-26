@@ -20,9 +20,9 @@ const TEAM_MANAGER_MAP: Record<string, string> = {
   "team 4": "Kumaraswamy M P",
   "team 5": "Pradeep Kumar B S",
   "team 6": "Deepu M C",
-  "team 7": "Deepu M C",
-  "team qc / engineering": "Deepu M C",
-  "qc / engineering": "Deepu M C",
+  "team 7": "Sudeep M C",
+  "team qc / engineering": "Sudeep M C",
+  "qc / engineering": "Sudeep M C",
 };
 
 interface FormHeaderProps {
