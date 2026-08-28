@@ -181,7 +181,7 @@ export const MGR_RECOMMENDATION_SECTIONS = [
   {
     level: "NOT_RECOMMENDED",
     header:
-      "I May OR May Not recommend this employee for appraisal because of the below reason marked with [√]",
+      "I May OR May Not recommend this employee for appraisal because of the reason marked with [√]",
     field: "mgrNotRecommendedReasons" as const,
   },
 ] as const;
