@@ -24,17 +24,18 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
   const [toast, setToast] = useState<string | null>(null);
 
   async function submit(data: ManagementFormValues, draft = false) {
-    const res = await fetch(`/api/submissions/${s.id}/management-submit`, {
+    const endpoint = s.stage === 2 ? "management-submit" : "management-edit";
+    const res = await fetch(`/api/submissions/${s.id}/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...data, draft }),
     });
     if (res.ok) {
-      if (!draft) {
+      if (!draft && s.stage === 2) {
         router.push("/management/success");
         return;
       }
-      setToast("✅ Management decision saved as draft.");
+      setToast(s.stage === 2 ? "✅ Management decision saved as draft." : "✅ Changes saved.");
       router.refresh();
     } else {
       const err = await res.json();
@@ -85,9 +86,9 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
           mgrSuggestedIncrementPercentage={s.mgrSuggestedIncrementPercentage ? Number(s.mgrSuggestedIncrementPercentage) : undefined}
           mgrFinalApprovedIncrementPercentage={s.mgrFinalApprovedIncrementPercentage ? Number(s.mgrFinalApprovedIncrementPercentage) : undefined}
           defaultValues={mgmtDefaults}
-          readOnly={s.stage !== 2}
-          onSaveDraft={s.stage === 2 ? (d) => submit(d, true) : undefined}
-          onSubmit={s.stage === 2 ? (d) => submit(d, false) : undefined}
+          readOnly={s.stage < 2}
+          onSaveDraft={s.stage >= 2 ? (d) => submit(d, true) : undefined}
+          onSubmit={s.stage >= 2 ? (d) => submit(d, false) : undefined}
         />
       </ChainSection>
     </div>

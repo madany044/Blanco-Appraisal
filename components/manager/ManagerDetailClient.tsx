@@ -31,17 +31,20 @@ export function ManagerDetailClient({
   const [toast, setToast] = useState<string | null>(null);
 
   async function submit(data: ManagerFormValues, draft = false) {
-    const res = await fetch(`/api/submissions/${s.id}/manager-submit`, {
+    // First time reaching this stage uses manager-submit (advances the workflow).
+    // Any time after that uses manager-edit (updates in place, stage untouched).
+    const endpoint = s.stage === 1 ? "manager-submit" : "manager-edit";
+    const res = await fetch(`/api/submissions/${s.id}/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...data, draft }),
     });
     if (res.ok) {
-      if (!draft) {
+      if (!draft && s.stage === 1) {
         router.push("/manager/success");
         return;
       }
-      setToast("✅ Manager remarks saved as draft.");
+      setToast(s.stage === 1 ? "✅ Manager remarks saved as draft." : "✅ Changes saved.");
       router.refresh();
     } else alert("Failed");
   }
@@ -90,11 +93,21 @@ export function ManagerDetailClient({
             mgrStrongReasons: s.mgrStrongReasons,
             mgrConditionalReasons: s.mgrConditionalReasons,
             mgrNotRecommendedReasons: s.mgrNotRecommendedReasons,
+            mgrFeedback: s.mgrFeedback ?? undefined,
             mgrSuggestedIncrementPercentage: s.mgrSuggestedIncrementPercentage
               ? Number(s.mgrSuggestedIncrementPercentage)
               : undefined,
             mgrFinalApprovedIncrementPercentage: s.mgrFinalApprovedIncrementPercentage
               ? Number(s.mgrFinalApprovedIncrementPercentage)
+              : undefined,
+            // The rupee-amount boxes aren't stored in the database — only the resulting
+            // percentage is. Reconstruct an equivalent amount from the saved percentage
+            // so the boxes aren't blank when reopening an already-filled form.
+            suggestedIncrementAmount: s.mgrSuggestedIncrementPercentage
+              ? Math.round((Number(s.mgrSuggestedIncrementPercentage) / 100) * currentSalary)
+              : undefined,
+            incrementAmount: s.mgrFinalApprovedIncrementPercentage
+              ? Math.round((Number(s.mgrFinalApprovedIncrementPercentage) / 100) * currentSalary)
               : undefined,
             mgrRemarks: s.mgrRemarks ?? undefined,
             mgrSignatureName: s.mgrSignatureName ?? undefined,
@@ -105,10 +118,10 @@ export function ManagerDetailClient({
               ])
             ),
           }}
-          readOnly={s.stage !== 1}
+          readOnly={s.stage < 1}
           submission={s}
-          onSaveDraft={s.stage === 1 ? (d) => submit(d, true) : undefined}
-          onSubmit={s.stage === 1 ? (d) => submit(d, false) : undefined}
+          onSaveDraft={s.stage >= 1 ? (d) => submit(d, true) : undefined}
+          onSubmit={s.stage >= 1 ? (d) => submit(d, false) : undefined}
           onReturn={s.stage === 1 ? returnToHR : undefined}
         />
       </ChainSection>

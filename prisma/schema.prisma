@@ -199,6 +199,7 @@ model AppraisalSubmission {
   mgrRemarks                 String? @map("mgr_remarks")
   mgrFeedback                 String? @map("mgr_feedback")
   mgrSignatureDate           DateTime? @map("mgr_signature_date") @db.Date
+  mgrLastEditedAt            DateTime? @map("mgr_last_edited_at") @db.Timestamptz(6)
   mgrSignatureName           String? @map("mgr_signature_name")
 
   mgmtIncrementPercentage   Decimal? @map("mgmt_increment_percentage") @db.Decimal(5, 2)
@@ -207,6 +208,7 @@ model AppraisalSubmission {
   mgmtEffectiveDate         DateTime? @map("mgmt_effective_date") @db.Date
   mgmtApproverName          String? @map("mgmt_approver_name")
   mgmtApprovalDate          DateTime? @map("mgmt_approval_date") @db.Date
+  mgmtLastEditedAt          DateTime? @map("mgmt_last_edited_at") @db.Timestamptz(6)
   mgmtFinalRemarks          String? @map("mgmt_final_remarks")
   mgmtFeedbackToEmployee    String? @map("mgmt_feedback_to_employee")
   mgmtInternalNotes         String? @map("mgmt_internal_notes")
