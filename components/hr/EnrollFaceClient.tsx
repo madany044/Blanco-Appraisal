@@ -16,12 +16,7 @@ import { loadFaceModels, getFaceDescriptor } from "@/lib/face-api-loader";
 import { createClient } from "@/lib/supabase/client";
 
 const ENROLLED_BY_OPTIONS = [
-  "Enroller 1",
-  "Enroller 2",
-  "Enroller 3",
-  "Enroller 4",
-  "Enroller 5",
-  "Enroller 6",
+  "HR",
 ];
 
 export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: string } = {}) {
