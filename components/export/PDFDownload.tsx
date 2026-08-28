@@ -4,7 +4,7 @@ import { pdf } from "@react-pdf/renderer";
 import { PDFReport } from "@/components/export/PDFReport";
 import type { AppraisalSubmission } from "@prisma/client";
 import type { SerializedIncrementSlab } from "@/lib/utils";
-const PDF_LOGO_PATH = "/images/logooooo.jpg";
+const PDF_LOGO_PATH = "/images/logooooo.JPG";
 
 async function resolveLogoSrc(): Promise<string | undefined> {
   if (typeof window === "undefined") return undefined;

@@ -537,7 +537,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
   const selfRatingFirst = SELF_RATING_ITEMS.slice(0, 10);
   const selfRatingSecond = SELF_RATING_ITEMS.slice(10);
 
-  const logoPath = logoSrc ?? "/images/logooooo.jpg";
+  const logoPath = logoSrc ?? "/images/logooooo.JPG";
 
   const currentMonthlySalary = sub.currentSalary ?? 0;
   const sortedSlabs = [...slabs].sort((a, b) => a.ctcMin - b.ctcMin);
