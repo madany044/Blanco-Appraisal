@@ -126,7 +126,17 @@ const s = StyleSheet.create({
     alignItems: "center",
   },
   cardHeaderText: { fontSize: 11, fontFamily: "Helvetica-Bold", color: PRIMARY, flex: 1 },
-  cardHeaderMarker: { fontSize: 11, fontFamily: "Helvetica-Bold", color: ACCENT },
+  cardHeaderMarker: {
+    fontSize: 11,
+    fontFamily: "Helvetica-Bold",
+    color: ACCENT,
+    borderWidth: 1.5,
+    borderColor: ACCENT,
+    borderRadius: 4,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    backgroundColor: ACCENT_LIGHT,
+  },
 
   // ── Info Grid ───────────────────────────────────────────────────
   infoGrid: {
@@ -383,9 +393,9 @@ function QCard({ num, heading, body, answer, minHeight = 40 }: {
   );
 }
 
-function CheckCard({ checked, label }: { checked: boolean; label: string }) {
+function CheckCard({ checked, label, gridStyle }: { checked: boolean; label: string; gridStyle?: boolean }) {
   return (
-    <View style={[s.checkCard, checked ? s.checkCardSelected : {}]} wrap={false}>
+    <View style={[gridStyle ? s.checkCard2Col : s.checkCard, checked ? s.checkCardSelected : {}]} wrap={false}>
       <View style={[s.checkDot, checked ? s.checkDotSelected : {}]}>
         {checked ? <View style={s.checkDotInner} /> : null}
       </View>
@@ -573,8 +583,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <View style={s.qCard} wrap={false}>
           <View style={s.qHeader}><Text style={s.qTitle}>d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?</Text></View>
-          <View style={s.qBody}>
-            {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (<CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} />))}
+          <View style={s.checkGrid2Col}>
+            {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (<CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} gridStyle />))}
           </View>
         </View>
 
@@ -585,8 +595,8 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
               {sub.abroadCapabilityNa ? <View style={s.naChip}><Text style={s.naChipText}>N/A</Text></View> : null}
             </View>
             {!sub.abroadCapabilityNa && (
-              <View style={s.qBody}>
-                {ABROAD_OPTIONS.map((opt) => (<CheckCard key={opt} checked={sub.abroadCapability === opt} label={opt} />))}
+              <View style={s.checkGrid2Col}>
+                {ABROAD_OPTIONS.map((opt) => (<CheckCard key={opt} checked={sub.abroadCapability === opt} label={opt} gridStyle />))}
               </View>
             )}
           </View>
@@ -752,28 +762,27 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
               <View style={[s.cardHeader, { paddingVertical: 4 }]}>
                 <Text style={s.cardHeaderText}>
                   {section.header.split("[√]")[0]}
-                  <Text style={s.cardHeaderMarker}>[o]</Text>
+                  <Text style={s.cardHeaderMarker}>[</Text>
+                  <Text style={[s.cardHeaderMarker, { fontFamily: "Helvetica-Bold", fontSize: 12.5 }]}>o</Text>
+                  <Text style={s.cardHeaderMarker}>]</Text>
                   {section.header.split("[√]")[1]}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", flexWrap: "wrap", paddingVertical: SP.xs, paddingHorizontal: SP.sm }}>
-                {options.map((opt) => {
-                  const checked = reasons.includes(opt);
-                  return (
-                    <View key={opt} style={{
-                      width: "50%",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 3, // Tightened row padding
-                      paddingRight: SP.sm,
-                    }}>
-                      <View style={[s.checkDot, checked ? s.checkDotSelected : {}, { marginRight: 6 }]}>
-                        {checked ? <View style={s.checkDotInner} /> : null}
-                      </View>
-                      <Text style={checked ? s.checkCardTextSelected : s.checkCardText}>{opt}</Text>
+                {options.filter((opt) => reasons.includes(opt)).map((opt) => (
+                  <View key={opt} style={{
+                    width: "50%",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingVertical: 3, // Tightened row padding
+                    paddingRight: SP.sm,
+                  }}>
+                    <View style={[s.checkDot, s.checkDotSelected, { marginRight: 6 }]}>
+                      <View style={s.checkDotInner} />
                     </View>
-                  );
-                })}
+                    <Text style={s.checkCardTextSelected}>{opt}</Text>
+                  </View>
+                ))}
               </View>
             </View>
           );
@@ -781,19 +790,28 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         {sub.mgrFeedback ? (
           <View style={{
-            backgroundColor: "#ffb3b3",
             borderWidth: 1,
             borderColor: "#a83232",
             borderRadius: 4,
-            padding: SP.sm,
+            overflow: "hidden",
             marginBottom: SP.sm,
           }} wrap={false}>
-            <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: "#7a1f1f", marginBottom: 3, textTransform: "uppercase" }}>
-              Manager Feedback
-            </Text>
-            <Text style={{ fontSize: 9.5, fontFamily: "Helvetica-Bold", color: "#7a1f1f", lineHeight: 1.4 }}>
-              {sub.mgrFeedback}
-            </Text>
+            <View style={{
+              backgroundColor: BG_ALT,
+              borderBottomWidth: 1,
+              borderBottomColor: "#a83232",
+              paddingVertical: 4,
+              paddingHorizontal: SP.sm,
+            }}>
+              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: "#7a1f1f", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                Manager Feedback
+              </Text>
+            </View>
+            <View style={{ backgroundColor: "#ffb3b3", padding: SP.sm }}>
+              <Text style={{ fontSize: 9.5, fontFamily: "Helvetica-Bold", color: "#7a1f1f", lineHeight: 1.4 }}>
+                {sub.mgrFeedback}
+              </Text>
+            </View>
           </View>
         ) : null}
 

@@ -10,7 +10,10 @@ async function resolveLogoSrc(): Promise<string | undefined> {
   if (typeof window === "undefined") return undefined;
   try {
     const res = await fetch(PDF_LOGO_PATH);
-    if (!res.ok) return undefined;
+    if (!res.ok) {
+      console.error("Logo fetch failed:", res.status, res.statusText, PDF_LOGO_PATH);
+      return undefined;
+    }
     const blob = await res.blob();
     return await new Promise((resolve, reject) => {
       const reader = new FileReader();
