@@ -8,6 +8,7 @@ import {
   Download,
   BarChart3,
   Camera,
+  ListChecks,
   LogOut,
   Save,
 } from "lucide-react";
@@ -33,6 +34,7 @@ const HR_NAV: NavItem[] = [
   { href: "/hr/exports", label: "Exports", icon: Download },
   { href: "/hr/reports", label: "Reports", icon: BarChart3 },
   { href: "/hr/enroll-face", label: "Enroll Face", icon: Camera },
+  { href: "/hr/eligibility", label: "Eligibility", icon: ListChecks },
 ];
 
 const MANAGER_NAV: NavItem[] = [
@@ -58,10 +60,10 @@ export function Sidebar({ role, userEmail }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const nav =
-  role === "hr" ? HR_NAV :
-  role === "manager" ? MANAGER_NAV :
-  role === "dc" ? DC_NAV :
-  MGMT_NAV;
+    role === "hr" ? HR_NAV :
+      role === "manager" ? MANAGER_NAV :
+        role === "dc" ? DC_NAV :
+          MGMT_NAV;
 
   async function handleLogout() {
     const supabase = createClient();

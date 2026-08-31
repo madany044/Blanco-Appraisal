@@ -44,6 +44,14 @@ export function FaceLoginGate({ onVerified }: { onVerified: (employeeCode: strin
     try {
       await loadFaceModels();
 
+      const eligRes = await fetch(`/api/eligible-employees?employeeCode=${encodeURIComponent(employeeCode)}`);
+      const eligData = await eligRes.json();
+      if (!eligData.eligible) {
+        setStatus("fail");
+        setMessage("The appraisal form is not open for you at this time. Please wait for HR to notify you.");
+        return;
+      }
+
       const res = await fetch(`/api/employee-profiles?employeeCode=${encodeURIComponent(employeeCode)}`);
       if (!res.ok) {
         setStatus("fail");

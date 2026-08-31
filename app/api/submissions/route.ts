@@ -13,6 +13,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Category and manager are required" }, { status: 400 });
     }
 
+    const eligible = await prisma.eligibleEmployee.findFirst({
+      where: { employeeCode: body.employeeCode, financialYear: "2026-27" },
+    });
+    if (!eligible) {
+      return NextResponse.json(
+        { error: "This employee is not currently eligible to submit an appraisal." },
+        { status: 403 }
+      );
+    }
+
     const data = mapEmployeeToPrisma(body);
     const submission = await prisma.appraisalSubmission.create({ data });
 
