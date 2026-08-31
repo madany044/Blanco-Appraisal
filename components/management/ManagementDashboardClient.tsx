@@ -29,6 +29,16 @@ export function ManagementDashboardClient({ managers, initialSubmissions, stats 
     search: "",
   });
 
+  const setStageFilter = (stageValue: string | null) => {
+    setFilters((current) => {
+      const nextStage = stageValue ?? "all";
+      return {
+        ...current,
+        stage: current.stage === nextStage ? "all" : nextStage,
+      };
+    });
+  };
+
   useEffect(() => {
     const params = new URLSearchParams();
     if (filters.managerId !== "all") params.set("managerId", filters.managerId);
@@ -47,15 +57,37 @@ export function ManagementDashboardClient({ managers, initialSubmissions, stats 
     <div className="space-y-6">
       <Alert variant="default">
         <AlertTitle>Management Review Dashboard</AlertTitle>
-        <AlertDescription>
-         
-        </AlertDescription>
+        <AlertDescription></AlertDescription>
       </Alert>
       <div className="grid gap-4 md:grid-cols-4">
-        <StatCard title="Pending Decision" value={stats.pending} accent="warning" />
-        <StatCard title="Decisions Made" value={stats.decided} accent="success" />
-        <StatCard title="Total Files" value={stats.total} accent="primary" />
-        <StatCard title="Completed" value={stats.completed} accent="purple" />
+        <StatCard
+          title="Pending Decision"
+          value={stats.pending}
+          accent="warning"
+          onClick={() => setStageFilter("2")}
+          active={filters.stage === "2"}
+        />
+        <StatCard
+          title="Decisions Made"
+          value={stats.decided}
+          accent="success"
+          onClick={() => setStageFilter("3")}
+          active={filters.stage === "3"}
+        />
+        <StatCard
+          title="Total Files"
+          value={stats.total}
+          accent="primary"
+          onClick={() => setStageFilter(null)}
+          active={filters.stage === "all"}
+        />
+        <StatCard
+          title="Completed"
+          value={stats.completed}
+          accent="purple"
+          onClick={() => setStageFilter("4")}
+          active={filters.stage === "4"}
+        />
       </div>
 
       <FilterBar filters={filters} onChange={setFilters} managers={managers} />
