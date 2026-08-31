@@ -2,15 +2,7 @@ import { redirect } from "next/navigation";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { formatDate } from "@/lib/utils";
+import { EnrolledEmployeesClient } from "@/components/dc/EnrolledEmployeesClient";
 
 export default async function DCEnrolledPage() {
   const user = await getAuthUser();
@@ -28,6 +20,15 @@ export default async function DCEnrolledPage() {
     },
   });
 
+  const enrolledByOptions = Array.from(
+    new Set(
+      profiles
+        .map((profile) => profile.enrolledBy)
+        .filter((value): value is string => Boolean(value && value.trim()))
+        .sort((a, b) => a.localeCompare(b))
+    )
+  );
+
   return (
     <DashboardLayout role="dc" userEmail={user.email} title="Enrolled Employees">
       <div className="space-y-4">
@@ -40,28 +41,7 @@ export default async function DCEnrolledPage() {
             No employees enrolled yet.
           </p>
         ) : (
-          <div className="rounded-lg border bg-white">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Employee Name</TableHead>
-                  <TableHead>Employee Code</TableHead>
-                  <TableHead>Enrolled By</TableHead>
-                  <TableHead>Enrolled On</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-  {profiles.map((p) => (
-    <TableRow key={p.id}>
-      <TableCell className="font-medium">{p.employeeName}</TableCell>
-      <TableCell>{p.employeeCode}</TableCell>
-      <TableCell>{p.enrolledBy || "—"}</TableCell>
-      <TableCell>{formatDate(p.createdAt)}</TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-            </Table>
-          </div>
+          <EnrolledEmployeesClient profiles={profiles} enrolledByOptions={enrolledByOptions} />
         )}
       </div>
     </DashboardLayout>
