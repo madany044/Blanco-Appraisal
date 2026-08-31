@@ -172,10 +172,14 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
   }
 
   async function saveSubmission(data: Partial<EmployeeFormValues>, isDraft: boolean) {
+    if (isDraft) {
+      throw new Error("Draft saving is disabled for employee submissions.");
+    }
+
     setSubmitting(true);
     try {
       let verificationPhotoUrl: string | null = null;
-      if (!isDraft && verificationPhoto) {
+      if (verificationPhoto) {
         verificationPhotoUrl = await uploadVerificationPhoto(verificationPhoto, data.employeeCode ?? "unknown");
       }
 
@@ -186,7 +190,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
           ...data,
           ...(isQC ? QC_PRODUCTIVITY_NULLS : {}),
           category,
-          stage: isDraft ? -1 : 0,
+          stage: 0,
           abroadCapabilityNa: !showAbroad,
           modelerSectionNa: isQC ? true : category === "GROUP_C",
           ...(verificationPhotoUrl ? { verificationPhotoUrl } : {}),
@@ -198,18 +202,12 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
         throw new Error(err.error ?? "Submission failed");
       }
 
-      if (!isDraft) router.push("/employee/success");
-      else alert("Draft saved successfully");
+      router.push("/employee/success");
     } catch (e) {
       alert(e instanceof Error ? e.message : "Failed to save");
     } finally {
       setSubmitting(false);
     }
-  }
-
-  async function onDraft() {
-    const data = methods.getValues();
-    await saveSubmission(data, true);
   }
 
   async function onSubmit(data: EmployeeFormValues) {
@@ -577,9 +575,6 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
             Previous
           </Button>
           <div className="flex gap-3">
-            <Button type="button" variant="secondary" onClick={onDraft} disabled={submitting}>
-              Save Draft
-            </Button>
             {step < lastStep ? (
               <Button type="button" onClick={nextStep}>Next</Button>
             ) : (

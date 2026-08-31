@@ -23,6 +23,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const requestedStage = Number(body.stage ?? 0);
+    if (requestedStage < 0) {
+      return NextResponse.json(
+        { error: "Draft saving is disabled for employee submissions." },
+        { status: 400 }
+      );
+    }
+
     const data = mapEmployeeToPrisma(body);
     const submission = await prisma.appraisalSubmission.create({ data });
 
