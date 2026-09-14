@@ -9,6 +9,7 @@ import {
   BarChart3,
   Camera,
   ListChecks,
+  CheckCircle2,
   LogOut,
   Save,
 } from "lucide-react";
@@ -30,6 +31,7 @@ interface SidebarProps {
 const HR_NAV: NavItem[] = [
   { href: "/hr", label: "Dashboard", icon: LayoutDashboard },
   { href: "/hr/submissions", label: "Submissions", icon: FileText },
+  { href: "/hr/completed", label: "Completed", icon: CheckCircle2 },
   { href: "/hr/drafts", label: "Saved Drafts", icon: Save },
   { href: "/hr/exports", label: "Exports", icon: Download },
   { href: "/hr/reports", label: "Reports", icon: BarChart3 },

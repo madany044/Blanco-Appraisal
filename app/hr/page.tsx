@@ -10,8 +10,12 @@ export default async function HRDashboardPage() {
 
   const [managers, submissions] = await Promise.all([
     prisma.manager.findMany({ orderBy: { name: "asc" } }),
+
     prisma.appraisalSubmission.findMany({
-      where: { hrDraftSavedAt: null },
+      where: {
+        hrDraftSavedAt: null,
+        stage: { lt: 4 },
+      },
       include: { manager: true },
       orderBy: { submittedAt: "desc" },
     }),

@@ -59,6 +59,7 @@ export function HRDashboardClient({
     if (filters.stage !== "all") params.set("stage", filters.stage);
     if (filters.financialYear !== "all") params.set("financialYear", filters.financialYear);
     if (filters.search) params.set("search", filters.search);
+    params.set("excludeCompleted", "true");
 
     fetch(`/api/submissions?${params}`)
       .then((r) => r.json())

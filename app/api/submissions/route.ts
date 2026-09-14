@@ -75,6 +75,7 @@ export async function GET(request: NextRequest) {
   }
   if (category && category !== "all") where.category = category as Prisma.AppraisalSubmissionWhereInput["category"];
   if (stage && stage !== "all") where.stage = parseInt(stage, 10);
+  if (searchParams.get("excludeCompleted") === "true") where.stage = { lt: 4 };
   if (financialYear && financialYear !== "all") where.financialYear = financialYear;
   if (search) {
     where.OR = [
