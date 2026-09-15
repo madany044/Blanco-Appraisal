@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { FilterBar, type FilterState } from "@/components/dashboard/FilterBar";
 import { SubmissionsTable } from "@/components/dashboard/SubmissionsTable";
@@ -26,6 +27,7 @@ export function HRDashboardClient({
   initialSubmissions,
   stats,
 }: HRDashboardClientProps) {
+  const router = useRouter();
   const [submissions, setSubmissions] = useState(initialSubmissions);
   const isInitialMount = useRef(true);
   const [filters, setFilters] = useState<FilterState>({
@@ -119,8 +121,8 @@ export function HRDashboardClient({
           title="Export Completed"
           value={stats.completed}
           accent="success"
-          onClick={() => setStageFilter("4")}
-          active={filters.stage === "4"}
+          onClick={() => router.push("/hr/completed")}
+          active={false}
         />
       </div>
 
