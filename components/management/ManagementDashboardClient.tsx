@@ -48,8 +48,10 @@ export function ManagementDashboardClient({ managers, initialSubmissions, stats 
     if (filters.search) params.set("search", filters.search);
 
     fetch(`/api/submissions?${params}`)
-      .then((r) => r.json())
-      .then(setSubmissions)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setSubmissions(data);
+      })
       .catch(console.error);
   }, [filters]);
 

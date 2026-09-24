@@ -1,6 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -8,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RotateCcw } from "lucide-react";
 import type { Manager } from "@prisma/client";
 
 export interface FilterState {
@@ -29,8 +31,25 @@ export function FilterBar({ filters, onChange, managers }: FilterBarProps) {
     onChange({ ...filters, [key]: value });
   }
 
+  const hasActiveFilters =
+    filters.managerId !== "all" ||
+    filters.category !== "all" ||
+    filters.stage !== "all" ||
+    filters.financialYear !== "2026-27" ||
+    filters.search !== "";
+
+  const handleReset = () => {
+    onChange({
+      managerId: "all",
+      category: "all",
+      stage: "all",
+      financialYear: "2026-27",
+      search: "",
+    });
+  };
+
   return (
-    <div className="flex flex-wrap gap-4 rounded-lg border bg-white p-4">
+    <div className="flex flex-wrap items-center gap-4 rounded-lg border bg-white p-4">
       <Select value={filters.managerId} onValueChange={(v) => update("managerId", v)}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="All Managers" />
@@ -72,6 +91,7 @@ export function FilterBar({ filters, onChange, managers }: FilterBarProps) {
           <SelectValue placeholder="FY" />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="all">All FYs</SelectItem>
           <SelectItem value="2026-27">2026-27</SelectItem>
         </SelectContent>
       </Select>
@@ -81,6 +101,17 @@ export function FilterBar({ filters, onChange, managers }: FilterBarProps) {
         value={filters.search}
         onChange={(e) => update("search", e.target.value)}
       />
+      {hasActiveFilters && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleReset}
+          className="h-10 px-3 text-xs text-slate-600 hover:text-slate-900"
+        >
+          <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+          Clear Filters
+        </Button>
+      )}
     </div>
   );
 }

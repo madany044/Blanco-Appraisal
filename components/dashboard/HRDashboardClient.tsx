@@ -64,8 +64,10 @@ export function HRDashboardClient({
     params.set("excludeCompleted", "true");
 
     fetch(`/api/submissions?${params}`)
-      .then((r) => r.json())
-      .then(setSubmissions)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setSubmissions(data);
+      })
       .catch(console.error);
   }, [filters]);
 
