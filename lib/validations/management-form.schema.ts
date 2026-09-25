@@ -11,4 +11,7 @@ export const managementFormSchema = z.object({
 
 export type ManagementFormValues = z.infer<typeof managementFormSchema>;
 
+export const managementDraftSchema = managementFormSchema.partial();
+
 export const INCREMENT_OPTIONS = Array.from({ length: 36 }, (_, i) => i);
+

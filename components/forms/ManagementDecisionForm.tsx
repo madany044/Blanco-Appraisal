@@ -361,7 +361,7 @@ We are happy to receive your appraisal request and the feedback from your team h
                 type="button"
                 variant="secondary"
                 className="w-full"
-                onClick={() => validateAndSubmit(onSaveDraft)}
+                onClick={() => onSaveDraft?.(getValues())}
               >
                 Save Draft
               </Button>

@@ -39,7 +39,14 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
         return;
       }
       router.push("/hr/drafts/success");
-    } else alert("Failed to submit");
+    } else {
+      try {
+        const err = await res.json();
+        alert(typeof err.error === "string" ? err.error : "Failed to submit HR review.");
+      } catch {
+        alert("Failed to submit HR review.");
+      }
+    }
   }
 
   async function handleComplete() {
@@ -47,7 +54,14 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
     if (res.ok) {
       setToast("✅ Record marked as completed.");
       router.refresh();
-    } else alert("Failed to complete");
+    } else {
+      try {
+        const err = await res.json();
+        alert(typeof err.error === "string" ? err.error : "Failed to complete record.");
+      } catch {
+        alert("Failed to complete record.");
+      }
+    }
   }
 
   const hrDefaults: Partial<HRFormValues> = {

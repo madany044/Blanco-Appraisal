@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { mapManagerToPrisma } from "@/lib/submission-mapper";
-import { managerFormSchema } from "@/lib/validations/manager-form.schema";
+import { managerDraftSchema, managerFormSchema } from "@/lib/validations/manager-form.schema";
 
 export async function POST(
     request: NextRequest,
@@ -15,7 +15,8 @@ export async function POST(
 
     try {
         const body = await request.json();
-        const parsed = managerFormSchema.safeParse(body);
+        const { draft } = body;
+        const parsed = (draft ? managerDraftSchema : managerFormSchema).safeParse(body);
         if (!parsed.success) {
             return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
         }

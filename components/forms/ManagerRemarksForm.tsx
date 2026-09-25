@@ -59,7 +59,7 @@ export function ManagerRemarksForm({
   });
 
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
-  const { register, handleSubmit, watch, setValue } = methods;
+  const { register, handleSubmit, watch, setValue, getValues } = methods;
 
   const openSubmitConfirm = onSubmit ? handleSubmit(() => setShowSubmitConfirm(true)) : undefined;
   const confirmSubmit = onSubmit ? handleSubmit(async (data) => {
@@ -253,7 +253,7 @@ export function ManagerRemarksForm({
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
-          {onSaveDraft && <Button type="button" variant="secondary" onClick={handleSubmit(onSaveDraft)}>Save Draft</Button>}
+          {onSaveDraft && <Button type="button" variant="secondary" onClick={() => onSaveDraft?.(getValues())}>Save Draft</Button>}
           {onReturn && <Button type="button" variant="outline" onClick={handleSubmit(onReturn)}>Return Back to HR</Button>}
           {onSubmit && (
             <Button type="button" variant="success" onClick={openSubmitConfirm}>

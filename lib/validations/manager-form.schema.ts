@@ -70,4 +70,21 @@ export const managerFormSchema = z
     }
   });
 
+export const managerDraftSchema = z.object({
+  mgrRecommendation: z.array(recommendationLevel).optional().default([]),
+  mgrStrongReasons: z.array(z.string()).optional().default([]),
+  mgrConditionalReasons: z.array(z.string()).optional().default([]),
+  mgrNotRecommendedReasons: z.array(z.string()).optional().default([]),
+  mgrSuggestedIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
+  mgrFinalApprovedIncrementPercentage: z.coerce.number().min(0).max(100).optional(),
+  incrementAmount: z.coerce.number().min(0).optional(),
+  suggestedIncrementAmount: z.coerce.number().min(0).optional(),
+  mgrRemarks: z.string().optional(),
+  mgrFeedback: z.string().optional(),
+  mgrSignatureName: z.string().optional(),
+  mgrSignatureDate: z.string().optional(),
+  ...managerSelfRatingFields,
+});
+
 export type ManagerFormValues = z.infer<typeof managerFormSchema>;
+

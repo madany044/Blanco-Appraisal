@@ -38,8 +38,13 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
       setToast(s.stage === 2 ? "✅ Management decision saved as draft." : "✅ Changes saved.");
       router.refresh();
     } else {
-      const err = await res.json();
-      alert(err.error ?? "Failed");
+      try {
+        const err = await res.json();
+        const msg = typeof err.error === "string" ? err.error : "Management submission failed. Please check required fields.";
+        alert(msg);
+      } catch {
+        alert("Management submission failed.");
+      }
     }
   }
 

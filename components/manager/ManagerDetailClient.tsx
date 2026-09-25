@@ -46,7 +46,15 @@ export function ManagerDetailClient({
       }
       setToast(s.stage === 1 ? "✅ Manager remarks saved as draft." : "✅ Changes saved.");
       router.refresh();
-    } else alert("Failed");
+    } else {
+      try {
+        const err = await res.json();
+        const msg = typeof err.error === "string" ? err.error : "Failed to save remarks. Please check required fields.";
+        alert(msg);
+      } catch {
+        alert("Failed to save remarks.");
+      }
+    }
   }
 
   async function returnToHR(data: ManagerFormValues) {
@@ -56,7 +64,14 @@ export function ManagerDetailClient({
       body: JSON.stringify(data),
     });
     if (res.ok) router.push("/manager");
-    else alert("Failed");
+    else {
+      try {
+        const err = await res.json();
+        alert(typeof err.error === "string" ? err.error : "Failed to return to HR.");
+      } catch {
+        alert("Failed to return to HR.");
+      }
+    }
   }
 
   return (

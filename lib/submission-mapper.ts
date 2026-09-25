@@ -121,40 +121,42 @@ export function mapHRToPrisma(data: Partial<HRFormValues>): Prisma.AppraisalSubm
   };
 }
 
-export function mapManagerToPrisma(data: ManagerFormValues): Prisma.AppraisalSubmissionUpdateInput {
+export function mapManagerToPrisma(data: Partial<ManagerFormValues>): Prisma.AppraisalSubmissionUpdateInput {
   const selfRatingFields = Object.fromEntries(
     SELF_RATING_ITEMS.map((item) => [item.mgrKey, data[item.mgrKey] ?? null])
   );
 
   return {
-    mgrRecommendation: data.mgrRecommendation,
-    mgrStrongReasons: data.mgrStrongReasons,
-    mgrConditionalReasons: data.mgrConditionalReasons,
-    mgrNotRecommendedReasons: data.mgrNotRecommendedReasons,
+    mgrRecommendation: data.mgrRecommendation ?? [],
+    mgrStrongReasons: data.mgrStrongReasons ?? [],
+    mgrConditionalReasons: data.mgrConditionalReasons ?? [],
+    mgrNotRecommendedReasons: data.mgrNotRecommendedReasons ?? [],
     mgrSuggestedIncrementPercentage: data.mgrSuggestedIncrementPercentage ?? null,
     mgrFinalApprovedIncrementPercentage: data.mgrFinalApprovedIncrementPercentage ?? null,
-    mgrRemarks: data.mgrRemarks,
-    mgrFeedback: data.mgrFeedback,
-    mgrSignatureName: data.mgrSignatureName,
+    mgrRemarks: data.mgrRemarks ?? null,
+    mgrFeedback: data.mgrFeedback ?? null,
+    mgrSignatureName: data.mgrSignatureName ?? null,
     mgrSignatureDate: data.mgrSignatureDate ? new Date(data.mgrSignatureDate) : new Date(),
     ...selfRatingFields,
   };
 }
 
 export function mapManagementToPrisma(
-  data: ManagementFormValues,
+  data: Partial<ManagementFormValues>,
   currentSalary: number
 ): Prisma.AppraisalSubmissionUpdateInput {
-  const newSalary = Math.round(currentSalary * (1 + data.mgmtIncrementPercentage / 100));
+  const incPct = data.mgmtIncrementPercentage ?? 0;
+  const newSalary = Math.round(currentSalary * (1 + incPct / 100));
 
   return {
-    mgmtIncrementPercentage: data.mgmtIncrementPercentage,
+    mgmtIncrementPercentage: data.mgmtIncrementPercentage ?? null,
     mgmtStatementPercentage: data.mgmtStatementPercentage ?? null,
     mgmtNewSalary: newSalary,
-    mgmtApproverName: data.mgmtApproverName,
+    mgmtApproverName: data.mgmtApproverName ?? null,
     mgmtApprovalDate: new Date(),
-    mgmtFinalRemarks: data.mgmtFinalRemarks,
-    mgmtFeedbackToEmployee: data.mgmtFeedbackToEmployee ?? data.mgmtFinalRemarks,
-    mgmtInternalNotes: data.mgmtInternalNotes,
+    mgmtFinalRemarks: data.mgmtFinalRemarks ?? null,
+    mgmtFeedbackToEmployee: data.mgmtFeedbackToEmployee ?? data.mgmtFinalRemarks ?? null,
+    mgmtInternalNotes: data.mgmtInternalNotes ?? null,
   };
 }
+
