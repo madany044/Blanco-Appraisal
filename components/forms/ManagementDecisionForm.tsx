@@ -147,17 +147,6 @@ We are happy to receive your appraisal request and the feedback from your team h
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statementPct]);
 
-  async function validateAndSubmit(
-    handler?: (data: ManagementFormValues) => Promise<void>
-  ) {
-    return handleSubmit(async (data) => {
-      if (!data.mgmtFeedbackToEmployee?.trim()) {
-        data.mgmtFeedbackToEmployee = generatedFeedback;
-      }
-      await handler?.(data);
-    })();
-  }
-
   const content = (
     <div className="space-y-8">
       <FormBrandHeader subtitle="Management Worksheet & Final Conclusion" compact />
