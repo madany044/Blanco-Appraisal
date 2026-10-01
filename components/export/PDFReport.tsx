@@ -393,9 +393,26 @@ function QCard({ num, heading, body, answer, minHeight = 40 }: {
   );
 }
 
-function CheckCard({ checked, label, gridStyle, style }: { checked: boolean; label: string; gridStyle?: boolean; style?: any }) {
+function CheckCard({
+  checked,
+  label,
+  gridStyle,
+  style,
+}: {
+  checked: boolean;
+  label: string;
+  gridStyle?: boolean;
+  style?: React.ComponentProps<typeof View>["style"];
+}) {
   return (
-    <View style={[gridStyle ? s.checkCard2Col : s.checkCard, style, checked ? s.checkCardSelected : {}]} wrap={false}>
+    <View
+      style={[
+        gridStyle ? s.checkCard2Col : s.checkCard,
+        ...(Array.isArray(style) ? style : style ? [style] : []),
+        checked ? s.checkCardSelected : {},
+      ]}
+      wrap={false}
+    >
       <View style={[s.checkDot, checked ? s.checkDotSelected : {}]}>
         {checked ? <View style={s.checkDotInner} /> : null}
       </View>
@@ -710,7 +727,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       {!isQC && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
           <Text style={s.sectionTitle}>10. Productivity and Time Management</Text>
-          <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}></Text>
+          <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}>{PRODUCTIVITY_INTRO}</Text>
 
           <Text style={s.subLabel}>Shop Drafting and Checker</Text>
           <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
