@@ -727,7 +727,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       {!isQC && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
           <Text style={s.sectionTitle}>10. Productivity and Time Management</Text>
-          <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}></Text>
+          <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}>What’s your capability to produce the maximum number of the following kinds of drawings/connections ?</Text>
 
           <Text style={s.subLabel}>Shop Drafting and Checker</Text>
           <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
