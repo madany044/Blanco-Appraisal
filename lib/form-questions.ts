@@ -12,7 +12,7 @@ export const LEARNING_COMMITMENT_OPTIONS = [
 export const INITIATIVE_FREQUENCY_OPTIONS = ["Consistently", "Occasionally", "Rarely", "Never"] as const;
 
 export const PRODUCTIVITY_INTRO =
-  "What's your capability to produce the maximum number of the following kinds of drawings/connections (Checking, shop drafting, GA drafting and modelling)";
+  "What's your capability to produce the maximum number of the following kinds of drawings/connections";
 
 export const EMPLOYEE_QUESTIONS = {
   q1: {
