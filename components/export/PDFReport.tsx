@@ -393,9 +393,9 @@ function QCard({ num, heading, body, answer, minHeight = 40 }: {
   );
 }
 
-function CheckCard({ checked, label, gridStyle }: { checked: boolean; label: string; gridStyle?: boolean }) {
+function CheckCard({ checked, label, gridStyle, style }: { checked: boolean; label: string; gridStyle?: boolean; style?: any }) {
   return (
-    <View style={[gridStyle ? s.checkCard2Col : s.checkCard, checked ? s.checkCardSelected : {}]} wrap={false}>
+    <View style={[gridStyle ? s.checkCard2Col : s.checkCard, style, checked ? s.checkCardSelected : {}]} wrap={false}>
       <View style={[s.checkDot, checked ? s.checkDotSelected : {}]}>
         {checked ? <View style={s.checkDotInner} /> : null}
       </View>
@@ -448,13 +448,64 @@ function RatingTableHeader() {
   );
 }
 
-function ProdTableRow({ label, value, index, isLast }: { label: string; value: string; index: number; isLast?: boolean }) {
+function ProdTableRow({
+  label,
+  value,
+  index,
+  isLast,
+  stacked = false,
+}: {
+  label: string;
+  value: string;
+  index: number;
+  isLast?: boolean;
+  stacked?: boolean;
+}) {
   const isAlt = index % 2 === 1;
   const isNA = !value || value === "—";
+
+  if (stacked) {
+    return (
+      <View
+        style={[
+          {
+            flexDirection: "column",
+            alignItems: "flex-start",
+            paddingHorizontal: SP.md,
+            paddingVertical: 7,
+            borderBottomWidth: 1,
+            borderBottomColor: BORDER,
+          },
+          isAlt ? s.tableRowAlt : {},
+          isLast ? s.tableRowLast : {},
+        ]}
+        wrap={false}
+      >
+        <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: PRIMARY, lineHeight: 1.35 }}>
+          {label}
+        </Text>
+        <Text
+          style={
+            isNA
+              ? { fontSize: 9, color: MUTED, fontFamily: "Helvetica", marginTop: 3 }
+              : { fontSize: 9.5, fontFamily: "Helvetica-Bold", color: ACCENT, marginTop: 3, lineHeight: 1.45 }
+          }
+        >
+          {value || "—"}
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={[s.tableRow, isAlt ? s.tableRowAlt : {}, isLast ? s.tableRowLast : {}]} wrap={false}>
       <Text style={s.tableLabel}>{label}</Text>
-      <Text style={isNA ? { fontSize: 9, color: MUTED, fontFamily: "Helvetica" } : s.scoreText}>
+      <Text
+        style={[
+          isNA ? { fontSize: 9, color: MUTED, fontFamily: "Helvetica" } : s.scoreText,
+          { flexShrink: 0, maxWidth: "40%", textAlign: "right" },
+        ]}
+      >
         {value || "—"}
       </Text>
     </View>
@@ -583,8 +634,10 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
 
         <View style={s.qCard} wrap={false}>
           <View style={s.qHeader}><Text style={s.qTitle}>d. Did you demonstrate initiative and contribute innovative ideas to improve processes or solve problems?</Text></View>
-          <View style={s.checkGrid2Col}>
-            {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (<CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} gridStyle />))}
+          <View style={{ flexDirection: "row", alignItems: "center", padding: SP.xs }}>
+            {INITIATIVE_FREQUENCY_OPTIONS.map((opt) => (
+              <CheckCard key={opt} checked={sub.initiativeFrequency === opt} label={opt} gridStyle style={{ width: "25%", marginBottom: 0 }} />
+            ))}
           </View>
         </View>
 
@@ -657,7 +710,7 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
       {!isQC && (
         <PdfPage num={nextPage()} logoSrc={logoPath}>
           <Text style={s.sectionTitle}>10. Productivity and Time Management</Text>
-          <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}>{PRODUCTIVITY_INTRO}</Text>
+          <Text style={{ fontSize: 9, color: MUTED, marginBottom: SP.sm }}></Text>
 
           <Text style={s.subLabel}>Shop Drafting and Checker</Text>
           <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
@@ -669,7 +722,14 @@ export function PDFReport({ submission: sub, slabs = [], logoSrc }: PDFReportPro
           <Text style={{ ...s.subLabel, marginTop: SP.md }}>E-Drafting</Text>
           <View style={{ borderWidth: 1, borderColor: BORDER, borderRadius: 6, overflow: "hidden" }}>
             {E_DRAFTING_ITEMS.map((item, i) => (
-              <ProdTableRow key={item.key} label={item.label} value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"} index={i} isLast={i === E_DRAFTING_ITEMS.length - 1} />
+              <ProdTableRow
+                key={item.key}
+                label={item.label}
+                value={pdfDisplayValue(getSubmissionField(sub, item.key as keyof AppraisalSubmission)) || "—"}
+                index={i}
+                isLast={i === E_DRAFTING_ITEMS.length - 1}
+                stacked
+              />
             ))}
           </View>
         </PdfPage>
