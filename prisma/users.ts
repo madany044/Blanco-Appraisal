@@ -13,7 +13,7 @@ export const USERS = [
   { email: "kumar.s.malliger@gmail.com", role: "manager", name: "Kumaraswamy M P" },
   { email: "deepu.cgowda@gmail.com", role: "manager", name: "Deepu M C" },
   { email: "madhugowda1997@gmail.com", role: "manager", name: "Madhu Gowda" },
-  { email: "reshmamk.gowda1997@gmail.com", role: "manager", name: "Reshma M K Gowda" },
+  { email: "reshmamk.gowda1993@gmail.com", role: "manager", name: "Reshma M K Gowda" },
   { email: "dc.blanco@gmail.com", role: "dc", name: "Data Collector" },
   { email: "lokaranjanj1149@gmail.com", role: "dc", name: "Lokaranjan J" },
   { email: "manusurya136@gmail.com", role: "dc", name: "Manu Surya" },
@@ -21,6 +21,7 @@ export const USERS = [
   { email: "alfeenfirdose04@gmail.com", role: "dc", name: "Alfeen Firdose" },
   { email: "misbamisbasultana@gmail.com", role: "dc", name: "Misba Sultana" },
   { email: "ppreetham703@gmail.com", role: "dc", name: "Preetham R" },
+  { email: "madanmadany2004@gmail.com", role: "admin", name: "Madan" },
 ] as const;
 
 export const MANAGERS = [
@@ -32,5 +33,5 @@ export const MANAGERS = [
   { name: "Kumaraswamy M P", email: "kumar.s.malliger@gmail.com" },
   { name: "Deepu M C", email: "deepu.cgowda@gmail.com" },
   { name: "Madhu Gowda", email: "madhugowda1997@gmail.com" },
-  { name: "Reshma M K Gowda", email: "reshmamk.gowda1997@gmail.com" },
+  { name: "Reshma M K Gowda", email: "reshmamk.gowda1993@gmail.com" },
 ] as const;
