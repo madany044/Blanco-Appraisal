@@ -215,6 +215,8 @@ model AppraisalSubmission {
   verificationPhotoUrl      String? @map("verification_photo_url")
 
   manager Manager @relation(fields: [managerId], references: [id])
+  correction AppraisalCorrection?
+  correctionEvents AppraisalCorrectionEvent[]
 
   @@index([managerId])
   @@index([stage])
@@ -222,6 +224,35 @@ model AppraisalSubmission {
   @@index([financialYear])
   @@index([employeeCode])
   @@map("appraisal_submissions")
+}
+
+// Additive feature tables. Existing appraisal columns/stage values are unchanged.
+model AppraisalCorrection {
+  submissionId String @id @map("submission_id") @db.Uuid
+  status String @default("NONE")
+  revision Int @default(0)
+  version Int @default(0)
+  reason String?
+  instructions String?
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  submission AppraisalSubmission @relation(fields: [submissionId], references: [id], onDelete: Restrict)
+
+  @@map("appraisal_corrections")
+}
+
+model AppraisalCorrectionEvent {
+  id String @id @default(uuid()) @db.Uuid
+  submissionId String @map("submission_id") @db.Uuid
+  revision Int
+  action String
+  actor String
+  note String?
+  snapshot Json?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  submission AppraisalSubmission @relation(fields: [submissionId], references: [id], onDelete: Restrict)
+
+  @@index([submissionId, createdAt])
+  @@map("appraisal_correction_events")
 }
 
 

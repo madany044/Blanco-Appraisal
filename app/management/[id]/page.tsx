@@ -1,3 +1,4 @@
+import { correctionDetails } from "@/lib/corrections";
 import { redirect } from "next/navigation";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -23,9 +24,11 @@ export default async function ManagementDetailPage({
 
   if (!submission || submission.stage < 2) redirect("/management");
 
+  const correctionInfo = await correctionDetails(params.id);
+
   return (
     <DashboardLayout role="management" userEmail={user.email} title="Management Review">
-      <ManagementDetailClient submission={submission} slabs={serializeIncrementSlabs(slabs)} />
+      <ManagementDetailClient submission={{ ...submission, correction: correctionInfo.correction }} correctionEvents={correctionInfo.events} slabs={serializeIncrementSlabs(slabs)} />
     </DashboardLayout>
   );
 }

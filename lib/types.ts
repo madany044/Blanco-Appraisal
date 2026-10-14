@@ -3,6 +3,7 @@ import type { SerializedIncrementSlab } from "@/lib/utils";
 
 export type SubmissionWithManager = AppraisalSubmission & {
   manager: Manager;
+  correction?: import("./correction-config").CorrectionSummary | null;
 };
 
 export type AppraisalCategory = "GROUP_A" | "GROUP_B" | "GROUP_C" | "QC";

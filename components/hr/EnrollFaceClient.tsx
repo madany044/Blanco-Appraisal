@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Camera, RotateCcw, CheckCircle2 } from "lucide-react";
 import { loadFaceModels, getFaceDescriptor } from "@/lib/face-api-loader";
+import { localCorrectionTest } from "@/lib/correction-config";
 import { createClient } from "@/lib/supabase/client";
 
 const ENROLLED_BY_OPTIONS = [
@@ -142,19 +143,24 @@ export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: stri
         return;
       }
 
-      const res = await fetch(photo);
-      const blob = await res.blob();
+      let referencePhotoUrl = photo;
+      if (!localCorrectionTest) {
+        const res = await fetch(photo);
+        const blob = await res.blob();
 
-      const supabase = createClient();
-      const fileName = `${employeeCode}_${Date.now()}.jpg`;
-      const { error: uploadError } = await supabase.storage
-        .from("employee-reference-photos")
-        .upload(fileName, blob, { contentType: "image/jpeg" });
-      if (uploadError) throw uploadError;
+        const supabase = createClient();
+        const fileName = `${employeeCode}_${Date.now()}.jpg`;
+        const { error: uploadError } = await supabase.storage
+          .from("employee-reference-photos")
+          .upload(fileName, blob, { contentType: "image/jpeg" });
+        if (uploadError) throw uploadError;
 
-      const { data: urlData } = supabase.storage
-        .from("employee-reference-photos")
-        .getPublicUrl(fileName);
+        const { data: urlData } = supabase.storage
+          .from("employee-reference-photos")
+          .getPublicUrl(fileName);
+
+        referencePhotoUrl = urlData.publicUrl;
+      }
 
       const saveRes = await fetch("/api/employee-profiles", {
         method: "POST",
@@ -162,7 +168,7 @@ export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: stri
         body: JSON.stringify({
           employeeCode,
           employeeName,
-          referencePhotoUrl: urlData.publicUrl,
+          referencePhotoUrl,
           faceDescriptor: Array.from(descriptor),
           enrolledBy,
         }),

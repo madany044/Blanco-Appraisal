@@ -1,3 +1,4 @@
+import { attachCorrections } from "@/lib/corrections";
 import { redirect } from "next/navigation";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -39,7 +40,7 @@ export default async function HRDashboardPage() {
     <DashboardLayout role="hr" userEmail={user.email} title="HR Dashboard">
       <HRDashboardClient
         managers={managers}
-        initialSubmissions={activeSubmissions}
+        initialSubmissions={await attachCorrections(activeSubmissions)}
         stats={stats}
       />
     </DashboardLayout>

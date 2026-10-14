@@ -1,3 +1,4 @@
+import { correctionDetails } from "@/lib/corrections";
 import { redirect } from "next/navigation";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -23,9 +24,11 @@ export default async function HRSubmissionDetailPage({
 
   if (!submission) redirect("/hr");
 
+  const correctionInfo = await correctionDetails(params.id);
+
   return (
     <DashboardLayout role="hr" userEmail={user.email} title="Submission Detail">
-      <SubmissionDetailClient submission={submission} slabs={serializeIncrementSlabs(slabs)} />
+      <SubmissionDetailClient submission={{ ...submission, correction: correctionInfo.correction }} correctionEvents={correctionInfo.events} slabs={serializeIncrementSlabs(slabs)} />
     </DashboardLayout>
   );
 }

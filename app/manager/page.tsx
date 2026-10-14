@@ -1,3 +1,4 @@
+import { attachCorrections } from "@/lib/corrections";
 import { redirect } from "next/navigation";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -25,7 +26,7 @@ export default async function ManagerDashboardPage() {
 
   return (
     <DashboardLayout role="manager" userEmail={user.email} title="Manager Dashboard">
-      <ManagerDashboardClient submissions={submissions} stats={stats} />
+      <ManagerDashboardClient submissions={await attachCorrections(submissions)} stats={stats} />
     </DashboardLayout>
   );
 }

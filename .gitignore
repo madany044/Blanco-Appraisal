@@ -35,3 +35,5 @@ yarn-error.log*
 next-env.d.ts
 
 notes.md
+# Isolated correction test database and logs
+/.local-correction-test/

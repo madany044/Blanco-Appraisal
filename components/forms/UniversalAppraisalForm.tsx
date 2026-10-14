@@ -1,5 +1,6 @@
 "use client";
 
+import { localCorrectionTest } from "@/lib/correction-config";
 import { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -88,9 +89,10 @@ interface UniversalAppraisalFormProps {
   managers: Manager[];
   brandSubtitle?: string;
   verifiedEmployeeCode?: string;
+  existingAppraisal?: { id: string; version: number; revision: number; instructions: string; answers: Partial<EmployeeFormValues> };
 }
 
-export function UniversalAppraisalForm({ category, managers, brandSubtitle, verifiedEmployeeCode }: UniversalAppraisalFormProps) {
+export function UniversalAppraisalForm({ category, managers, brandSubtitle, verifiedEmployeeCode, existingAppraisal }: UniversalAppraisalFormProps) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
@@ -118,6 +120,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
     defaultValues: {
       abroadCapabilityNa: !showAbroad,
       modelerSectionNa: category === "GROUP_C" || isQC,
+      ...existingAppraisal?.answers,
     },
     mode: "onBlur",
   });
@@ -148,6 +151,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
   }, [employeeName, employeeSignatureName, setValue]);
 
   async function uploadVerificationPhoto(dataUrl: string, employeeCode: string): Promise<string | null> {
+    if (localCorrectionTest) return dataUrl; // Keep test photos in the isolated local database.
     try {
       const supabase = createClient();
       const res = await fetch(dataUrl);
@@ -183,16 +187,17 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
         verificationPhotoUrl = await uploadVerificationPhoto(verificationPhoto, data.employeeCode ?? "unknown");
       }
 
-      const res = await fetch("/api/submissions", {
-        method: "POST",
+      const res = await fetch(existingAppraisal ? "/api/employee-appraisal" : "/api/submissions", {
+        method: existingAppraisal ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
+          ...(existingAppraisal ? { id: existingAppraisal.id, version: existingAppraisal.version } : {}),
           ...(isQC ? QC_PRODUCTIVITY_NULLS : {}),
           category,
           stage: 0,
-          abroadCapabilityNa: !showAbroad,
-          modelerSectionNa: isQC ? true : category === "GROUP_C",
+          abroadCapabilityNa: !showAbroad || (existingAppraisal ? !!data.abroadCapabilityNa : false),
+          modelerSectionNa: isQC || category === "GROUP_C" || (existingAppraisal ? !!data.modelerSectionNa : false),
           ...(verificationPhotoUrl ? { verificationPhotoUrl } : {}),
         }),
       });
@@ -285,6 +290,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
       <DisableCopyPaste />
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-6">
         <FormBrandHeader compact subtitle={brandSubtitle} />
+        {existingAppraisal && <section className="rounded-lg border border-amber-300 bg-amber-50 p-4"><h2 className="font-semibold">Update your existing appraisal · Correction round {existingAppraisal.revision}</h2><p className="mt-2 whitespace-pre-wrap">{existingAppraisal.instructions}</p><p className="mt-2 text-sm">Your previous answers are filled in. Review them, make the requested changes, and resubmit for HR review.</p></section>}
 
         <div className="sticky top-0 z-10 bg-white py-4 border-b shadow-sm">
           <div className="flex justify-between items-center mb-2">
@@ -296,7 +302,7 @@ export function UniversalAppraisalForm({ category, managers, brandSubtitle, veri
 
         {step === 1 && (
           <div className="space-y-6">
-            <FormHeader managers={managers} lockedEmployeeCode={verifiedEmployeeCode} />
+            <FormHeader managers={managers} lockedEmployeeCode={verifiedEmployeeCode} lockIdentity={!!existingAppraisal} />
             <div>
               <Label>1. Basis of appraisal request <span className="text-red-500">*</span></Label>
               <p className="mt-1 text-sm text-gray-500">

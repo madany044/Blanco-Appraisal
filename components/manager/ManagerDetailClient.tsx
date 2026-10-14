@@ -1,5 +1,8 @@
 "use client";
 
+import { ReturnCorrectionButton } from "@/components/manager/ReturnCorrectionButton";
+import { CorrectionPanel, type CorrectionEventView } from "@/components/shared/CorrectionPanel";
+import { correctionsEnabled, type CorrectionSummary } from "@/lib/correction-config";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
@@ -15,19 +18,21 @@ import { SELF_RATING_ITEMS } from "@/lib/form-questions";
 import { SuccessToast } from "@/components/shared/SuccessToast";
 
 interface ManagerDetailClientProps {
-  submission: AppraisalSubmission & { manager: Manager };
+  submission: AppraisalSubmission & { manager: Manager; correction?: CorrectionSummary | null };
+  correctionEvents?: CorrectionEventView[];
   managerName: string;
   currentSalary?: number;
   slabs?: SerializedIncrementSlab[];
 }
 
 export function ManagerDetailClient({
-  submission: s,
+  submission: s, correctionEvents,
   managerName,
   currentSalary = 0,
   slabs = [],
 }: ManagerDetailClientProps) {
   const router = useRouter();
+  const managerOpen = s.stage >= 1 && (!(s.correction?.revision) || s.stage === 1);
   const [toast, setToast] = useState<string | null>(null);
 
   async function submit(data: ManagerFormValues, draft = false) {
@@ -37,7 +42,7 @@ export function ManagerDetailClient({
     const res = await fetch(`/api/submissions/${s.id}/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...data, draft }),
+      body: JSON.stringify({ ...data, draft, version: s.correction?.version ?? 0 }),
     });
     if (res.ok) {
       if (!draft && s.stage === 1) {
@@ -87,6 +92,9 @@ export function ManagerDetailClient({
         <p className="text-muted-foreground">{s.employeeCode}</p>
       </div>
       <WorkflowBar currentStage={s.stage} />
+      <CorrectionPanel id={s.id} correction={s.correction} events={correctionEvents} role="manager" />
+
+      {correctionsEnabled && s.stage === 1 && <ReturnCorrectionButton id={s.id} version={s.correction?.version ?? 0} />}
 
       <ChainSection title="Section 1: Employee Form" accent="blue">
         <SubmissionDetailView submission={s} sections={["employee"]} />
@@ -133,11 +141,12 @@ export function ManagerDetailClient({
               ])
             ),
           }}
-          readOnly={s.stage < 1}
+          readOnly={!managerOpen}
           submission={s}
-          onSaveDraft={s.stage >= 1 ? (d) => submit(d, true) : undefined}
-          onSubmit={s.stage >= 1 ? (d) => submit(d, false) : undefined}
-          onReturn={s.stage === 1 ? returnToHR : undefined}
+          onSaveDraft={managerOpen ? (d) => submit(d, true) : undefined}
+          onSubmit={managerOpen ? (d) => submit(d, false) : undefined}
+          onReturn={!correctionsEnabled && s.stage === 1 ? returnToHR : undefined}
+          correctionAction={correctionsEnabled && s.stage === 1 ? <ReturnCorrectionButton id={s.id} version={s.correction?.version ?? 0} /> : undefined}
         />
       </ChainSection>
     </div>

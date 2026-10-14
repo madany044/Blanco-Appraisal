@@ -1,4 +1,5 @@
 "use client";
+import { correctionsEnabled } from "@/lib/correction-config";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -80,6 +81,8 @@ export function FilterBar({ filters, onChange, managers }: FilterBarProps) {
         <SelectContent>
           <SelectItem value="all">All Stages</SelectItem>
           <SelectItem value="0">HR Review Pending</SelectItem>
+          {correctionsEnabled && <SelectItem value="RETURNED_TO_HR">Returned for correction</SelectItem>}
+          {correctionsEnabled && <SelectItem value="AWAITING_EMPLOYEE">Employee correction pending</SelectItem>}
           <SelectItem value="1">Pending TL Review</SelectItem>
           <SelectItem value="2">With Management</SelectItem>
           <SelectItem value="3">Returned to HR For Export</SelectItem>

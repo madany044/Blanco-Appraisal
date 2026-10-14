@@ -1,3 +1,5 @@
+import { correctionsEnabled } from "@/lib/correction-config";
+import { saveReview, WorkflowConflict } from "@/lib/corrections";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -36,6 +38,11 @@ export async function POST(
 
         const mgrData = mapManagerToPrisma(parsed.data);
 
+        if (correctionsEnabled) {
+            return NextResponse.json(await saveReview({ id: params.id, requiredStage: existing.stage, expectedVersion: body.version,
+                actor: user.email, action: "MANAGER_EDITED", data: { ...mgrData, mgrLastEditedAt: new Date() },
+            }));
+        }
         const updated = await prisma.appraisalSubmission.update({
             where: { id: params.id },
             data: { ...mgrData, mgrLastEditedAt: new Date() },
@@ -43,6 +50,7 @@ export async function POST(
 
         return NextResponse.json(updated);
     } catch (error) {
+        if (error instanceof WorkflowConflict) return NextResponse.json({ error: error.message }, { status: 409 });
         console.error(error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Failed" },

@@ -1,5 +1,7 @@
 "use client";
 
+import { CorrectionPanel, type CorrectionEventView } from "@/components/shared/CorrectionPanel";
+import { type CorrectionSummary } from "@/lib/correction-config";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
@@ -19,19 +21,21 @@ import { SuccessToast } from "@/components/shared/SuccessToast";
 import { VerificationPhotoButton } from "@/components/shared/VerificationPhotoButton";
 
 interface SubmissionDetailClientProps {
-  submission: AppraisalSubmission & { manager: Manager };
+  submission: AppraisalSubmission & { manager: Manager; correction?: CorrectionSummary | null };
+  correctionEvents?: CorrectionEventView[];
   slabs: SerializedIncrementSlab[];
 }
 
-export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetailClientProps) {
+export function SubmissionDetailClient({ submission: s, correctionEvents, slabs }: SubmissionDetailClientProps) {
   const router = useRouter();
+  const hrOpen = s.stage === 0 && (!s.correction || s.correction.status === "NONE");
   const [toast, setToast] = useState<string | null>(null);
 
   async function hrSubmit(data: HRFormValues, draft = false) {
     const res = await fetch(`/api/submissions/${s.id}/hr-submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...data, draft }),
+      body: JSON.stringify({ ...data, draft, version: s.correction?.version ?? 0 }),
     });
     if (res.ok) {
       if (!draft) {
@@ -50,7 +54,7 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
   }
 
   async function handleComplete() {
-    const res = await fetch(`/api/submissions/${s.id}/complete`, { method: "POST" });
+    const res = await fetch(`/api/submissions/${s.id}/complete`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ version: s.correction?.version ?? 0 }) });
     if (res.ok) {
       setToast("✅ Record marked as completed.");
       router.refresh();
@@ -115,6 +119,7 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
         <VerificationPhotoButton photoUrl={s.verificationPhotoUrl} />
       </div>
       <WorkflowBar currentStage={s.stage} />
+      <CorrectionPanel id={s.id} correction={s.correction} events={correctionEvents} role="hr" />
 
       <ChainSection title="Section 1: Employee Form" accent="blue">
         <SubmissionDetailView submission={s} sections={["employee"]} />
@@ -123,10 +128,10 @@ export function SubmissionDetailClient({ submission: s, slabs }: SubmissionDetai
       <ChainSection title="Section 2: HR Form" accent="green">
         <HRFeedbackForm
           defaultValues={hrDefaults}
-          readOnly={s.stage > 0}
-          submission={s.stage > 0 ? s : undefined}
-          onSaveDraft={s.stage === 0 ? (d) => hrSubmit(d, true) : undefined}
-          onSubmit={s.stage === 0 ? (d) => hrSubmit(d, false) : undefined}
+          readOnly={!hrOpen}
+          submission={!hrOpen ? s : undefined}
+          onSaveDraft={hrOpen ? (d) => hrSubmit(d, true) : undefined}
+          onSubmit={hrOpen ? (d) => hrSubmit(d, false) : undefined}
         />
       </ChainSection>
 

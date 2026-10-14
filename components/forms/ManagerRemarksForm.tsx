@@ -17,7 +17,7 @@ import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { ConfirmSubmitModal } from "@/components/shared/ConfirmSubmitModal";
 import { getMaxIncrementPct } from "@/lib/workflow";
 import { formatSalary } from "@/lib/submission-display";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
 interface ManagerRemarksFormProps {
   managerName?: string;
@@ -31,6 +31,7 @@ interface ManagerRemarksFormProps {
   onSaveDraft?: (data: ManagerFormValues) => Promise<void>;
   onSubmit?: (data: ManagerFormValues) => Promise<void>;
   onReturn?: (data: ManagerFormValues) => Promise<void>;
+  correctionAction?: ReactNode;
 }
 
 export function ManagerRemarksForm({
@@ -43,6 +44,7 @@ export function ManagerRemarksForm({
   onSaveDraft,
   onSubmit,
   onReturn,
+  correctionAction,
 }: ManagerRemarksFormProps) {
   const methods = useForm<ManagerFormValues>({
     resolver: zodResolver(managerFormSchema),
@@ -236,9 +238,9 @@ export function ManagerRemarksForm({
         </div>
 
         <div>
-          <Label>Additional Remarks (If Return Back To HR)</Label>
+          <Label>{correctionAction ? "Additional Manager Remarks" : "Additional Remarks (If Return Back To HR)"}</Label>
           <p className="mt-1 text-sm text-gray-500">
-            Please explain the reason for returning back this employee form to HR.
+            {correctionAction ? "Optional review notes. Use the return action below to enter a correction reason." : "Please explain the reason for returning back this employee form to HR."}
           </p>
           <Textarea className="mt-1" {...register("mgrRemarks")} />
         </div>
@@ -262,6 +264,7 @@ export function ManagerRemarksForm({
           )}
         </div>
       </form>
+      {correctionAction}
 
       {/* Confirmation Modal */}
       <ConfirmSubmitModal

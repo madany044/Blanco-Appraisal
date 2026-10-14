@@ -1,3 +1,6 @@
+import { correctionsEnabled } from "@/lib/correction-config";
+import { createVerifiedSubmission } from "@/lib/create-verified-submission";
+import { attachCorrections } from "@/lib/corrections";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthUser } from "@/lib/auth";
@@ -7,6 +10,7 @@ import type { Prisma } from "@prisma/client";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    if (correctionsEnabled) return await createVerifiedSubmission(request, body);
     const { category, managerId } = body;
 
     if (!category || !managerId) {
@@ -75,7 +79,10 @@ export async function GET(request: NextRequest) {
   }
   if (category && category !== "all") where.category = category as Prisma.AppraisalSubmissionWhereInput["category"];
 
-  if (stage && stage !== "all") {
+  if (correctionsEnabled && (stage === "RETURNED_TO_HR" || stage === "AWAITING_EMPLOYEE")) {
+    where.stage = user.role === "management" ? -999 : 0;
+    where.correction = { is: { status: stage } };
+  } else if (stage && stage !== "all") {
     const parsedStage = parseInt(stage, 10);
     if (user.role === "management") {
       if (parsedStage >= 2) {
@@ -87,7 +94,7 @@ export async function GET(request: NextRequest) {
       where.stage = parsedStage;
     }
   } else if (searchParams.get("excludeCompleted") === "true") {
-    where.stage = { lt: 4 };
+    where.stage = user.role === "management" ? { gte: 2, lt: 4 } : { lt: 4 };
   }
 
   if (financialYear && financialYear !== "all") where.financialYear = financialYear;
@@ -104,7 +111,7 @@ export async function GET(request: NextRequest) {
       include: { manager: true },
       orderBy: { submittedAt: "desc" },
     });
-    return NextResponse.json(submissions);
+    return NextResponse.json(await attachCorrections(submissions));
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Failed to fetch submissions" }, { status: 500 });

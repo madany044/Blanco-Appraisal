@@ -1,3 +1,4 @@
+import { localCorrectionTest } from "@/lib/correction-config";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -15,7 +16,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>{localCorrectionTest && <div className="bg-amber-100 border-b border-amber-300 p-2 text-center text-sm font-semibold">Local correction test — appraisals and photos are stored only in the test database</div>}{children}</body>
     </html>
   );
 }

@@ -53,7 +53,7 @@ export function SubmissionsTable({ submissions, detailPath }: SubmissionsTablePr
                 <TableCell>{categoryLabel(s.category)}</TableCell>
                 <TableCell>{s.manager.name}</TableCell>
                 <TableCell>{formatDate(s.submittedAt)}</TableCell>
-                <TableCell><StageBadge stage={s.stage} /></TableCell>
+                <TableCell><StageBadge stage={s.stage} correctionStatus={s.correction?.status} /></TableCell>
                 <TableCell><FormChips submission={s} /></TableCell>
                 <TableCell><VerificationPhotoButton photoUrl={s.verificationPhotoUrl} /></TableCell>
                 <TableCell>

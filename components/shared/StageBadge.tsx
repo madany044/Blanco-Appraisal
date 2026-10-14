@@ -1,11 +1,15 @@
+import { correctionLabel } from "@/lib/correction-config";
 import { Badge } from "@/components/ui/badge";
 import { formatStage } from "@/lib/utils";
 
 interface StageBadgeProps {
   stage: number;
+  correctionStatus?: string;
 }
 
-export function StageBadge({ stage }: StageBadgeProps) {
+export function StageBadge({ stage, correctionStatus }: StageBadgeProps) {
+  const label = correctionLabel(correctionStatus);
+  if (label) return <Badge variant="warning">{label}</Badge>;
   const variant =
     stage === 4
       ? "success"

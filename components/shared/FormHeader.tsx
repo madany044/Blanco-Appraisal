@@ -28,9 +28,10 @@ const TEAM_MANAGER_MAP: Record<string, string> = {
 interface FormHeaderProps {
   managers: Manager[];
   lockedEmployeeCode?: string;
+  lockIdentity?: boolean;
 }
 
-export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
+export function FormHeader({ managers, lockedEmployeeCode, lockIdentity }: FormHeaderProps) {
   const { register, control, setValue, watch, formState: { errors } } = useFormContext();
   const managerId = watch("managerId");
   const selectedTeam = watch("team") ?? "";
@@ -45,6 +46,7 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
   }, [setValue, today]);
 
   useEffect(() => {
+    if (lockIdentity) return;
     const teamKey = selectedTeam.trim().toLowerCase();
 
     if (!teamKey) {
@@ -64,7 +66,7 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
     );
 
     setValue("managerId", matchedManager?.id ?? "", { shouldValidate: false });
-  }, [selectedTeam, managers, setValue]);
+  }, [selectedTeam, managers, setValue, lockIdentity]);
 
   return (
     <div className="rounded-lg border-2 border-blanco-primary/30 bg-slate-50 p-6 space-y-4">
@@ -72,7 +74,7 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
       <div className="grid gap-4 md:grid-cols-2">
         <div>
           <Label htmlFor="employeeName">Employee Name <span className="text-red-500">*</span></Label>
-          <Input id="employeeName" {...register("employeeName")} />
+          <Input readOnly={lockIdentity} id="employeeName" {...register("employeeName")} />
           {errors.employeeName && (
             <p className="text-sm text-blanco-danger mt-1">{String(errors.employeeName.message)}</p>
           )}
@@ -99,7 +101,7 @@ export function FormHeader({ managers, lockedEmployeeCode }: FormHeaderProps) {
             name="team"
             control={control}
             render={({ field }) => (
-              <Select
+              <Select disabled={lockIdentity}
                 value={field.value ?? ""}
                 onValueChange={(value) => field.onChange(value)}
               >

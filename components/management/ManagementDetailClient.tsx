@@ -1,5 +1,7 @@
 "use client";
 
+import { CorrectionPanel, type CorrectionEventView } from "@/components/shared/CorrectionPanel";
+import { type CorrectionSummary } from "@/lib/correction-config";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { WorkflowBar } from "@/components/shared/WorkflowBar";
@@ -15,12 +17,14 @@ import { FormBrandHeader } from "@/components/shared/FormBrandHeader";
 import { SuccessToast } from "@/components/shared/SuccessToast";
 
 interface ManagementDetailClientProps {
-  submission: AppraisalSubmission & { manager: Manager };
+  submission: AppraisalSubmission & { manager: Manager; correction?: CorrectionSummary | null };
+  correctionEvents?: CorrectionEventView[];
   slabs: SerializedIncrementSlab[];
 }
 
-export function ManagementDetailClient({ submission: s, slabs }: ManagementDetailClientProps) {
+export function ManagementDetailClient({ submission: s, correctionEvents, slabs }: ManagementDetailClientProps) {
   const router = useRouter();
+  const managementOpen = s.stage >= 2 && (!(s.correction?.revision) || s.stage === 2);
   const [toast, setToast] = useState<string | null>(null);
 
   async function submit(data: ManagementFormValues, draft = false) {
@@ -28,7 +32,7 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
     const res = await fetch(`/api/submissions/${s.id}/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...data, draft }),
+      body: JSON.stringify({ ...data, draft, version: s.correction?.version ?? 0 }),
     });
     if (res.ok) {
       if (!draft && s.stage === 2) {
@@ -70,6 +74,7 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
         <p className="text-muted-foreground">{s.employeeCode} · {s.manager.name}</p>
       </div>
       <WorkflowBar currentStage={s.stage} />
+      <CorrectionPanel id={s.id} correction={s.correction} events={correctionEvents} role="management" />
 
       <ChainSection title="Section 1: Employee Form" accent="blue">
         <SubmissionDetailView submission={s} sections={["employee"]} />
@@ -91,9 +96,9 @@ export function ManagementDetailClient({ submission: s, slabs }: ManagementDetai
           mgrSuggestedIncrementPercentage={s.mgrSuggestedIncrementPercentage ? Number(s.mgrSuggestedIncrementPercentage) : undefined}
           mgrFinalApprovedIncrementPercentage={s.mgrFinalApprovedIncrementPercentage ? Number(s.mgrFinalApprovedIncrementPercentage) : undefined}
           defaultValues={mgmtDefaults}
-          readOnly={s.stage < 2}
-          onSaveDraft={s.stage >= 2 ? (d) => submit(d, true) : undefined}
-          onSubmit={s.stage >= 2 ? (d) => submit(d, false) : undefined}
+          readOnly={!managementOpen}
+          onSaveDraft={managementOpen ? (d) => submit(d, true) : undefined}
+          onSubmit={managementOpen ? (d) => submit(d, false) : undefined}
         />
       </ChainSection>
     </div>

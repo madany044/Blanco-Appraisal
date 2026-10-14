@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
+import { verifyEmployeeFace } from "@/lib/verify-employee-face";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Camera, CheckCircle2, RotateCcw } from "lucide-react";
-import { loadFaceModels, getFaceDescriptor, compareDescriptors } from "@/lib/face-api-loader";
+import { loadFaceModels, getFaceDescriptor } from "@/lib/face-api-loader";
 
 interface FinalFaceVerificationProps {
   employeeCode: string;
@@ -110,20 +111,20 @@ export function FinalFaceVerification({ employeeCode, onVerified }: FinalFaceVer
         return;
       }
 
-      const { isMatch, distance } = compareDescriptors(profile.faceDescriptor, liveDescriptor);
+      const isMatch = await verifyEmployeeFace(employeeCode, liveDescriptor, profile.faceDescriptor);
       if (isMatch) {
         setStatus("success");
         setMessage("Identity verified.");
         onVerified(dataUrl);
       } else {
         setStatus("fail");
-        setMessage(`Face did not match your enrolled profile (distance ${distance.toFixed(2)}). Please try again.`);
+        setMessage("Face did not match your enrolled profile. Please try again.");
         onVerified(null);
       }
     } catch (err) {
       console.error("Final verification error:", err);
       setStatus("fail");
-      setMessage("Verification failed. Please try again.");
+      setMessage(err instanceof Error ? err.message : "Verification failed. Please try again.");
       onVerified(null);
     }
   }

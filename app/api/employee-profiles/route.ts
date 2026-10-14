@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthUser } from "@/lib/auth";
+import { correctionsEnabled } from "@/lib/correction-config";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,10 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
+  if (correctionsEnabled) {
+    const user = await getAuthUser();
+    if (!user || !["hr", "manager", "dc"].includes(user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
   try {
     const body = await request.json();
     const { employeeCode, employeeName, referencePhotoUrl, faceDescriptor, enrolledBy } = body;
@@ -39,7 +45,7 @@ export async function GET(request: NextRequest) {
     if (!profile) {
       return NextResponse.json({ error: "Not found" }, { status: 404, headers: CORS_HEADERS });
     }
-    return NextResponse.json(profile, { headers: CORS_HEADERS });
+    return NextResponse.json(correctionsEnabled ? { employeeCode: profile.employeeCode, enrolled: true } : profile, { headers: { ...CORS_HEADERS, "Cache-Control": "no-store" } });
   }
 
   const profiles = await prisma.employeeProfile.findMany({

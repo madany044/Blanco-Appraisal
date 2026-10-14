@@ -16,7 +16,7 @@ export function EmployeeCard({ submission: s, href }: EmployeeCardProps) {
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <CardTitle className="text-lg">{s.employeeName}</CardTitle>
-          <StageBadge stage={s.stage} />
+          <StageBadge stage={s.stage} correctionStatus={s.correction?.status} />
         </div>
         <p className="text-sm text-muted-foreground">{s.employeeCode} · {categoryLabel(s.category)}</p>
       </CardHeader>
