@@ -53,7 +53,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Not found" }, { status: 404, headers: CORS_HEADERS });
     }
     // Keep contact details out of the public face-login lookup, including legacy mode.
-    const { whatsappNumber: _whatsappNumber, enrollmentStatus: _enrollmentStatus, ...legacyProfile } = profile;
+    const legacyProfile = {
+      id: profile.id,
+      employeeCode: profile.employeeCode,
+      employeeName: profile.employeeName,
+      referencePhotoUrl: profile.referencePhotoUrl,
+      faceDescriptor: profile.faceDescriptor,
+      enrolledBy: profile.enrolledBy,
+      createdAt: profile.createdAt,
+    };
     return NextResponse.json(correctionsEnabled ? { employeeCode: profile.employeeCode, enrolled: true } : legacyProfile, { headers: { ...CORS_HEADERS, "Cache-Control": "no-store" } });
   }
 
