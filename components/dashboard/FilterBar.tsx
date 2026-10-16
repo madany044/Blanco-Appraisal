@@ -25,9 +25,10 @@ interface FilterBarProps {
   filters: FilterState;
   onChange: (filters: FilterState) => void;
   managers: Manager[];
+  stages?: string[];
 }
 
-export function FilterBar({ filters, onChange, managers }: FilterBarProps) {
+export function FilterBar({ filters, onChange, managers, stages }: FilterBarProps) {
   function update(key: keyof FilterState, value: string) {
     onChange({ ...filters, [key]: value });
   }
@@ -74,21 +75,22 @@ export function FilterBar({ filters, onChange, managers }: FilterBarProps) {
           <SelectItem value="QC">QC</SelectItem>
         </SelectContent>
       </Select>
-      <Select value={filters.stage} onValueChange={(v) => update("stage", v)}>
+      {stages?.length !== 0 && <Select value={filters.stage} onValueChange={(v) => update("stage", v)}>
         <SelectTrigger className="w-[160px]">
           <SelectValue placeholder="Stage" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Stages</SelectItem>
-          <SelectItem value="0">HR Review Pending</SelectItem>
-          {correctionsEnabled && <SelectItem value="RETURNED_TO_HR">Returned for correction</SelectItem>}
-          {correctionsEnabled && <SelectItem value="AWAITING_EMPLOYEE">Employee correction pending</SelectItem>}
-          <SelectItem value="1">Pending TL Review</SelectItem>
-          <SelectItem value="2">With Management</SelectItem>
-          <SelectItem value="3">Returned to HR For Export</SelectItem>
-          <SelectItem value="4">Export Completed</SelectItem>
+          {(!stages || stages.includes("0")) && <SelectItem value="0">HR Review Pending</SelectItem>}
+          {!stages && correctionsEnabled && <SelectItem value="RETURNED_TO_HR">Returned for correction</SelectItem>}
+          {!stages && correctionsEnabled && <SelectItem value="AWAITING_EMPLOYEE">Employee correction pending</SelectItem>}
+          {(!stages || stages.includes("1")) && <SelectItem value="1">Pending TL Review</SelectItem>}
+          {(!stages || stages.includes("2")) && <SelectItem value="2">With Management</SelectItem>}
+          {(!stages || stages.includes("3")) && <SelectItem value="3">Returned to HR For Export</SelectItem>}
+          {(!stages || stages.includes("4")) && <SelectItem value="4">Export Completed</SelectItem>}
         </SelectContent>
       </Select>
+      }
       <Select value={filters.financialYear} onValueChange={(v) => update("financialYear", v)}>
         <SelectTrigger className="w-[130px]">
           <SelectValue placeholder="FY" />

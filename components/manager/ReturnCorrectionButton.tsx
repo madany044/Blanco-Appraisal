@@ -17,7 +17,7 @@ export function ReturnCorrectionButton({ id, version }: { id: string; version: n
       const res = await fetch(`/api/submissions/${id}/return`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reason, version }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Unable to return appraisal.");
-      router.refresh();
+      router.push("/manager/return-success");
     } catch (e) { setError(e instanceof Error ? e.message : "Please try again."); }
     finally { setBusy(false); }
   }

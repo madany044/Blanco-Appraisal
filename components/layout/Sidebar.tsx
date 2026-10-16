@@ -54,6 +54,7 @@ const DC_NAV: NavItem[] = [
 
 const MGMT_NAV: NavItem[] = [
   { href: "/management", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/management/completed", label: "Completed", icon: CheckCircle2 },
   { href: "/management/drafts", label: "Saved Drafts", icon: Save },
   { href: "/management/exports", label: "Exports", icon: Download },
 ];
@@ -82,7 +83,9 @@ export function Sidebar({ role, userEmail }: SidebarProps) {
       </div>
       <nav className="flex-1 space-y-1 p-4">
         {nav.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(item.href + "/");
+          const active = pathname === item.href || (pathname.startsWith(item.href + "/") &&
+            !nav.some((other) => other.href !== item.href && other.href.startsWith(item.href + "/") &&
+              (pathname === other.href || pathname.startsWith(other.href + "/"))));
           return (
             <Link
               key={item.href}

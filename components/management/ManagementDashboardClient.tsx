@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { FilterBar, type FilterState } from "@/components/dashboard/FilterBar";
 import { SubmissionsTable } from "@/components/dashboard/SubmissionsTable";
@@ -11,22 +12,19 @@ import type { SubmissionWithManager } from "@/lib/types";
 interface ManagementDashboardClientProps {
   managers: Manager[];
   initialSubmissions: SubmissionWithManager[];
-  stats: {
-    pending: number;
-    decided: number;
-    total: number;
-    completed: number;
-  };
+  completedView?: boolean;
+  initialFilters?: Partial<FilterState>;
 }
 
-export function ManagementDashboardClient({ managers, initialSubmissions, stats }: ManagementDashboardClientProps) {
-  const [submissions, setSubmissions] = useState(initialSubmissions);
+export function ManagementDashboardClient({ managers, initialSubmissions, completedView = false, initialFilters }: ManagementDashboardClientProps) {
+  const router = useRouter();
   const [filters, setFilters] = useState<FilterState>({
     managerId: "all",
     category: "all",
     stage: "all",
-    financialYear: "2026-27",
+    financialYear: completedView ? "all" : "2026-27",
     search: "",
+    ...initialFilters,
   });
 
   const setStageFilter = (stageValue: string | null) => {
@@ -34,34 +32,33 @@ export function ManagementDashboardClient({ managers, initialSubmissions, stats 
       const nextStage = stageValue ?? "all";
       return {
         ...current,
-        stage: current.stage === nextStage ? "all" : nextStage,
+        stage: nextStage,
       };
     });
   };
 
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (filters.managerId !== "all") params.set("managerId", filters.managerId);
-    if (filters.category !== "all") params.set("category", filters.category);
-    if (filters.stage !== "all") params.set("stage", filters.stage);
-    if (filters.financialYear !== "all") params.set("financialYear", filters.financialYear);
-    if (filters.search) params.set("search", filters.search);
-
-    fetch(`/api/submissions?${params}`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data) => {
-        if (Array.isArray(data)) setSubmissions(data);
-      })
-      .catch(console.error);
-  }, [filters]);
+  const matching = initialSubmissions.filter((s) =>
+    (filters.managerId === "all" || s.managerId === filters.managerId) &&
+    (filters.category === "all" || s.category === filters.category) &&
+    (filters.financialYear === "all" || s.financialYear === filters.financialYear) &&
+    (!filters.search.trim() || `${s.employeeName} ${s.employeeCode}`.toLowerCase().includes(filters.search.trim().toLowerCase()))
+  );
+  const stats = {
+    pending: matching.filter((s) => s.stage === 2).length,
+    decided: matching.filter((s) => s.stage === 3).length,
+    total: matching.filter((s) => s.stage === 2 || s.stage === 3).length,
+    completed: matching.filter((s) => s.stage === 4).length,
+  };
+  const submissions = matching.filter((s) => completedView ? s.stage === 4 :
+    (s.stage === 2 || s.stage === 3) && (filters.stage === "all" || String(s.stage) === filters.stage));
 
   return (
     <div className="space-y-6">
       <Alert variant="default">
-        <AlertTitle>Management Review Dashboard</AlertTitle>
-        <AlertDescription></AlertDescription>
+        <AlertTitle>{completedView ? "Completed Appraisals" : "Management Review Dashboard"}</AlertTitle>
+        <AlertDescription>{completedView ? "Appraisals finalized by HR after export." : "Pending decisions and appraisals awaiting HR export. Completed appraisals are available in Completed."}</AlertDescription>
       </Alert>
-      <div className="grid gap-4 md:grid-cols-4">
+      {!completedView && <div className="grid gap-4 md:grid-cols-4">
         <StatCard
           title="Pending Decision"
           value={stats.pending}
@@ -77,7 +74,7 @@ export function ManagementDashboardClient({ managers, initialSubmissions, stats 
           active={filters.stage === "3"}
         />
         <StatCard
-          title="Total Files"
+          title="Active Files"
           value={stats.total}
           accent="primary"
           onClick={() => setStageFilter(null)}
@@ -87,12 +84,12 @@ export function ManagementDashboardClient({ managers, initialSubmissions, stats 
           title="Completed"
           value={stats.completed}
           accent="purple"
-          onClick={() => setStageFilter("4")}
-          active={filters.stage === "4"}
+          onClick={() => router.push(`/management/completed?${new URLSearchParams({ managerId: filters.managerId, category: filters.category, financialYear: filters.financialYear, search: filters.search })}`)}
+          active={false}
         />
-      </div>
+      </div>}
 
-      <FilterBar filters={filters} onChange={setFilters} managers={managers} />
+      <FilterBar filters={filters} onChange={setFilters} managers={managers} stages={completedView ? [] : ["2", "3"]} />
       <SubmissionsTable submissions={submissions} detailPath="/management" />
     </div>
   );

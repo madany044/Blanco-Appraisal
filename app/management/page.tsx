@@ -17,19 +17,11 @@ export default async function ManagementDashboardPage() {
     prisma.manager.findMany({ orderBy: { name: "asc" } }),
   ]);
 
-  const stats = {
-    pending: submissions.filter((s) => s.stage === 2).length,
-    decided: submissions.filter((s) => s.stage >= 3).length,
-    total: submissions.length,
-    completed: submissions.filter((s) => s.stage === 4).length,
-  };
-
   return (
     <DashboardLayout role="management" userEmail={user.email} title="Management Dashboard">
       <ManagementDashboardClient
         managers={managers}
         initialSubmissions={submissions}
-        stats={stats}
       />
     </DashboardLayout>
   );

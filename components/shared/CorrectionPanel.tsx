@@ -35,7 +35,7 @@ export function CorrectionPanel({ id, correction, events = [], role }: {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Unable to open corrections.");
-      router.refresh();
+      router.push("/hr/correction-success");
     } catch (e) { setError(e instanceof Error ? e.message : "Please try again."); }
     finally { setBusy(false); }
   }
