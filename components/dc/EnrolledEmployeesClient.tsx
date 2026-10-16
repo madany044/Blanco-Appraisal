@@ -24,6 +24,8 @@ interface EnrolledProfile {
   employeeCode: string;
   employeeName: string;
   enrolledBy: string | null;
+  whatsappNumber: string | null;
+  enrollmentStatus: string | null;
   createdAt: Date;
 }
 
@@ -112,6 +114,8 @@ export function EnrolledEmployeesClient({
                 <TableHead>Employee Name</TableHead>
                 <TableHead>Employee Code</TableHead>
                 <TableHead>Enrolled By</TableHead>
+                <TableHead>WhatsApp Number</TableHead>
+                <TableHead>Enrollment Status</TableHead>
                 <TableHead>Enrolled On</TableHead>
               </TableRow>
             </TableHeader>
@@ -121,6 +125,8 @@ export function EnrolledEmployeesClient({
                   <TableCell className="font-medium">{profile.employeeName}</TableCell>
                   <TableCell>{profile.employeeCode}</TableCell>
                   <TableCell>{profile.enrolledBy || "—"}</TableCell>
+                  <TableCell>{profile.whatsappNumber || "—"}</TableCell>
+                  <TableCell>{profile.enrollmentStatus || "—"}</TableCell>
                   <TableCell>{formatDate(profile.createdAt)}</TableCell>
                 </TableRow>
               ))}

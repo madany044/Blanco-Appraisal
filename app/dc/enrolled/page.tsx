@@ -16,6 +16,8 @@ export default async function DCEnrolledPage() {
       employeeName: true,
       referencePhotoUrl: true,
       enrolledBy: true,
+      whatsappNumber: true,
+      enrollmentStatus: true,
       createdAt: true,
     },
   });

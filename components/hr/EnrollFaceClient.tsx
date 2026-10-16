@@ -15,6 +15,7 @@ import { Camera, RotateCcw, CheckCircle2 } from "lucide-react";
 import { loadFaceModels, getFaceDescriptor } from "@/lib/face-api-loader";
 import { localCorrectionTest } from "@/lib/correction-config";
 import { createClient } from "@/lib/supabase/client";
+import { enrollmentDetailsSchema } from "@/lib/validations/enrollment-details";
 
 const ENROLLED_BY_OPTIONS = [
   "HR",
@@ -23,6 +24,8 @@ const ENROLLED_BY_OPTIONS = [
 export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: string } = {}) {
   const [employeeCode, setEmployeeCode] = useState("");
   const [employeeName, setEmployeeName] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [enrollmentStatus, setEnrollmentStatus] = useState("New enrollment");
   const [enrolledBy, setEnrolledBy] = useState(lockedEnrolledBy ?? "");
   const [status, setStatus] = useState<"idle" | "starting" | "live" | "captured" | "saving" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -60,6 +63,11 @@ export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: stri
   }, []);
 
   async function startCamera() {
+    const details = enrollmentDetailsSchema.safeParse({ whatsappNumber, enrollmentStatus });
+    if (!details.success) {
+      setMessage(details.error.issues[0].message);
+      return;
+    }
     if (!employeeCode || !employeeName || !enrolledBy) {
       setMessage("Please enter Employee Code, Name, and select Enrolled By first.");
       return;
@@ -122,6 +130,11 @@ export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: stri
   }
 
   async function handleEnroll() {
+    const details = enrollmentDetailsSchema.safeParse({ whatsappNumber, enrollmentStatus });
+    if (!details.success) {
+      setMessage(details.error.issues[0].message);
+      return;
+    }
     if (!photo) {
       setMessage("Please capture a photo first.");
       return;
@@ -171,9 +184,13 @@ export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: stri
           referencePhotoUrl,
           faceDescriptor: Array.from(descriptor),
           enrolledBy,
+          ...details.data,
         }),
       });
-      if (!saveRes.ok) throw new Error("Failed to save profile");
+      if (!saveRes.ok) {
+        const error = await saveRes.json().catch(() => null);
+        throw new Error(typeof error?.error === "string" ? error.error : "Failed to save profile");
+      }
 
       setStatus("done");
       setMessage(`Enrolled ${employeeName} successfully.`);
@@ -186,6 +203,8 @@ export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: stri
   function resetForm() {
     setEmployeeCode("");
     setEmployeeName("");
+    setWhatsappNumber("");
+    setEnrollmentStatus("New enrollment");
     setEnrolledBy(lockedEnrolledBy ?? "");
     setPhoto(null);
     setStatus("idle");
@@ -198,22 +217,36 @@ export function EnrollFaceClient({ lockedEnrolledBy }: { lockedEnrolledBy?: stri
   return (
     <div className="mx-auto max-w-md space-y-5 rounded-xl border bg-white p-6 shadow-sm">
       <div>
-        <h2 className="text-lg font-semibold text-slate-800">Enroll for New Employees</h2>
+        <h2 className="text-lg font-semibold text-slate-800">Employee Enrollment</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Capture a clear, front-facing live photo to enroll this employee for face verification.
         </p>
       </div>
 
-      <div className="space-y-4">
-        <div>
-          <Label>Employee Code</Label>
-          <Input value={employeeCode} onChange={(e) => setEmployeeCode(e.target.value)} disabled={lockFields} />
-        </div>
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <Label>Employee Name</Label>
           <Input value={employeeName} onChange={(e) => setEmployeeName(e.target.value)} disabled={lockFields} />
         </div>
         <div>
+          <Label>Employee Code</Label>
+          <Input value={employeeCode} onChange={(e) => setEmployeeCode(e.target.value)} disabled={lockFields} />
+        </div>
+        <div>
+          <Label htmlFor="enrollment-whatsapp">WhatsApp Number</Label>
+          <Input id="enrollment-whatsapp" type="tel" autoComplete="tel" maxLength={30} placeholder="e.g. +91 9876543210" value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} disabled={lockFields} />
+        </div>
+        <div>
+          <Label htmlFor="enrollment-status">Enrollment Type</Label>
+          <Select value={enrollmentStatus} onValueChange={setEnrollmentStatus} disabled={lockFields}>
+            <SelectTrigger id="enrollment-status"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="New enrollment">New enrollment</SelectItem>
+              <SelectItem value="Re-Enrollment">Re-Enrollment</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="col-span-2">
           <Label>Enrolled By</Label>
           {lockedEnrolledBy ? (
             <div className="mt-1 flex h-10 items-center rounded-md border bg-slate-50 px-3 text-sm text-slate-700">
