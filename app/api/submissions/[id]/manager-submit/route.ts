@@ -37,7 +37,7 @@ export async function POST(
       return NextResponse.json({ error: "Invalid stage for manager submit" }, { status: 400 });
     }
 
-    const mgrData = mapManagerToPrisma(parsed.data);
+    const mgrData = mapManagerToPrisma(parsed.data, existing);
 
     if (correctionsEnabled) {
       const updated = await saveReview({ id: params.id, requiredStage: 1, toStage: draft ? undefined : 2,

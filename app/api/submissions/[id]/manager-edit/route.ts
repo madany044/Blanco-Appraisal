@@ -36,7 +36,7 @@ export async function POST(
             return NextResponse.json({ error: "Cannot edit this submission" }, { status: 400 });
         }
 
-        const mgrData = mapManagerToPrisma(parsed.data);
+        const mgrData = mapManagerToPrisma(parsed.data, existing);
 
         if (correctionsEnabled) {
             return NextResponse.json(await saveReview({ id: params.id, requiredStage: existing.stage, expectedVersion: body.version,

@@ -55,8 +55,9 @@ function CompareRow({
         <Controller
           name={mgrKey}
           control={control}
+          disabled={employeeScore == null}
           render={({ field }) => {
-            const selected = (field.value as number | null | undefined) ?? null;
+            const selected = employeeScore == null ? null : (field.value as number | null | undefined) ?? null;
             const diff = selected != null && employeeScore != null ? selected - employeeScore : null;
 
             return (
@@ -81,9 +82,11 @@ function CompareRow({
                     <button
                       key={n}
                       type="button"
+                      disabled={employeeScore == null}
+                      title={employeeScore == null ? "Employee has not rated this item" : undefined}
                       onClick={() => field.onChange(n)}
                       className={cn(
-                        "h-7 w-7 rounded-full border text-[12px] font-medium transition-colors",
+                        "h-7 w-7 rounded-full border text-[12px] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40",
                         selected === n
                           ? "border-[#a83232] bg-[#a83232] text-white"
                           : "border-gray-300 bg-white text-gray-600 hover:border-[#a83232]/50"

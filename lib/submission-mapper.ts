@@ -4,6 +4,7 @@ import type { HRFormValues } from "@/lib/validations/hr-form.schema";
 import type { ManagerFormValues } from "@/lib/validations/manager-form.schema";
 import type { ManagementFormValues } from "@/lib/validations/management-form.schema";
 import { SELF_RATING_ITEMS } from "@/lib/form-questions";
+import { restrictManagerRatings, type EmployeeSelfRatings } from "./manager-rating-policy";
 
 export function mapEmployeeToPrisma(
   data: Partial<EmployeeFormValues> & {
@@ -121,12 +122,12 @@ export function mapHRToPrisma(data: Partial<HRFormValues>): Prisma.AppraisalSubm
   };
 }
 
-export function mapManagerToPrisma(data: Partial<ManagerFormValues>): Prisma.AppraisalSubmissionUpdateInput {
+export function mapManagerToPrisma(data: Partial<ManagerFormValues>, employee: EmployeeSelfRatings): Prisma.AppraisalSubmissionUpdateInput {
   const selfRatingFields = Object.fromEntries(
     SELF_RATING_ITEMS.map((item) => [item.mgrKey, data[item.mgrKey] ?? null])
   );
 
-  return {
+  return restrictManagerRatings({
     mgrRecommendation: data.mgrRecommendation ?? [],
     mgrStrongReasons: data.mgrStrongReasons ?? [],
     mgrConditionalReasons: data.mgrConditionalReasons ?? [],
@@ -138,7 +139,7 @@ export function mapManagerToPrisma(data: Partial<ManagerFormValues>): Prisma.App
     mgrSignatureName: data.mgrSignatureName ?? null,
     mgrSignatureDate: data.mgrSignatureDate ? new Date(data.mgrSignatureDate) : new Date(),
     ...selfRatingFields,
-  };
+  }, employee);
 }
 
 export function mapManagementToPrisma(

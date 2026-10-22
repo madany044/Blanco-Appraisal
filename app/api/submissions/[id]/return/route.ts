@@ -40,7 +40,7 @@ export async function POST(
       if (!manager || existing.managerId !== manager.id) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
-      const mgrData = body.mgrSignatureName ? mapManagerToPrisma(body) : {};
+      const mgrData = body.mgrSignatureName ? mapManagerToPrisma(body, existing) : {};
       const updated = await transitionStage(params.id, 1, 0, mgrData);
       return NextResponse.json(updated);
     }

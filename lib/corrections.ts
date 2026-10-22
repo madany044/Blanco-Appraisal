@@ -4,6 +4,7 @@ import { correctionsEnabled } from "./correction-config";
 import { assertReviewAllowed, assertVersion, WorkflowConflict } from "./correction-policy";
 import { employeeAnswers } from "./employee-fields";
 import { appraisalTransactionOptions } from "./appraisal-transaction";
+import { restrictManagerRatings } from "./manager-rating-policy";
 
 export { WorkflowConflict } from "./correction-policy";
 
@@ -98,7 +99,8 @@ export async function saveReview(input: {
       : input.toStage === 3 ? { managementFilledAt: new Date() }
       : input.toStage === 4 ? { completedAt: new Date() } : {};
     const result = await tx.appraisalSubmission.update({ where: { id: input.id }, data: {
-      ...input.data, ...timestamp, ...(input.toStage != null ? { stage: input.toStage } : {}),
+      ...(input.action.startsWith("MANAGER_") ? restrictManagerRatings(input.data, s) : input.data),
+      ...timestamp, ...(input.toStage != null ? { stage: input.toStage } : {}),
     } });
     // Track a version even before the first return, protecting old tabs across cycles.
     const updated = await tx.appraisalCorrection.upsert({ where: { submissionId: input.id },
